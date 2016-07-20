@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * @file
+ * The islandora_genetic_edition moudule.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function islandora_genetic_edition_menu() {
+}
