@@ -10,3 +10,77 @@
  */
 function islandora_genetic_edition_menu() {
 }
+
+/**
+ * Implements hook_islandora_required_objects().
+ */
+function islandora_genetic_edition_islandora_required_objects(IslandoraTuque $connection) {
+  $module_path = drupal_get_path('module', 'islandora_genetic_edition');
+
+  // Genetic Edition content model.
+  $genetic_edition_content_model = $connection->repository->constructObject('islandora:geneticEditionCModel');
+  $genetic_edition_content_model->owner = 'fedoraAdmin';
+  $genetic_edition_content_model->label = 'Islandora Genetic Edition Content Model';
+  $genetic_edition_content_model->models = 'fedora-system:ContentModel-3.0';
+  // DS-COMPOSITE-MODEL datastream.
+  $datastream = $genetic_edition_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'X');
+  $datastream->label = 'DS-COMPOSITE-MODEL';
+  $datastream->mimetype = 'application/xml';
+  $datastream->setContentFromFile("$module_path/xml/content_models/islandora_genetic_edition_ds_composite_model.xml", FALSE);
+  $genetic_edition_content_model->ingestDatastream($datastream);
+
+  // Witness content model.
+  $genetic_edition_witness_content_model = $connection->repository->constructObject('islandora:geneticEditionWitnessCModel');
+  $genetic_edition_witness_content_model->owner = 'fedoraAdmin';
+  $genetic_edition_witness_content_model->label = 'Islandora Genetic Edition Witness Content Model';
+  $genetic_edition_witness_content_model->models = 'fedora-system:ContentModel-3.0';
+  // DS-COMPOSITE-MODEL datastream.
+  $datastream = $genetic_edition_witness_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'X');
+  $datastream->label = 'DS-COMPOSITE-MODEL';
+  $datastream->mimetype = 'application/xml';
+  $datastream->setContentFromFile("$module_path/xml/content_models/islandora_genetic_edition_witness_ds_composite_model.xml", FALSE);
+  $genetic_edition_witness_content_model->ingestDatastream($datastream);
+
+  // Page content model.
+  $genetic_edition_page_content_model = $connection->repository->constructObject('islandora:geneticEditionPageCModel');
+  $genetic_edition_page_content_model->owner = 'fedoraAdmin';
+  $genetic_edition_page_content_model->label = 'Islandora Genetic Edition Page Content Model';
+  $genetic_edition_page_content_model->models = 'fedora-system:ContentModel-3.0';
+  // DS-COMPOSITE-MODEL datastream.
+  $datastream = $genetic_edition_page_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'X');
+  $datastream->label = 'DS-COMPOSITE-MODEL';
+  $datastream->mimetype = 'application/xml';
+  $datastream->setContentFromFile("$module_path/xml/content_models/islandora_genetic_edition_page_ds_composite_model.xml", FALSE);
+  $genetic_edition_page_content_model->ingestDatastream($datastream);
+
+  // Genetic Edition collection.
+  $genetic_edition_collection = $connection->repository->constructObject('islandora:genetic_edition_collection');
+  $genetic_edition_collection->owner = 'fedoraAdmin';
+  $genetic_edition_collection->label = 'Genetic Edition Collection';
+  $genetic_edition_collection->models = 'islandora:collectionCModel';
+  $genetic_edition_collection->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOfCollection', 'islandora:root');
+  // Collection policy datastream.
+  $datastream = $genetic_edition_collection->constructDatastream('COLLECTION_POLICY', 'X');
+  $datastream->label = 'Collection policy';
+  $datastream->mimetype = 'application/xml';
+  $datastream->setContentFromFile("$module_path/xml/collection/islandora_genetic_edition_collection_policy.xml", FALSE);
+  $genetic_edition_collection->ingestDatastream($datastream);
+  // TN datastream.
+  $datastream = $genetic_edition_collection->constructDatastream('TN', 'M');
+  $datastream->label = 'Thumbnail';
+  $datastream->mimetype = 'image/png';
+  $datastream->setContentFromFile("$module_path/images/folder.png", FALSE);
+  $genetic_edition_collection->ingestDatastream($datastream);
+
+  return array(
+    'islandora_genetic_edition' => array(
+      'title' => 'Islandora Genetic Edition',
+      'objects' => array(
+        $genetic_edition_content_model,
+        $genetic_edition_witness_content_model,
+        $genetic_edition_page_content_model,
+        $genetic_edition_collection,
+      ),
+    ),
+  );
+}
