@@ -23,11 +23,11 @@ function islandora_genetic_edition_islandora_required_objects(IslandoraTuque $co
   $genetic_edition_content_model->label = 'Islandora Genetic Edition Content Model';
   $genetic_edition_content_model->models = 'fedora-system:ContentModel-3.0';
   // DS-COMPOSITE-MODEL datastream.
-  $datastream = $genetic_edition_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'X');
-  $datastream->label = 'DS-COMPOSITE-MODEL';
-  $datastream->mimetype = 'application/xml';
-  $datastream->setContentFromFile("$module_path/xml/content_models/islandora_genetic_edition_ds_composite_model.xml", FALSE);
-  $genetic_edition_content_model->ingestDatastream($datastream);
+  $ge_model_ds = $genetic_edition_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'X');
+  $ge_model_ds->label = 'DS-COMPOSITE-MODEL';
+  $ge_model_ds->mimetype = 'application/xml';
+  $ge_model_ds->setContentFromFile("$module_path/xml/content_models/islandora_genetic_edition_ds_composite_model.xml", FALSE);
+  $genetic_edition_content_model->ingestDatastream($ge_model_ds);
 
   // Witness content model.
   $genetic_edition_witness_content_model = $connection->repository->constructObject('islandora:geneticEditionWitnessCModel');
@@ -35,11 +35,11 @@ function islandora_genetic_edition_islandora_required_objects(IslandoraTuque $co
   $genetic_edition_witness_content_model->label = 'Islandora Genetic Edition Witness Content Model';
   $genetic_edition_witness_content_model->models = 'fedora-system:ContentModel-3.0';
   // DS-COMPOSITE-MODEL datastream.
-  $datastream = $genetic_edition_witness_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'X');
-  $datastream->label = 'DS-COMPOSITE-MODEL';
-  $datastream->mimetype = 'application/xml';
-  $datastream->setContentFromFile("$module_path/xml/content_models/islandora_genetic_edition_witness_ds_composite_model.xml", FALSE);
-  $genetic_edition_witness_content_model->ingestDatastream($datastream);
+  $witness_model_ds = $genetic_edition_witness_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'X');
+  $witness_model_ds->label = 'DS-COMPOSITE-MODEL';
+  $witness_model_ds->mimetype = 'application/xml';
+  $witness_model_ds->setContentFromFile("$module_path/xml/content_models/islandora_genetic_edition_witness_ds_composite_model.xml", FALSE);
+  $genetic_edition_witness_content_model->ingestDatastream($witness_model_ds);
 
   // Page content model.
   $genetic_edition_page_content_model = $connection->repository->constructObject('islandora:geneticEditionPageCModel');
@@ -47,11 +47,11 @@ function islandora_genetic_edition_islandora_required_objects(IslandoraTuque $co
   $genetic_edition_page_content_model->label = 'Islandora Genetic Edition Page Content Model';
   $genetic_edition_page_content_model->models = 'fedora-system:ContentModel-3.0';
   // DS-COMPOSITE-MODEL datastream.
-  $datastream = $genetic_edition_page_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'X');
-  $datastream->label = 'DS-COMPOSITE-MODEL';
-  $datastream->mimetype = 'application/xml';
-  $datastream->setContentFromFile("$module_path/xml/content_models/islandora_genetic_edition_page_ds_composite_model.xml", FALSE);
-  $genetic_edition_page_content_model->ingestDatastream($datastream);
+  $page_model_ds = $genetic_edition_page_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'X');
+  $page_model_ds->label = 'DS-COMPOSITE-MODEL';
+  $page_model_ds->mimetype = 'application/xml';
+  $page_model_ds->setContentFromFile("$module_path/xml/content_models/islandora_genetic_edition_page_ds_composite_model.xml", FALSE);
+  $genetic_edition_page_content_model->ingestDatastream($page_model_ds);
 
   // Genetic Edition collection.
   $genetic_edition_collection = $connection->repository->constructObject('islandora:genetic_edition_collection');
@@ -60,17 +60,17 @@ function islandora_genetic_edition_islandora_required_objects(IslandoraTuque $co
   $genetic_edition_collection->models = 'islandora:collectionCModel';
   $genetic_edition_collection->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOfCollection', 'islandora:root');
   // Collection policy datastream.
-  $datastream = $genetic_edition_collection->constructDatastream('COLLECTION_POLICY', 'X');
-  $datastream->label = 'Collection policy';
-  $datastream->mimetype = 'application/xml';
-  $datastream->setContentFromFile("$module_path/xml/collection/islandora_genetic_edition_collection_policy.xml", FALSE);
-  $genetic_edition_collection->ingestDatastream($datastream);
+  $ge_collection_policy_ds = $genetic_edition_collection->constructDatastream('COLLECTION_POLICY', 'X');
+  $ge_collection_policy_ds->label = 'Collection policy';
+  $ge_collection_policy_ds->mimetype = 'application/xml';
+  $ge_collection_policy_ds->setContentFromFile("$module_path/xml/collection/islandora_genetic_edition_collection_policy.xml", FALSE);
+  $genetic_edition_collection->ingestDatastream($ge_collection_policy_ds);
   // TN datastream.
-  $datastream = $genetic_edition_collection->constructDatastream('TN', 'M');
-  $datastream->label = 'Thumbnail';
-  $datastream->mimetype = 'image/png';
-  $datastream->setContentFromFile("$module_path/images/folder.png", FALSE);
-  $genetic_edition_collection->ingestDatastream($datastream);
+  $ge_collection_tn_ds = $genetic_edition_collection->constructDatastream('TN', 'M');
+  $ge_collection_tn_ds->label = 'Thumbnail';
+  $ge_collection_tn_ds->mimetype = 'image/png';
+  $ge_collection_tn_ds->setContentFromFile("$module_path/images/folder.png", FALSE);
+  $genetic_edition_collection->ingestDatastream($ge_collection_tn_ds);
 
   return array(
     'islandora_genetic_edition' => array(
