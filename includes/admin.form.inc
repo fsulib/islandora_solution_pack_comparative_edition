@@ -32,3 +32,9 @@ function islandora_genetic_edition_admin_settings_form(array $form, array &$form
   unset($form['viewers']);
   return system_settings_form($form);
 }
+
+function islandora_genetic_edition_admin_settings_form_validate($form, &$form_state) {
+  if (isset($form_state['values']['islandora_genetic_edition_collatex_server_url']) && !filter_var($form_state['values']['islandora_genetic_edition_collatex_server_url'], FILTER_VALIDATE_URL)) {
+    form_set_error('islandora_genetic_edition_collatex_server_url', t('CollateX endpoint is not a valid URL.'));
+  }
+}

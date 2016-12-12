@@ -19,6 +19,7 @@ function islandora_genetic_edition_menu() {
     'file' => 'includes/admin.form.inc',
     'type' => MENU_NORMAL_ITEM,
   );
+  return $menu;
 }
 
 /**
@@ -98,5 +99,7 @@ function islandora_genetic_edition_islandora_required_objects(IslandoraTuque $co
 /**
  * Implements hook_theme().
  */
+/*
 function islandora_genetic_edition_theme($existing, $type, $theme, $path) {
 }
+*/
