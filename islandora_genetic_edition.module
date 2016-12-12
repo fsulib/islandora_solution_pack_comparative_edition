@@ -9,6 +9,16 @@
  * Implements hook_menu().
  */
 function islandora_genetic_edition_menu() {
+  $menu = array();
+  $menu['admin/islandora/solution_pack_config/genetic_edition'] = array(
+    'title' => 'Genetic Editions',
+    'description' => 'Configure Collatex server connection and select page viewer.',
+    'page callback' => 'drupal_get_form',
+    'access arguments' => array('administer site configuration'),
+    'page arguments' => array('islandora_genetic_edition_admin_settings_form'),
+    'file' => 'includes/admin.form.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
 }
 
 /**
