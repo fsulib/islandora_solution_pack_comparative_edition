@@ -26,7 +26,7 @@ function islandora_genetic_edition_admin_settings_form(array $form, array &$form
     '#size' => 100,
   );
   module_load_include('inc', 'islandora', 'includes/solution_packs');
-  $form += islandora_viewers_form('islandora_newspaper_page_viewers', 'image/jp2');
+  $form += islandora_viewers_form('islandora_genetic_edition_page_viewers', 'image/jp2');
   $form['page_viewers'] = $form['viewers'];
   $form['page_viewers']['#title'] = t('Page Viewers');
   unset($form['viewers']);
