@@ -19,6 +19,17 @@ function islandora_genetic_edition_menu() {
     'file' => 'includes/admin.form.inc',
     'type' => MENU_NORMAL_ITEM,
   );
+  $menu['islandora/object/%islandora_object/manage/genetic_edition/ingest'] = array(
+    'title' => 'Add Witness',
+    'page callback' => 'islandora_genetic_edition_ingest_witness',
+    'page arguments' => array(2),
+    'type' => MENU_LOCAL_ACTION,
+    'access callback' => 'islandora_user_access',
+    'access arguments' => array(
+      2, array(ISLANDORA_INGEST), array('islandora:geneticEditionCModel'),
+    ),
+    'file' => 'includes/manage_genetic_edition.inc',
+  );
   return $menu;
 }
 
@@ -103,3 +114,42 @@ function islandora_genetic_edition_islandora_required_objects(IslandoraTuque $co
 function islandora_genetic_edition_theme($existing, $type, $theme, $path) {
 }
 */
+
+/**
+ * Implements hook_islandora_xml_form_builder_forms().
+ */
+function islandora_genetic_edition_islandora_xml_form_builder_forms() {
+  $module_path = drupal_get_path('module', 'islandora_genetic_edition');
+  return array(
+    'Genetic Edition' => array(
+      'form_file' => "$module_path/xml/forms/islandora_genetic_edition_form_mods.xml",
+    ),
+    'Genetic Edition Witness' => array(
+      'form_file' => "$module_path/xml/forms/islandora_genetic_edition_witness_form_mods.xml",
+    ),
+  );
+}
+
+/**
+ * Implements hook_islandora_xml_form_builder_form_associations().
+ */
+function islandora_genetic_edition_islandora_xml_form_builder_form_associations() {
+  return array(
+    'islandora_genetic_edition_mods_form' => array(
+      'content_model' => 'islandora:geneticEditionCModel',
+      'form_name' => 'Genetic Edition',
+      'dsid' => 'MODS',
+      'title_field' => array('titleInfo', 'title'),
+      'transform' => 'mods_to_dc.xsl',
+      'template' => FALSE,
+    ),
+    'islandora_genetic_edition_witness_mods_form' => array(
+      'content_model' => 'islandora:geneticEditionWitnessCModel',
+      'form_name' => 'Genetic Edition Witness',
+      'dsid' => 'MODS',
+      'title_field' => array('titleInfo', 'title'),
+      'transform' => 'mods_to_dc.xsl',
+      'template' => FALSE,
+    ),
+  );
+}
