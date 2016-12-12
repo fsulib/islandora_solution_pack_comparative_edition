@@ -5,6 +5,25 @@
  */
 
 /**
+ * Returns the collection object of a given witness object.
+ *
+ * @param object $object
+ *   Genetic Edition witness object.
+ *
+ * @return string|bool
+ *   Returns the PID of the genetic edition of which $object is a member. If there is
+ *   no such membership, returns FALSE.
+ */
+function islandora_genetic_edition_get_genetic_edition($object) {
+  $rels = $object->relationships->get(FEDORA_RELS_EXT_URI, 'isMemberOf');
+  $rel = reset($rels);
+  if ($rel) {
+    return $rel['object']['value'];
+  }
+  return FALSE;
+}
+
+/**
  * Gets all the witnesses that the given genetic edition owns.
  *
  * The results are ordered by their RELS-EXT dateIssued property.

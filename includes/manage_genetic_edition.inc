@@ -1,5 +1,7 @@
 <?php
 
+require_once dirname(__FILE__) . '/utilities.inc';
+
 /**
  * Local menu action that gets the ingest witness form.
  *
@@ -13,7 +15,6 @@ function islandora_genetic_edition_ingest_witness(AbstractObject $genetic_editio
   global $user;
   module_load_include('inc', 'islandora', 'includes/utilities');
   module_load_include('inc', 'islandora', 'includes/ingest.form');
-  module_load_include('inc', 'islandora_genetic_edition', 'includes/utilities');
   $tuque = islandora_get_tuque_connection();
   $witness = $tuque->repository->constructObject(islandora_get_namespace($genetic_edition->id));
   $witness->owner = $user->name;
