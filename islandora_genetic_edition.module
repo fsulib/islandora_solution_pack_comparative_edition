@@ -22,24 +22,14 @@ function islandora_genetic_edition_menu() {
   $menu['islandora/object/%islandora_object/manage/overview/genetic_edition_witness_ingest'] = array(
     'title' => 'Add Witness',
     'page callback' => 'islandora_genetic_edition_ingest_witness',
-    'page arguments' => array(2),
-    'type' => MENU_LOCAL_ACTION,
-    'access callback' => 'islandora_user_access',
-    'access arguments' => array(
-      2, array(ISLANDORA_INGEST), array('islandora:geneticEditionCModel'),
+    'page arguments' => array(2,
+      array('zip'),
+      'islandora:geneticEditionWitnessCModel',
     ),
+    'type' => MENU_LOCAL_ACTION,
+    'access callback' => 'islandora_object_access',
+    'access arguments' => array(ISLANDORA_INGEST, 2),
     'file' => 'includes/manage_genetic_edition.inc',
-  );
-  $menu['islandora/object/%islandora_object/manage/overview/genetic_edition_page_ingest'] = array(
-    'title' => 'Add Page',
-    'page callback' => 'islandora_genetic_edition_ingest_page',
-    'page arguments' => array(2),
-    'type' => MENU_LOCAL_ACTION,
-    'access callback' => 'islandora_user_access',
-    'access arguments' => array(
-      2, array(ISLANDORA_INGEST), array('islandora:geneticEditionWitnessCModel'),
-    ),
-    'file' => 'includes/manage_witness.inc',
   );
 
   return $menu;
