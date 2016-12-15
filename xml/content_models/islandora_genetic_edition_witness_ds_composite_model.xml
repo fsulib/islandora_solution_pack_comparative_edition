@@ -1,28 +1,31 @@
 <?xml version="1.0"?>
 <dsCompositeModel xmlns="info:fedora/fedora-system:def/dsCompositeModel#">
-  <dsTypeModel ID="RELS-EXT" optional="false">
+  <dsTypeModel ID="RELS-EXT" optional="true">
     <form FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" MIME="application/rdf+xml"/>
   </dsTypeModel>
-  <dsTypeModel ID="MODS" optional="false">
+  <dsTypeModel ID="MODS" optional="true">
     <form MIME="text/xml"/>
   </dsTypeModel>
-  <dsTypeModel ID="DC" optional="false">
+  <dsTypeModel ID="DC" optional="true">
     <form FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" MIME="text/xml"/>
   </dsTypeModel>
-  <dsTypeModel ID="OBJ" optional="false">
+  <dsTypeModel ID="OBJ" optional="true">
     <form MIME="image/tiff"/>
     <form MIME="image/jpeg"/>
     <form MIME="image/jp2"/>
   </dsTypeModel>
-  <dsTypeModel ID="JP2" optional="false">
+  <dsTypeModel ID="JP2" optional="true">
     <form MIME="image/jp2"/>
   </dsTypeModel>
-  <dsTypeModel ID="TN" optional="false">
+  <dsTypeModel ID="TN" optional="true">
     <form MIME="image/jpeg"/>
     <form MIME="image/png"/>
     <form MIME="image/gif"/>
   </dsTypeModel>
-  <dsTypeModel ID="WINDEX" optional="false">
+  <dsTypeModel ID="WINDEX" optional="true">
     <form MIME="application/json"/>
+  </dsTypeModel>
+  <dsTypeModel ID="FULL-TEI" optional="true">
+    <form MIME="text/xml"/>
   </dsTypeModel>
 </dsCompositeModel>

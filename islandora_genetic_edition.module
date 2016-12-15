@@ -136,9 +136,6 @@ function islandora_genetic_edition_islandora_xml_form_builder_forms() {
     'Genetic Edition' => array(
       'form_file' => "$module_path/xml/forms/islandora_genetic_edition_form_mods.xml",
     ),
-    'Genetic Edition Witness' => array(
-      'form_file' => "$module_path/xml/forms/islandora_genetic_edition_witness_form_mods.xml",
-    ),
   );
 }
 
@@ -150,14 +147,6 @@ function islandora_genetic_edition_islandora_xml_form_builder_form_associations(
     'islandora_genetic_edition_mods_form' => array(
       'content_model' => 'islandora:geneticEditionCModel',
       'form_name' => 'Genetic Edition',
-      'dsid' => 'MODS',
-      'title_field' => array('titleInfo', 'title'),
-      'transform' => 'mods_to_dc.xsl',
-      'template' => FALSE,
-    ),
-    'islandora_genetic_edition_witness_mods_form' => array(
-      'content_model' => 'islandora:geneticEditionWitnessCModel',
-      'form_name' => 'Genetic Edition Witness',
       'dsid' => 'MODS',
       'title_field' => array('titleInfo', 'title'),
       'transform' => 'mods_to_dc.xsl',
