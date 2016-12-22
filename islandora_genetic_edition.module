@@ -10,6 +10,8 @@
  */
 function islandora_genetic_edition_menu() {
   $menu = array();
+
+  // Admin menu
   $menu['admin/islandora/solution_pack_config/genetic_edition'] = array(
     'title' => 'Genetic Editions',
     'description' => 'Configure Collatex server connection and select page viewer.',
@@ -19,6 +21,8 @@ function islandora_genetic_edition_menu() {
     'file' => 'includes/admin.form.inc',
     'type' => MENU_NORMAL_ITEM,
   );
+
+  /*
   $menu['islandora/object/%islandora_object/manage/overview/genetic_edition_witness_ingest'] = array(
     'title' => 'Add Witness',
     'page callback' => 'islandora_genetic_edition_ingest_witness',
@@ -28,11 +32,35 @@ function islandora_genetic_edition_menu() {
     ),
     'type' => MENU_LOCAL_ACTION,
     'access callback' => 'islandora_object_access',
-    'access arguments' => array(ISLANDORA_INGEST, 2),
+    'access arguments' => array(
+      2, array(ISLANDORA_INGEST), array('islandora:geneticEditionCModel'),
+    ),
     'file' => 'includes/manage_genetic_edition.inc',
+  );
+  */
+
+  $menu['islandora/object/%islandora_object/manage/attach_witness'] = array(
+    'title' => 'Attach Witness',
+    'access callback' => 'islandora_genetic_edition_attach_witness_access',
+    'access arguments' => array(2),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('islandora_genetic_edition_attach_witness_form', 2),
+    'file' => 'includes/attach_witness.form.inc',
+    'type' => MENU_LOCAL_ACTION,
+    'weight' => 1,
   );
 
   return $menu;
+}
+
+/**
+ * Menu access callback.
+ */
+function islandora_genetic_edition_attach_witness_access($object) {
+  if (!islandora_object_access(ISLANDORA_INGEST, $object)) {
+    return FALSE;
+  }
+  return in_array('islandora:geneticEditionCModel', $object->models);
 }
 
 /**
