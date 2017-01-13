@@ -122,12 +122,45 @@ function islandora_genetic_edition_islandora_required_objects(IslandoraTuque $co
 }
 
 /**
+ * Implements hook_islandora_view_object().
+ */
+function islandora_genetic_edition_islandora_geneticEditionCModel_islandora_view_object($object) {
+  $output = theme('islandora_genetic_edition', array('islandora_object' => $object));
+  return array('' => $output);
+}
+
+function islandora_genetic_edition_islandora_geneticEditionWitnessCModel_islandora_view_object($object) {
+  $output = theme('islandora_genetic_edition_witness', array('islandora_object' => $object));
+  return array('' => $output);
+}
+
+function islandora_genetic_edition_islandora_geneticEditionPageCModel_islandora_view_object($object) {
+  $output = theme('islandora_genetic_edition_page', array('islandora_object' => $object));
+  return array('' => $output);
+}
+
+/**
  * Implements hook_theme().
  */
-/*
 function islandora_genetic_edition_theme($existing, $type, $theme, $path) {
+  return array(
+    'islandora_genetic_edition' => array(
+      'path' => drupal_get_path('module', 'islandora_genetic_edition').'/theme',
+      'template' => 'islandora-genetic-edition',
+      'variables' => array('islandora_object' => NULL, 'display' => NULL),
+    ),
+    'islandora_genetic_edition_witness' => array(
+      'path' => drupal_get_path('module', 'islandora_genetic_edition').'/theme',
+      'template' => 'islandora-genetic-edition-witness',
+      'variables' => array('islandora_object' => NULL, 'display' => NULL),
+    ),
+    'islandora_genetic_edition_page' => array(
+      'path' => drupal_get_path('module', 'islandora_genetic_edition').'/theme',
+      'template' => 'islandora-genetic-edition-page',
+      'variables' => array('islandora_object' => NULL, 'display' => NULL),
+    ),
+  );  
 }
-*/
 
 /**
  * Implements hook_islandora_xml_form_builder_forms().

@@ -58,12 +58,12 @@ function islandora_genetic_edition_attach_witness_form_submit($form, $form_state
 
 function islandora_genetic_edition_ingest_witness_from_zip_file($connection, $parameters) {
   $file_url = drupal_realpath($parameters['zip_file_uri']);
-  $tmpdir = variable_get('file_temporary_path', '/tmp');
+  $tmpdir = variable_get('file_temporary_path', '/tmp') . "/witness_ingest";
 
   $zip = new ZipArchive;
   $response = $zip->open($file_url);
   if ($response === TRUE) {
-    $zip->extractTo("{$tmpdir}/witness_ingest/");
+    $zip->extractTo($tmpdir);
     $zip->close();
   } else {
     watchdog('gesp', "Error extracting zip to tmp directory: temporary://witness_ingest/");
@@ -79,23 +79,45 @@ function islandora_genetic_edition_ingest_witness_from_zip_file($connection, $pa
 
   $repository = $connection->repository;
   $witness_object = $repository->constructObject($parent_namespace);
+  $witness_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isMemberOf', $parent_id);
+  $witness_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:geneticEditionWitnessCModel');
 
   // Construct TEI DS
   $tei_datastream = $witness_object->constructDatastream('TEI');
   $tei_datastream->label = 'TEI';
   $tei_datastream->mimeType = 'application/xml';
-  $tei_datastream->setContentFromFile("{$tmpdir}/witness_ingest/tei.xml");
+  $tei_datastream->setContentFromFile("{$tmpdir}/tei.xml");
   $witness_object->ingestDatastream($tei_datastream);
 
   // Construct OBJ DS
   $obj_datastream = $witness_object->constructDatastream('OBJ');
   $obj_datastream->label = 'OBJ';
   $obj_datastream->mimeType = 'image/png';
-  $obj_datastream->setContentFromFile("{$tmpdir}/witness_ingest/obj.png");
+  $obj_datastream->setContentFromFile("{$tmpdir}/obj.png");
   $witness_object->ingestDatastream($obj_datastream);
 
-  $witness_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isMemberOf', $parent_id);
+  $witness_id = $repository->ingestObject($witness_object)->id;
+  watchdog('gesp', "New witness ingested at {$witness_id}");
 
-  $repository->ingestObject($witness_object);
+  // Construct page objects
+  $facsdir = $tmpdir . "/facsimiles";
+  $pages = array_diff(scandir($facsdir), array('.', '..'));
+  foreach ($pages as $page) {
+
+    $page_object = $repository->constructObject($parent_namespace);
+    $page_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isMemberOf', $witness_id);
+    $page_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:geneticEditionPageCModel');
+
+    // Construct OBJ DS
+    $obj_datastream = $page_object->constructDatastream('OBJ');
+    $obj_datastream->label = 'OBJ';
+    $obj_datastream->mimeType = 'image/png';
+    $obj_datastream->setContentFromFile("{$facsdir}/{$page}");
+    $page_object->ingestDatastream($obj_datastream);
+
+    $page_id = $repository->ingestObject($page_object)->id;
+    watchdog('gesp', "New page ingested at {$page_id}");
+
+  }
   
 }
