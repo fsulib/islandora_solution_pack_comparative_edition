@@ -113,6 +113,13 @@ function islandora_genetic_edition_ingest_witness_from_zip_file($connection, $pa
   $tn_datastream->setContentFromFile("{$tmpdir}/obj.png");
   $witness_object->ingestDatastream($tn_datastream);
 
+  // TEMPORARY! Construct PREVIEW DS
+  $preview_datastream = $witness_object->constructDatastream('PREVIEW');
+  $preview_datastream->label = 'PREVIEW';
+  $preview_datastream->mimeType = 'image/png';
+  $preview_datastream->setContentFromFile("{$tmpdir}/obj.png");
+  $witness_object->ingestDatastream($preview_datastream);
+
   $witness_id = $repository->ingestObject($witness_object)->id;
   watchdog('gesp', "New witness ingested at {$witness_id}");
 
@@ -131,6 +138,13 @@ function islandora_genetic_edition_ingest_witness_from_zip_file($connection, $pa
     $obj_datastream->mimeType = 'image/png';
     $obj_datastream->setContentFromFile("{$facsdir}/{$page}");
     $page_object->ingestDatastream($obj_datastream);
+
+    // TEMPORARY! Construct PREVIEW DS
+    $preview_datastream = $page_object->constructDatastream('PREVIEW');
+    $preview_datastream->label = 'PREVIEW';
+    $preview_datastream->mimeType = 'image/png';
+    $preview_datastream->setContentFromFile("{$facsdir}/{$page}");
+    $page_object->ingestDatastream($preview_datastream);
 
     // TEMPORARY! Construct TN DS
     $tn_datastream = $page_object->constructDatastream('TN');
