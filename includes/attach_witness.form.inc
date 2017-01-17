@@ -89,6 +89,14 @@ function islandora_genetic_edition_ingest_witness_from_zip_file($connection, $pa
   $tei_datastream->setContentFromFile("{$tmpdir}/tei.xml");
   $witness_object->ingestDatastream($tei_datastream);
 
+  // Construct MODS DS from TEI DS
+  $mods = islandora_genetic_edition_construct_mods_from_tei($witness_object['TEI']->content);
+  $mods_datastream = $witness_object->constructDatastream('MODS');
+  $mods_datastream->label = 'MODS';
+  $mods_datastream->mimeType = 'application/xml';
+  $mods_datastream->setContentFromString($mods);
+  $witness_object->ingestDatastream($mods_datastream);
+
   // Construct OBJ DS
   $obj_datastream = $witness_object->constructDatastream('OBJ');
   $obj_datastream->label = 'OBJ';
@@ -120,4 +128,38 @@ function islandora_genetic_edition_ingest_witness_from_zip_file($connection, $pa
 
   }
   
+}
+
+function islandora_genetic_edition_construct_mods_from_tei($tei) {
+ 
+  // Extract TEI metadata
+  $tei_obj = simplexml_load_string($tei);
+  $title = $tei_obj->teiHeader->fileDesc->sourceDesc->biblFull->titleStmt->title;
+  $author_first_name = $tei_obj->teiHeader->fileDesc->sourceDesc->biblFull->titleStmt->author->forename;
+  $author_middle_name = $tei_obj->teiHeader->fileDesc->sourceDesc->biblFull->titleStmt->author->addName;
+  if (!empty($author_middle_name)) {
+    $author_first_name = "{$author_first_name} {$author_middle_name}";
+  }
+  $author_last_name = $tei_obj->teiHeader->fileDesc->sourceDesc->biblFull->titleStmt->author->surname;
+  $abstract = $tei_obj->teiHeader->profileDesc->abstract->p;
+
+  // Construct MODS record
+  $mods = new SimpleXMLElement('<mods xmlns="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:etd="http://www.ndltd.org/standards/metadata/etdms/1.0/" xmlns:flvc="info:flvc/manifest/v1" xsi:schemaLocation="http://www.loc.gov/standards/mods/v3/mods-3-4.xsd" version="3.4"></mods>');
+
+  // Title
+  $mods->addChild('titleInfo');
+  $mods->titleInfo->addAttribute('lang', 'eng');
+  $mods->titleInfo->addChild('title', htmlspecialchars($title));
+  
+  // Author
+  $name = $mods->addChild('name');
+  $name->addAttribute('type', 'personal');
+  $name->addAttribute('authority', 'local');
+  $name->addChild('namePart', htmlspecialchars($author_first_name))->addAttribute('type', 'given');
+  $name->addChild('namePart', htmlspecialchars($author_last_name))->addAttribute('type', 'family');
+  
+  // Abstract
+  $mods->addChild('abstract', $abstract);
+
+  return $mods->asXML();
 }
