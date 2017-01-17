@@ -19,15 +19,25 @@ foreach ($results as $result) {
   $pids[] = $result;
 }
 
+$mods_string = $islandora_object['MODS']->content;
+$mods_obj = simplexml_load_string($mods_string);
 ?>
 
-<h1>I AM GENETIC EDITION OBJECT <?php print $islandora_object->id; ?>!!1</h1>
+<div id="islandora-genetic-edition-header">
+  <p>
+    <img id="islandora-genetic-edition-preview" 
+         src="/islandora/object/<?php print $islandora_object->id; ?>/datastream/PREVIEW">
+    <span id="islandora-genetic-edition-abstract"><?php print $mods_obj->abstract;?></span>
+  </p>
+</div>
 
-<h2>AND I HAVE THE FOLLOWING CHILDREN:</h2>
-<ul>
+<div id="islandora-genetic-edition-children-container">
+  <h1>Witnesses</h1>
+  <hr />
+  <ul>
+  <?php foreach ($pids as $pid) { ?>
+    <li><a href="/islandora/object/<?php print $pid?>"><?php print $pid; ?></a></li>
+  <?php } ?>
+  </ul>
+</div>
 
-<?php foreach ($pids as $pid) { ?>
-  <li><a href="/islandora/object/<?php print $pid?>"><?php print $pid; ?></a></li>
-<?php } ?>
-
-</ul>
