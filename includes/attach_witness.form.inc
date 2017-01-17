@@ -96,6 +96,8 @@ function islandora_genetic_edition_ingest_witness_from_zip_file($connection, $pa
   $mods_datastream->mimeType = 'application/xml';
   $mods_datastream->setContentFromString($mods);
   $witness_object->ingestDatastream($mods_datastream);
+ 
+  $witness_object->label = simplexml_load_string($mods)->titleInfo->title;
 
   // Construct OBJ DS
   $obj_datastream = $witness_object->constructDatastream('OBJ');
@@ -103,6 +105,13 @@ function islandora_genetic_edition_ingest_witness_from_zip_file($connection, $pa
   $obj_datastream->mimeType = 'image/png';
   $obj_datastream->setContentFromFile("{$tmpdir}/obj.png");
   $witness_object->ingestDatastream($obj_datastream);
+
+  // TEMPORARY! Construct TN DS
+  $tn_datastream = $witness_object->constructDatastream('TN');
+  $tn_datastream->label = 'TN';
+  $tn_datastream->mimeType = 'image/png';
+  $tn_datastream->setContentFromFile("{$tmpdir}/obj.png");
+  $witness_object->ingestDatastream($tn_datastream);
 
   $witness_id = $repository->ingestObject($witness_object)->id;
   watchdog('gesp', "New witness ingested at {$witness_id}");
@@ -122,6 +131,13 @@ function islandora_genetic_edition_ingest_witness_from_zip_file($connection, $pa
     $obj_datastream->mimeType = 'image/png';
     $obj_datastream->setContentFromFile("{$facsdir}/{$page}");
     $page_object->ingestDatastream($obj_datastream);
+
+    // TEMPORARY! Construct TN DS
+    $tn_datastream = $page_object->constructDatastream('TN');
+    $tn_datastream->label = 'TN';
+    $tn_datastream->mimeType = 'image/png';
+    $tn_datastream->setContentFromFile("{$facsdir}/{$page}");
+    $page_object->ingestDatastream($tn_datastream);
 
     $page_id = $repository->ingestObject($page_object)->id;
     watchdog('gesp', "New page ingested at {$page_id}");

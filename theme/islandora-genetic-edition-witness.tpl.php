@@ -16,20 +16,22 @@ $results = $connection->repository->ri->sparqlQuery($query);
 $pids = array();
 foreach ($results as $result) {
   $result = $result['child']['value'];
-  $pids[] = $result;
+  $label = islandora_object_load($result)->label;
+  $children[] = array('pid' => $result, 'label' => $label);
 }
 
 ?>
 
 <h1>I AM GENETIC EDITION WITNESS OBJECT <?php print $islandora_object->id; ?>!!1</h1>
 
-<h2>AND I HAVE THE FOLLOWING CHILDREN:</h2>
-<ul>
+<h2>Pages:</h2>
 
-<?php foreach ($pids as $pid) { ?>
-  <li><a href="/islandora/object/<?php print $pid?>"><?php print $pid; ?></a></li>
+<?php foreach ($children as $child) { ?>
+  <div>
+    <a href="/islandora/object/<?php print $child['pid']; ?>">
+      <strong><?php print $child['label']; ?></strong>
+      <img src="/islandora/object/<?php print $child['pid']; ?>/datastream/TN">
+    </a>
+  </div>
 <?php } ?>
-
-</ul>
-
 

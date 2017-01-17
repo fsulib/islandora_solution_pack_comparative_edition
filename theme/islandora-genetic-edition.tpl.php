@@ -13,10 +13,12 @@ SELECT ?child FROM <#ri> WHERE {
 EOQ;
 $connection = islandora_get_tuque_connection();
 $results = $connection->repository->ri->sparqlQuery($query);
-$pids = array();
+$children = array();
 foreach ($results as $result) {
   $result = $result['child']['value'];
-  $pids[] = $result;
+  $object = islandora_object_load($result);
+  $abstract = simplexml_load_string($object['MODS']->content)->abstract;
+  $children[] = array('pid' => $result, 'label' => $object->label, 'abstract' => $abstract);
 }
 
 $mods_string = $islandora_object['MODS']->content;
@@ -34,10 +36,16 @@ $mods_obj = simplexml_load_string($mods_string);
 <div id="islandora-genetic-edition-children-container">
   <h1>Witnesses</h1>
   <hr />
-  <ul>
-  <?php foreach ($pids as $pid) { ?>
-    <li><a href="/islandora/object/<?php print $pid?>"><?php print $pid; ?></a></li>
+
+  <?php foreach ($children as $child) { ?>
+    <div style="clear:left;padding-top:10px;" class="islandora-genetic-edition-child-container">
+      <a href="/islandora/object/<?php print $child['pid']; ?>">
+        <img style="max-width:200px;border:1px solid black;float:left;margin-right:10px;" src="/islandora/object/<?php print $child['pid']; ?>/datastream/TN">
+        <strong><?php print $child['label']; ?></strong>
+        <p><?php print $child['abstract']; ?></p>
+      </a>
+    </div>
   <?php } ?>
-  </ul>
+
 </div>
 
