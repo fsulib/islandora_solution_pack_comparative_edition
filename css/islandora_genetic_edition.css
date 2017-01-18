@@ -1,5 +1,6 @@
 /* Style Sheet for Genetic Editions Solution Pack Module */
 
+/* Genetic Edition Top Level Styles */
 #islandora-genetic-edition-preview {
   float: right;
   max-width: 200px;
@@ -8,4 +9,42 @@
 
 #islandora-genetic-edition-children-container {
   clear: both;
+}
+
+.islandora-genetic-edition-child-container {
+  clear: left;
+  padding-top: 10px;
+}
+
+.islandora-genetic-edition-child-container img {
+  max-width: 150px;
+  border: 1px solid black;
+  float: left;
+  margin-right: 10px;
+}
+
+/* Genetic Edition Witness Styles */
+#islandora-genetic-edition-witness-preview {
+  float: right;
+  max-width: 200px;
+  padding-left: 20px;
+  border: 1px solid black;
+}
+
+#islandora-genetic-edition-witness-children-container {
+  clear: both;
+}
+
+.islandora-genetic-edition-witness-child-container {
+  clear: left;
+  padding-top: 10px;
+  max-width: 150px;
+  display: inline;
+}
+
+.islandora-genetic-edition-witness-child-container img {
+  max-width: 150px;
+  border: 1px solid black;
+  margin-right: 20px;
+  margin-top: 20px;
 }

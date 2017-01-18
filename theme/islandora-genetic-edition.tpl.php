@@ -38,9 +38,9 @@ $mods_obj = simplexml_load_string($mods_string);
   <hr />
 
   <?php foreach ($children as $child) { ?>
-    <div style="clear:left;padding-top:10px;" class="islandora-genetic-edition-child-container">
+    <div class="islandora-genetic-edition-child-container">
       <a href="/islandora/object/<?php print $child['pid']; ?>">
-        <img style="max-width:200px;border:1px solid black;float:left;margin-right:10px;" src="/islandora/object/<?php print $child['pid']; ?>/datastream/TN">
+        <img src="/islandora/object/<?php print $child['pid']; ?>/datastream/TN">
         <strong><?php print $child['label']; ?></strong>
         <p><?php print $child['abstract']; ?></p>
       </a>

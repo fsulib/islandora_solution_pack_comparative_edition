@@ -2,8 +2,15 @@
 
 /**
  * @file
- * This is the template file for genetic edition objects
+ * This is the template file for genetic edition page objects
  */
 ?>
 
-<h1>THIS IS A GENETIC EDITION PAGE OBJECT!!1</h1>
+<h1>Page Template</h1>
+
+<div id="islandora-genetic-edition-page-header">
+  <p>
+    <img id="islandora-genetic-edition-page-preview" 
+         src="/islandora/object/<?php print $islandora_object->id; ?>/datastream/PREVIEW">
+  </p>
+</div>

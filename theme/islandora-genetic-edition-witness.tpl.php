@@ -2,7 +2,7 @@
 
 /**
  * @file
- * This is the template file for genetic edition objects
+ * This is the template file for genetic edition witness objects
  */
 
 // Get child witness objects
@@ -20,18 +20,31 @@ foreach ($results as $result) {
   $children[] = array('pid' => $result, 'label' => $label);
 }
 
+$mods_string = $islandora_object['MODS']->content;
+$mods_obj = simplexml_load_string($mods_string);
 ?>
 
-<h1>I AM GENETIC EDITION WITNESS OBJECT <?php print $islandora_object->id; ?>!!1</h1>
+<div id="islandora-genetic-edition-witness-header">
+  <p>
+    <img id="islandora-genetic-edition-witness-preview" 
+         src="/islandora/object/<?php print $islandora_object->id; ?>/datastream/PREVIEW">
+    <span id="islandora-genetic-edition-witness-abstract"><?php print $mods_obj->abstract;?></span>
+  </p>
+</div>
 
-<h2>Pages:</h2>
+<div id="islandora-genetic-edition-witness-children-container">
+  <h1>Pages</h1>
+  <hr />
 
-<?php foreach ($children as $child) { ?>
-  <div>
-    <a href="/islandora/object/<?php print $child['pid']; ?>">
-      <strong><?php print $child['label']; ?></strong>
-      <img src="/islandora/object/<?php print $child['pid']; ?>/datastream/TN">
-    </a>
-  </div>
-<?php } ?>
+  <?php foreach ($children as $child) { ?>
+    <div class="islandora-genetic-edition-witness-child-container">
+      <a href="/islandora/object/<?php print $child['pid']; ?>">
+        <img src="/islandora/object/<?php print $child['pid']; ?>/datastream/TN">
+        <strong><?php print $child['label']; ?></strong>
+      </a>
+    </div>
+  <?php } ?>
+
+</div>
+
 
