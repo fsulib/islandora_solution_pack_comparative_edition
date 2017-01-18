@@ -1,0 +1,1 @@
+/* Javascript file for Genetic Editions Solution Pack Module */

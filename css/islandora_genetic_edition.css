@@ -1,0 +1,11 @@
+/* Style Sheet for Genetic Editions Solution Pack Module */
+
+#islandora-genetic-edition-preview {
+  float: right;
+  max-width: 200px;
+  padding-left: 20px;
+}
+
+#islandora-genetic-edition-children-container {
+  clear: both;
+}

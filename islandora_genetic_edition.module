@@ -163,6 +163,14 @@ function islandora_genetic_edition_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Implements template_preprocess_HOOK().
+ */
+function template_preprocess_islandora_genetic_edition(&$variables) {
+  drupal_add_css(drupal_get_path('module', 'islandora_genetic_edition') . '/css/islandora_genetic_edition.css');
+  drupal_add_js(drupal_get_path('module', 'islandora_genetic_edition') . '/js/islandora_genetic_edition.js');
+}
+
+/**
  * Implements hook_islandora_xml_form_builder_forms().
  */
 function islandora_genetic_edition_islandora_xml_form_builder_forms() {
