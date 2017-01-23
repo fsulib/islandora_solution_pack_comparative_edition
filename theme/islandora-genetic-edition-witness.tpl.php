@@ -24,27 +24,29 @@ $mods_string = $islandora_object['MODS']->content;
 $mods_obj = simplexml_load_string($mods_string);
 ?>
 
-<div id="islandora-genetic-edition-witness-header">
+<div id="igesp-witness-header">
   <p>
-    <img id="islandora-genetic-edition-witness-preview" 
+    <img id="igesp-witness-preview" 
          src="/islandora/object/<?php print $islandora_object->id; ?>/datastream/PREVIEW">
-    <span id="islandora-genetic-edition-witness-abstract"><?php print $mods_obj->abstract;?></span>
+    <span id="igesp-witness-abstract"><?php print $mods_obj->abstract;?></span>
   </p>
 </div>
 
-<div id="islandora-genetic-edition-witness-children-container">
+<div id="igesp-witness-children-container">
   <h1>Pages</h1>
   <hr />
 
+  <ul>
+  
   <?php foreach ($children as $child) { ?>
-    <div class="islandora-genetic-edition-witness-child-container">
-      <a href="/islandora/object/<?php print $child['pid']; ?>">
-        <img src="/islandora/object/<?php print $child['pid']; ?>/datastream/TN">
-        <strong><?php print $child['label']; ?></strong>
-      </a>
-    </div>
+    <li class="igesp-witness-child-container">
+      <p><a href="/islandora/object/<?php print $child['pid']; ?>">
+          <img src="/islandora/object/<?php print $child['pid']; ?>/datastream/TN"></a></p>
+        <p class="igesp-witness-page-label"><strong><?php print $child['label']; ?></strong><p>
+    </li>
   <?php } ?>
 
+  </ul>  
 </div>
 
 

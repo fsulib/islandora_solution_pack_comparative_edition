@@ -6,8 +6,6 @@
  */
 ?>
 
-<h1>Page Template</h1>
-
 <div id="islandora-genetic-edition-page-header">
   <p>
     <img id="islandora-genetic-edition-page-preview" 

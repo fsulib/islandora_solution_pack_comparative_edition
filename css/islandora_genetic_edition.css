@@ -1,50 +1,108 @@
 /* Style Sheet for Genetic Editions Solution Pack Module */
 
 /* Genetic Edition Top Level Styles */
-#islandora-genetic-edition-preview {
+#igesp-genetic-edition-preview {
   float: right;
   max-width: 200px;
   padding-left: 20px;
 }
 
-#islandora-genetic-edition-children-container {
+#igesp-genetic-edition-children-container {
   clear: both;
 }
 
-.islandora-genetic-edition-child-container {
+#igesp-genetic-edition-children-container .ui-widget-content {
+  border: none;
+}
+
+#igesp-genetic-edition-children-container .ui-tabs-nav {
+  float: right;
+  margin-top: -20px;
+}
+
+#igesp-genetic-edition-children-container .ui-widget-header {
+  border: none;
+  background: none;
+}
+
+#igesp-genetic-edition-children-container .ui-tabs-panel {
+  padding: 1em 0;
+}
+
+#igesp-genetic-edition-children-container .ui-state-default {
+  border: 1px solid #d3d3d3;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+#igesp-genetic-edition-children-container .ui-state-active {
+  background: black;
+}
+
+#igesp-genetic-edition-children-container .ui-state-active a {
+  color: white;
+}
+
+.igesp-genetic-edition-child-container {
   clear: left;
   padding-top: 10px;
 }
 
-.islandora-genetic-edition-child-container img {
+.igesp-genetic-edition-child-container img {
   max-width: 150px;
   border: 1px solid black;
   float: left;
   margin-right: 10px;
 }
 
+#igesp-genetic-edition-child-grid-container {
+  float: left;
+  margin: 0;
+  padding: 0;
+}
+
+#igesp-genetic-edition-child-grid-container li {
+  float: left;
+  list-style: none;
+  max-width: 150px;
+  margin: 15px 30px 0 0;
+}
+
+#igesp-genetic-edition-child-grid-container li img {
+  max-width: 150px;
+  border: 1px solid black;
+}
+
+
 /* Genetic Edition Witness Styles */
-#islandora-genetic-edition-witness-preview {
+#igesp-witness-preview {
   float: right;
   max-width: 200px;
   padding-left: 20px;
   border: 1px solid black;
 }
 
-#islandora-genetic-edition-witness-children-container {
+#igesp-witness-children-container {
   clear: both;
 }
 
-.islandora-genetic-edition-witness-child-container {
-  clear: left;
-  padding-top: 10px;
-  max-width: 150px;
-  display: inline;
+#igesp-witness-children-container ul {
+  float: left;
 }
 
-.islandora-genetic-edition-witness-child-container img {
+.igesp-witness-child-container {
+  max-width: 150px;
+  float:left;
+  list-style: none;
+  margin: 15px 30px 0 0;
+}
+
+.igesp-witness-child-container img {
   max-width: 150px;
   border: 1px solid black;
-  margin-right: 20px;
-  margin-top: 20px;
 }
+
+p.igesp-witness-page-label {
+  text-align: center;
+}
+
