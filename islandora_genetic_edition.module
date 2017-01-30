@@ -232,3 +232,21 @@ function islandora_genetic_edition_islandora_geneticEditionCModel_islandora_inge
     ),
   );
 }
+
+/**
+ * Implements hook_CMODEL_islandora_derivative().
+ */
+function islandora_genetic_edition_islandora_geneticEditionCModel_islandora_derivative() {
+  $mod_path = drupal_get_path('module', 'islandora_genetic_edition');
+  return array(
+    array(
+      'source_dsid' => 'OBJ',
+      'destination_dsid' => 'TN',
+      'weight' => 0,
+      'function' => array(
+        'islandora_genetic_edition_create_tn_derivative',
+      ),
+      'file' => "$mod_path/includes/derivatives.inc",
+    ),
+  );
+}
