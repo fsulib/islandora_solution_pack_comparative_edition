@@ -217,3 +217,18 @@ function islandora_genetic_edition_islandora_xml_form_builder_form_associations(
     ),
   );
 }
+
+/**
+ * Implements hook_islandora_ingest_steps().
+ */
+function islandora_genetic_edition_islandora_geneticEditionCModel_islandora_ingest_steps() {
+  return array(
+    'islandora_gened_file_upload' => array(
+      'weight' => 10,
+      'type' => 'form',
+      'form_id' => 'islandora_genetic_edition_gened_upload_form',
+      'module' => 'islandora_genetic_edition',
+      'file' => 'includes/gened_upload.form.inc',
+    ),
+  );
+}
