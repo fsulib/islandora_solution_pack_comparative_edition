@@ -16,9 +16,7 @@
     <form MIME="image/tiff"/>
     <form MIME="image/jpeg"/>
     <form MIME="image/jp2"/>
-  </dsTypeModel>
-  <dsTypeModel ID="JP2" optional="true">
-    <form MIME="image/jp2"/>
+    <form MIME="image/png"/>
   </dsTypeModel>
   <dsTypeModel ID="TN" optional="true">
     <form MIME="image/jpeg"/>

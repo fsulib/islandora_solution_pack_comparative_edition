@@ -26,7 +26,7 @@ foreach ($results as $result) {
 <div id="igesp-genetic-edition-header">
   <p>
     <img id="igesp-genetic-edition-preview" 
-         src="/islandora/object/<?php print $islandora_object->id; ?>/datastream/PREVIEW">
+         src="/islandora/object/<?php print $islandora_object->id; ?>/datastream/OBJ">
     <span id="igesp-genetic-edition-abstract"><?php print $mods_obj->abstract;?></span>
   </p>
 </div>

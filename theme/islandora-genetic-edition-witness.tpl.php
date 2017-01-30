@@ -27,7 +27,7 @@ $mods_obj = simplexml_load_string($mods_string);
 <div id="igesp-witness-header">
   <p>
     <img id="igesp-witness-preview" 
-         src="/islandora/object/<?php print $islandora_object->id; ?>/datastream/PREVIEW">
+         src="/islandora/object/<?php print $islandora_object->id; ?>/datastream/OBJ">
     <span id="igesp-witness-abstract"><?php print $mods_obj->abstract;?></span>
   </p>
 </div>
