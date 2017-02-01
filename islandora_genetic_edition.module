@@ -250,3 +250,24 @@ function islandora_genetic_edition_islandora_geneticEditionCModel_islandora_deri
     ),
   );
 }
+
+/**
+ * Implements hook_islandora_breadcrumbs_alter().
+ */
+function islandora_genetic_edition_islandora_breadcrumbs_alter(&$breadcrumbs, $context, $object = NULL) {
+  module_load_include('inc', 'islandora_genetic_edition', 'includes/breadcrumb');
+  if (in_array('islandora:geneticEditionWitnessCModel', $object->models)) {
+    $gened_parent = _get_genetic_parent($object);
+    $gened_parent_collection = _get_collection_parent($gened_parent);
+    $breadcrumbs[] = _create_breadcrumb_html($gened_parent_collection);
+    $breadcrumbs[] = _create_breadcrumb_html($gened_parent);
+  }
+  if (in_array('islandora:geneticEditionPageCModel', $object->models)) {
+    $witness_parent = _get_genetic_parent($object);
+    $gened_parent = _get_genetic_parent($witness_parent);
+    $gened_parent_collection = _get_collection_parent($gened_parent);
+    $breadcrumbs[] = _create_breadcrumb_html($gened_parent_collection);
+    $breadcrumbs[] = _create_breadcrumb_html($gened_parent);
+    $breadcrumbs[] = _create_breadcrumb_html($witness_parent);
+  }
+}
