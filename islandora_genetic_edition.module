@@ -58,6 +58,7 @@ function islandora_genetic_edition_islandora_required_objects(IslandoraTuque $co
   $genetic_edition_content_model->owner = 'fedoraAdmin';
   $genetic_edition_content_model->label = 'Islandora Genetic Edition Content Model';
   $genetic_edition_content_model->models = 'fedora-system:ContentModel-3.0';
+  
   // DS-COMPOSITE-MODEL datastream.
   $ge_model_ds = $genetic_edition_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'X');
   $ge_model_ds->label = 'DS-COMPOSITE-MODEL';
@@ -70,6 +71,7 @@ function islandora_genetic_edition_islandora_required_objects(IslandoraTuque $co
   $genetic_edition_witness_content_model->owner = 'fedoraAdmin';
   $genetic_edition_witness_content_model->label = 'Islandora Genetic Edition Witness Content Model';
   $genetic_edition_witness_content_model->models = 'fedora-system:ContentModel-3.0';
+  
   // DS-COMPOSITE-MODEL datastream.
   $witness_model_ds = $genetic_edition_witness_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'X');
   $witness_model_ds->label = 'DS-COMPOSITE-MODEL';
@@ -82,6 +84,7 @@ function islandora_genetic_edition_islandora_required_objects(IslandoraTuque $co
   $genetic_edition_page_content_model->owner = 'fedoraAdmin';
   $genetic_edition_page_content_model->label = 'Islandora Genetic Edition Page Content Model';
   $genetic_edition_page_content_model->models = 'fedora-system:ContentModel-3.0';
+  
   // DS-COMPOSITE-MODEL datastream.
   $page_model_ds = $genetic_edition_page_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'X');
   $page_model_ds->label = 'DS-COMPOSITE-MODEL';
@@ -95,12 +98,14 @@ function islandora_genetic_edition_islandora_required_objects(IslandoraTuque $co
   $genetic_edition_collection->label = 'Genetic Edition Collection';
   $genetic_edition_collection->models = 'islandora:collectionCModel';
   $genetic_edition_collection->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOfCollection', 'islandora:root');
+  
   // Collection policy datastream.
   $ge_collection_policy_ds = $genetic_edition_collection->constructDatastream('COLLECTION_POLICY', 'X');
   $ge_collection_policy_ds->label = 'Collection policy';
   $ge_collection_policy_ds->mimetype = 'application/xml';
   $ge_collection_policy_ds->setContentFromFile("$module_path/xml/collection/islandora_genetic_edition_collection_policy.xml", FALSE);
   $genetic_edition_collection->ingestDatastream($ge_collection_policy_ds);
+  
   // TN datastream.
   $ge_collection_tn_ds = $genetic_edition_collection->constructDatastream('TN', 'M');
   $ge_collection_tn_ds->label = 'Thumbnail';
@@ -186,8 +191,28 @@ function template_preprocess_islandora_genetic_edition_witness(&$variables) {
  * Implements template_preprocess_HOOK().
  */
 function template_preprocess_islandora_genetic_edition_page(&$variables) {
+  drupal_add_library( 'system' , 'ui.tabs' );
   drupal_add_css(drupal_get_path('module', 'islandora_genetic_edition') . '/css/islandora_genetic_edition.css');
   drupal_add_js(drupal_get_path('module', 'islandora_genetic_edition') . '/js/islandora_genetic_edition.js');
+  module_load_include('inc', 'islandora', 'includes/solution_packs');
+  
+  $islandora_object = $variables['islandora_object'];
+  
+  if(isset($islandora_object['JP2'])) {
+    $params = array();
+    $jp2_url = url("islandora/object/{$islandora_object->id}/datastream/JP2/view",
+      array(
+      'absolute' => TRUE,
+      ));
+    $params['jp2_url'] = $jp2_url; 
+    $viewer = islandora_get_viewer($params, 'islandora_genetic_edition_page_viewers', $islandora_object);
+  }
+  
+  if ($viewer) {
+    $variables['page_image'] = $viewer;
+  } else {
+    $variables['page_image'] = "<img src='/islandora/object/{$islandora_object->id}/datastream/OBJ/view'>";
+  }
 }
 
 /**

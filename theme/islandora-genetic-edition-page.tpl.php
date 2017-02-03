@@ -6,9 +6,12 @@
  */
 ?>
 
-<div id="islandora-genetic-edition-page-header">
-  <p>
-    <img id="islandora-genetic-edition-page-preview" 
-         src="/islandora/object/<?php print $islandora_object->id; ?>/datastream/PREVIEW">
-  </p>
+<div id="igesp-page-header">
+  
+  <!--- TODO: ADD CONTROLS TO SWITCH PAGES -->
+  
+</div>  
+  
+<div id="igesp-focus-tabs-container">
+  <?php print $page_image; ?>
 </div>
