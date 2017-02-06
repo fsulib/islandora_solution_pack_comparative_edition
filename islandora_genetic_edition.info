@@ -2,7 +2,6 @@ name = Islandora Genetic Editions Solution Pack
 description = Allows for the creation of Genetic Edition objects in Islandora.
 dependencies[] = imagemagick
 dependencies[] = islandora
-dependencies[] = islandora_paged_content
 dependencies[] = islandora_large_image
 package = Islandora Solution Packs
 core = 7.x
