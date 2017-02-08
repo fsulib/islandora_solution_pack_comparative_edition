@@ -106,3 +106,44 @@ p.igesp-witness-page-label {
   text-align: center;
 }
 
+/* Genetic Edition Page Styles */
+.igesp-button-active {
+  background: black;
+  color: white;
+}
+
+#igesp-tabs-comparison {
+  display: none;
+}
+
+#igesp-comparison-tabs-container {
+  width: 100%;
+  margin: auto;
+  padding: 0;
+  display: inline-block;
+}
+
+.igesp-left-column {
+  width: 46%;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.igesp-right-column {
+  display: inline-block !important;
+  width: 46%;
+  vertical-align: top;
+}
+
+#igesp-comparison-tabs-container #tab-1,
+#igesp-comparison-tabs-container #tab-2,
+#igesp-comparison-tabs-container #tab-3 {
+  height: 500px;
+  overflow: scroll;
+}
+
+.igesp-right-column #tab-comp-2,
+.igesp-right-column #tab-comp-3 {
+  height: 500px;
+  overflow: scroll;
+}
