@@ -219,6 +219,7 @@ function template_preprocess_islandora_genetic_edition_page(&$variables) {
   if (isset($islandora_object['HTML'])) {
     $variables['display_html'] = $islandora_object['HTML']->content;
   } else {
+    watchdog('islandora_genetic_edition', "Object ID {$islandora_object->id} has no HTML datastream.");
     $variables['display_html'] = "<h3>No HTML datastream found.</h3>";
   }  
   
@@ -226,6 +227,7 @@ function template_preprocess_islandora_genetic_edition_page(&$variables) {
   if (isset($islandora_object['PAGE-TEI'])) {
     $variables['page_tei'] = '<xmp>' . $islandora_object['PAGE-TEI']->content . '</xmp>';
   } else {
+    watchdog('islandora_genetic_edition', "Object ID {$islandora_object->id} has no PAGE-TEI datastream.");
     $variables['page_tei'] = "<h3>No PAGE-TEI datastream found.</h3>";
   }  
 }
@@ -277,59 +279,14 @@ function islandora_genetic_edition_islandora_geneticEditionCModel_islandora_inge
  * Implements hook_CMODEL_islandora_derivative().
  */
 function islandora_genetic_edition_islandora_geneticEditionCModel_islandora_derivative() {
-  $mod_path = drupal_get_path('module', 'islandora_large_image');
+  $mod_path = drupal_get_path('module', 'islandora_genetic_edition');
   return array(
     array(
       'source_dsid' => 'OBJ',
       'destination_dsid' => 'TN',
       'weight' => 0,
       'function' => array(
-        'islandora_large_image_create_tn_derivative',
-      ),
-      'file' => "$mod_path/includes/derivatives.inc",
-    ),
-  );
-}
-
-/**
- * Implements hook_CMODEL_islandora_derivative().
- */
-function islandora_genetic_edition_islandora_geneticEditionWitnessCModel_islandora_derivative() {
-  $mod_path = drupal_get_path('module', 'islandora_large_image');
-  return array(
-    array(
-      'source_dsid' => 'OBJ',
-      'destination_dsid' => 'TN',
-      'weight' => 0,
-      'function' => array(
-        'islandora_large_image_create_tn_derivative',
-      ),
-      'file' => "$mod_path/includes/derivatives.inc",
-    ),
-  );
-}
-
-/**
- * Implements hook_CMODEL_islandora_derivative().
- */
-function islandora_genetic_edition_islandora_geneticEditionPageCModel_islandora_derivative() {
-  $mod_path = drupal_get_path('module', 'islandora_large_image');
-  return array(
-    array(
-      'source_dsid' => 'OBJ',
-      'destination_dsid' => 'TN',
-      'weight' => 0,
-      'function' => array(
-        'islandora_large_image_create_tn_derivative',
-      ),
-      'file' => "$mod_path/includes/derivatives.inc",
-    ),
-    array(
-      'source_dsid' => 'OBJ',
-      'destination_dsid' => 'JP2',
-      'weight' => 0,
-      'function' => array(
-        'islandora_large_image_create_jp2_derivative',
+        'islandora_genetic_edition_create_tn_derivative',
       ),
       'file' => "$mod_path/includes/derivatives.inc",
     ),
