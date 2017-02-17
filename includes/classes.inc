@@ -2,17 +2,17 @@
 
 /**
  * @file
- * Implementation of classes for the genetic edition solution pack. 
+ * Implementation of classes for the comparative edition solution pack. 
  */
 
-class IslandoraGeneticEditionObject { 
+class IslandoraComparativeEditionObject { 
 
   public static function getChildren($pid) {
   }
 
 }
 
-class IslandoraGeneticEditionWitnessObject { 
+class IslandoraComparativeEditionWitnessObject { 
 
   public static function getParent($pid) {
   }
@@ -30,7 +30,7 @@ class IslandoraGeneticEditionWitnessObject {
     $repository = $connection->repository;
     $witness_object = $repository->constructObject($parent_namespace);
     $witness_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isMemberOf', $parent_id);
-    $witness_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:geneticEditionWitnessCModel');
+    $witness_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:comparativeEditionWitnessCModel');
 
     // Construct TEI DS
     $tei_datastream = $witness_object->constructDatastream('TEI');
@@ -63,7 +63,7 @@ class IslandoraGeneticEditionWitnessObject {
     $facsdir = $tmpdir . "/facsimiles";
     $images = array_diff(scandir($facsdir), array('.', '..'));
     foreach ($images as $image) {
-      $page_object = new IslandoraGeneticEditionPageObject();
+      $page_object = new IslandoraComparativeEditionPageObject();
       $page_object->ingest($image, $parent_namespace, $witness_id, $repository, $facsdir);
     }
   }
@@ -104,7 +104,7 @@ class IslandoraGeneticEditionWitnessObject {
 
 }
 
-class IslandoraGeneticEditionPageObject { 
+class IslandoraComparativeEditionPageObject { 
 
   public static function getParent($pid) {
   }
@@ -112,7 +112,7 @@ class IslandoraGeneticEditionPageObject {
   public function ingest($image, $parent_namespace, $witness_id, $repository, $facsdir) {
     $page_object = $repository->constructObject($parent_namespace);
     $page_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isMemberOf', $witness_id);
-    $page_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:geneticEditionPageCModel');
+    $page_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:comparativeEditionPageCModel');
 
     // Construct OBJ DS
     $obj_datastream = $page_object->constructDatastream('OBJ');
@@ -127,7 +127,7 @@ class IslandoraGeneticEditionPageObject {
 
 }
 
-class IslandoraGeneticEditionWitnessIngestPackage { 
+class IslandoraComparativeEditionWitnessIngestPackage { 
 
   public function validate($package) {
   }
@@ -146,7 +146,7 @@ class IslandoraGeneticEditionWitnessIngestPackage {
       break;
     }
   
-    $witness_object = new IslandoraGeneticEditionWitnessObject();
+    $witness_object = new IslandoraComparativeEditionWitnessObject();
     $witness_object->ingest($connection, $parameters, $tmpdir);
   }
 

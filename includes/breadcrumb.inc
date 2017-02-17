@@ -2,10 +2,10 @@
 
 /**
  * @file
- * This file contains functions to create breadcrumbs on genetic witness and page objects.
+ * This file contains functions to create breadcrumbs on comparative witness and page objects.
  */
 
-function _get_genetic_parent($object) {
+function _get_comparative_parent($object) {
   $parent_result = $object->relationships->get(ISLANDORA_RELS_EXT_URI, 'isMemberOf');
   $parent_pid = $parent_result[0]['object']['value'];
   $parent_object = islandora_object_load($parent_pid);

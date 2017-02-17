@@ -1,0 +1,150 @@
+/* Style Sheet for Comparative Editions Solution Pack Module */
+
+/* Comparative Edition Top Level Styles */
+#icesp-comparative-edition-preview {
+  float: right;
+  max-width: 200px;
+  padding-left: 20px;
+}
+
+#icesp-comparative-edition-children-container {
+  clear: both;
+}
+
+#icesp-comparative-edition-children-container .ui-widget-content {
+  border: none;
+}
+
+#icesp-comparative-edition-children-container .ui-tabs-nav {
+  float: right;
+  margin-top: -20px;
+}
+
+#icesp-comparative-edition-children-container .ui-widget-header {
+  border: none;
+  background: none;
+}
+
+#icesp-comparative-edition-children-container .ui-tabs-panel {
+  padding: 1em 0;
+}
+
+#icesp-comparative-edition-children-container .ui-state-default {
+  border: 1px solid #d3d3d3;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+#icesp-comparative-edition-children-container .ui-state-active {
+  background: black;
+}
+
+#icesp-comparative-edition-children-container .ui-state-active a {
+  color: white;
+}
+
+.icesp-comparative-edition-child-container {
+  clear: left;
+  padding-top: 10px;
+}
+
+.icesp-comparative-edition-child-container img {
+  max-width: 150px;
+  border: 1px solid black;
+  float: left;
+  margin-right: 10px;
+}
+
+#icesp-comparative-edition-child-grid-container {
+  float: left;
+  margin: 0;
+  padding: 0;
+}
+
+#icesp-comparative-edition-child-grid-container li {
+  float: left;
+  list-style: none;
+  max-width: 150px;
+  margin: 15px 30px 0 0;
+}
+
+#icesp-comparative-edition-child-grid-container li img {
+  max-width: 150px;
+  border: 1px solid black;
+}
+
+
+/* Comparative Edition Witness Styles */
+#icesp-witness-preview {
+  float: right;
+  max-width: 200px;
+  padding-left: 20px;
+  border: 1px solid black;
+}
+
+#icesp-witness-children-container {
+  clear: both;
+}
+
+#icesp-witness-children-container ul {
+  float: left;
+}
+
+.icesp-witness-child-container {
+  max-width: 150px;
+  float:left;
+  list-style: none;
+  margin: 15px 30px 0 0;
+}
+
+.icesp-witness-child-container img {
+  max-width: 150px;
+  border: 1px solid black;
+}
+
+p.icesp-witness-page-label {
+  text-align: center;
+}
+
+/* Comparative Edition Page Styles */
+.icesp-button-active {
+  background: black;
+  color: white;
+}
+
+#icesp-tabs-comparison {
+  display: none;
+}
+
+#icesp-comparison-tabs-container {
+  width: 100%;
+  margin: auto;
+  padding: 0;
+  display: inline-block;
+}
+
+.icesp-left-column {
+  width: 46%;
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 10px;
+}
+
+.icesp-right-column {
+  display: inline-block !important;
+  width: 46%;
+  vertical-align: top;
+}
+
+#icesp-comparison-tabs-container #tab-1,
+#icesp-comparison-tabs-container #tab-2,
+#icesp-comparison-tabs-container #tab-3 {
+  height: 500px;
+  overflow: scroll;
+}
+
+.icesp-right-column #tab-comp-2,
+.icesp-right-column #tab-comp-3 {
+  height: 500px;
+  overflow: scroll;
+}

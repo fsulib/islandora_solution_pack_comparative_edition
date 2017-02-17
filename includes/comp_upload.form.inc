@@ -2,11 +2,11 @@
 
 /**
  * @file
- * Handles the uploading of files for the genetic edition ingest process.
+ * Handles the uploading of files for the comparative edition ingest process.
  */
 
 /**
- * Defines a file upload form for uploading genetic edition files.
+ * Defines a file upload form for uploading comparative edition files.
  *
  * @param array $form
  *   The drupal form.
@@ -16,7 +16,7 @@
  * @return array
  *   The drupal form definition.
  */
-function islandora_genetic_edition_gened_upload_form(array $form, array &$form_state) {
+function islandora_comparative_edition_comp_upload_form(array $form, array &$form_state) {
   $upload_size = min((int) ini_get('post_max_size'), (int) ini_get('upload_max_filesize'));
   $obj_extensions = array('tif tiff jp2 jpg png');
   $form = array();
@@ -25,7 +25,7 @@ function islandora_genetic_edition_gened_upload_form(array $form, array &$form_s
     '#title' => t('OBJ File'),
     '#type' => 'managed_file',
     '#required' => TRUE,
-    '#description' => t('Select file to upload for Genetic Edition OBJ datastream.<br/>Files must be less than <strong>@size MB.</strong><br/>Allowed file types: <strong>@ext.</strong>', array('@size' => $upload_size, '@ext' => $obj_extensions[0])),
+    '#description' => t('Select file to upload for Comparative Edition OBJ datastream.<br/>Files must be less than <strong>@size MB.</strong><br/>Allowed file types: <strong>@ext.</strong>', array('@size' => $upload_size, '@ext' => $obj_extensions[0])),
     '#upload_location' => 'temporary://',
     '#upload_validators' => array(
       'file_validate_extensions' => $obj_extensions, 
@@ -37,7 +37,7 @@ function islandora_genetic_edition_gened_upload_form(array $form, array &$form_s
     '#title' => t('CSS File'),
     '#type' => 'managed_file',
     '#required' => TRUE,
-    '#description' => t('Select file to upload for Genetic Editon CSS datastream.<br/>Files must be less than <strong>@size MB.</strong><br/>Allowed file types: <strong>@ext.</strong>', array('@size' => $upload_size, '@ext' => 'css')),
+    '#description' => t('Select file to upload for Comparative Editon CSS datastream.<br/>Files must be less than <strong>@size MB.</strong><br/>Allowed file types: <strong>@ext.</strong>', array('@size' => $upload_size, '@ext' => 'css')),
     '#upload_location' => 'temporary://',
     '#upload_validators' => array(
       'file_validate_extensions' => array('css'), 
@@ -49,7 +49,7 @@ function islandora_genetic_edition_gened_upload_form(array $form, array &$form_s
     '#title' => t('DISPLAY-XSLT File'),
     '#type' => 'managed_file',
     '#required' => TRUE,
-    '#description' => t('Select file to upload for Genetic Editon DISPLAY datastream.<br/>Files must be less than <strong>@size MB.</strong><br/>Allowed file types: <strong>@ext.</strong>', array('@size' => $upload_size, '@ext' => 'xsl')),
+    '#description' => t('Select file to upload for Comparative Editon DISPLAY datastream.<br/>Files must be less than <strong>@size MB.</strong><br/>Allowed file types: <strong>@ext.</strong>', array('@size' => $upload_size, '@ext' => 'xsl')),
     '#upload_location' => 'temporary://',
     '#upload_validators' => array(
       'file_validate_extensions' => array('xsl'), 
@@ -61,7 +61,7 @@ function islandora_genetic_edition_gened_upload_form(array $form, array &$form_s
     '#title' => t('INDEX-XSLT File'),
     '#type' => 'managed_file',
     '#required' => TRUE,
-    '#description' => t('Select file to upload for Genetic Editon DISPLAY datastream.<br/>Files must be less than <strong>@size MB.</strong><br/>Allowed file types: <strong>@ext.</strong>', array('@size' => $upload_size, '@ext' => 'xsl')),
+    '#description' => t('Select file to upload for Comparative Editon DISPLAY datastream.<br/>Files must be less than <strong>@size MB.</strong><br/>Allowed file types: <strong>@ext.</strong>', array('@size' => $upload_size, '@ext' => 'xsl')),
     '#upload_location' => 'temporary://',
     '#upload_validators' => array(
       'file_validate_extensions' => array('xsl'), 
@@ -88,7 +88,7 @@ function islandora_genetic_edition_gened_upload_form(array $form, array &$form_s
  * @param array $form_state
  *   The drupal form state.
  */
-function islandora_genetic_edition_gened_upload_form_submit(array $form, array &$form_state) {
+function islandora_comparative_edition_comp_upload_form_submit(array $form, array &$form_state) {
   $object = islandora_ingest_form_get_object($form_state);
 
   if ($form_state['values']['obj']) {

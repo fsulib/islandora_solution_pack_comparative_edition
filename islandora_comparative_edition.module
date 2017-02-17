@@ -1,0 +1,315 @@
+<?php
+
+/**
+ * @file
+ * The islandora_comparative_edition module.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function islandora_comparative_edition_menu() {
+  $menu = array();
+
+  // Admin menu
+  $menu['admin/islandora/solution_pack_config/comparative_edition'] = array(
+    'title' => 'Comparative Editions',
+    'description' => 'Configure Collatex server connection and select page viewer.',
+    'page callback' => 'drupal_get_form',
+    'access arguments' => array('administer site configuration'),
+    'page arguments' => array('islandora_comparative_edition_admin_settings_form'),
+    'file' => 'includes/admin.form.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+
+  $menu['islandora/object/%islandora_object/manage/attach_witness'] = array(
+    'title' => 'Attach Witness',
+    'access callback' => 'islandora_comparative_edition_attach_witness_access',
+    'access arguments' => array(2),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('islandora_comparative_edition_attach_witness_form', 2),
+    'file' => 'includes/attach_witness.form.inc',
+    'type' => MENU_LOCAL_ACTION,
+    'weight' => 1,
+  );
+
+  return $menu;
+}
+
+/**
+ * Menu access callback.
+ */
+function islandora_comparative_edition_attach_witness_access($object) {
+  if (!islandora_object_access(ISLANDORA_INGEST, $object)) {
+    return FALSE;
+  }
+  return in_array('islandora:comparativeEditionCModel', $object->models);
+}
+
+/**
+ * Implements hook_islandora_required_objects().
+ */
+function islandora_comparative_edition_islandora_required_objects(IslandoraTuque $connection) {
+  $module_path = drupal_get_path('module', 'islandora_comparative_edition');
+
+  // Comparative Edition content model.
+  $comparative_edition_content_model = $connection->repository->constructObject('islandora:comparativeEditionCModel');
+  $comparative_edition_content_model->owner = 'fedoraAdmin';
+  $comparative_edition_content_model->label = 'Islandora Comparative Edition Content Model';
+  $comparative_edition_content_model->models = 'fedora-system:ContentModel-3.0';
+  
+  // DS-COMPOSITE-MODEL datastream.
+  $ge_model_ds = $comparative_edition_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'X');
+  $ge_model_ds->label = 'DS-COMPOSITE-MODEL';
+  $ge_model_ds->mimetype = 'application/xml';
+  $ge_model_ds->setContentFromFile("$module_path/xml/content_models/islandora_comparative_edition_ds_composite_model.xml", FALSE);
+  $comparative_edition_content_model->ingestDatastream($ge_model_ds);
+
+  // Witness content model.
+  $comparative_edition_witness_content_model = $connection->repository->constructObject('islandora:comparativeEditionWitnessCModel');
+  $comparative_edition_witness_content_model->owner = 'fedoraAdmin';
+  $comparative_edition_witness_content_model->label = 'Islandora Comparative Edition Witness Content Model';
+  $comparative_edition_witness_content_model->models = 'fedora-system:ContentModel-3.0';
+  
+  // DS-COMPOSITE-MODEL datastream.
+  $witness_model_ds = $comparative_edition_witness_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'X');
+  $witness_model_ds->label = 'DS-COMPOSITE-MODEL';
+  $witness_model_ds->mimetype = 'application/xml';
+  $witness_model_ds->setContentFromFile("$module_path/xml/content_models/islandora_comparative_edition_witness_ds_composite_model.xml", FALSE);
+  $comparative_edition_witness_content_model->ingestDatastream($witness_model_ds);
+
+  // Page content model.
+  $comparative_edition_page_content_model = $connection->repository->constructObject('islandora:comparativeEditionPageCModel');
+  $comparative_edition_page_content_model->owner = 'fedoraAdmin';
+  $comparative_edition_page_content_model->label = 'Islandora Comparative Edition Page Content Model';
+  $comparative_edition_page_content_model->models = 'fedora-system:ContentModel-3.0';
+  
+  // DS-COMPOSITE-MODEL datastream.
+  $page_model_ds = $comparative_edition_page_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'X');
+  $page_model_ds->label = 'DS-COMPOSITE-MODEL';
+  $page_model_ds->mimetype = 'application/xml';
+  $page_model_ds->setContentFromFile("$module_path/xml/content_models/islandora_comparative_edition_page_ds_composite_model.xml", FALSE);
+  $comparative_edition_page_content_model->ingestDatastream($page_model_ds);
+
+  // Comparative Edition collection.
+  $comparative_edition_collection = $connection->repository->constructObject('islandora:comparative_edition_collection');
+  $comparative_edition_collection->owner = 'fedoraAdmin';
+  $comparative_edition_collection->label = 'Comparative Edition Collection';
+  $comparative_edition_collection->models = 'islandora:collectionCModel';
+  $comparative_edition_collection->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOfCollection', 'islandora:root');
+  
+  // Collection policy datastream.
+  $ge_collection_policy_ds = $comparative_edition_collection->constructDatastream('COLLECTION_POLICY', 'X');
+  $ge_collection_policy_ds->label = 'Collection policy';
+  $ge_collection_policy_ds->mimetype = 'application/xml';
+  $ge_collection_policy_ds->setContentFromFile("$module_path/xml/collection/islandora_comparative_edition_collection_policy.xml", FALSE);
+  $comparative_edition_collection->ingestDatastream($ge_collection_policy_ds);
+  
+  // TN datastream.
+  $ge_collection_tn_ds = $comparative_edition_collection->constructDatastream('TN', 'M');
+  $ge_collection_tn_ds->label = 'Thumbnail';
+  $ge_collection_tn_ds->mimetype = 'image/png';
+  $ge_collection_tn_ds->setContentFromFile("$module_path/images/folder.png", FALSE);
+  $comparative_edition_collection->ingestDatastream($ge_collection_tn_ds);
+
+  return array(
+    'islandora_comparative_edition' => array(
+      'title' => 'Islandora Comparative Edition',
+      'objects' => array(
+        $comparative_edition_content_model,
+        $comparative_edition_witness_content_model,
+        $comparative_edition_page_content_model,
+        $comparative_edition_collection,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_islandora_view_object().
+ */
+function islandora_comparative_edition_islandora_comparativeEditionCModel_islandora_view_object($object) {
+  $output = theme('islandora_comparative_edition', array('islandora_object' => $object));
+  return array('' => $output);
+}
+
+function islandora_comparative_edition_islandora_comparativeEditionWitnessCModel_islandora_view_object($object) {
+  $output = theme('islandora_comparative_edition_witness', array('islandora_object' => $object));
+  return array('' => $output);
+}
+
+function islandora_comparative_edition_islandora_comparativeEditionPageCModel_islandora_view_object($object) {
+  $output = theme('islandora_comparative_edition_page', array('islandora_object' => $object));
+  return array('' => $output);
+}
+
+/**
+ * Implements hook_theme().
+ */
+function islandora_comparative_edition_theme($existing, $type, $theme, $path) {
+  return array(
+    'islandora_comparative_edition' => array(
+      'path' => drupal_get_path('module', 'islandora_comparative_edition').'/theme',
+      'template' => 'islandora-comparative-edition',
+      'variables' => array('islandora_object' => NULL, 'display' => NULL),
+    ),
+    'islandora_comparative_edition_witness' => array(
+      'path' => drupal_get_path('module', 'islandora_comparative_edition').'/theme',
+      'template' => 'islandora-comparative-edition-witness',
+      'variables' => array('islandora_object' => NULL, 'display' => NULL),
+    ),
+    'islandora_comparative_edition_page' => array(
+      'path' => drupal_get_path('module', 'islandora_comparative_edition').'/theme',
+      'template' => 'islandora-comparative-edition-page',
+      'variables' => array('islandora_object' => NULL, 'display' => NULL),
+    ),
+  );  
+}
+
+/**
+ * Implements template_preprocess_HOOK().
+ */
+function template_preprocess_islandora_comparative_edition(&$variables) {
+  drupal_add_library ( 'system' , 'ui.tabs' );
+  drupal_add_css(drupal_get_path('module', 'islandora_comparative_edition') . '/css/islandora_comparative_edition.css');
+  drupal_add_js(drupal_get_path('module', 'islandora_comparative_edition') . '/js/islandora_comparative_edition.js');
+  
+  $mods_string = $variables['islandora_object']['MODS']->content;
+  $variables['mods_obj'] = simplexml_load_string($mods_string);
+}
+
+/**
+ * Implements template_preprocess_HOOK().
+ */
+function template_preprocess_islandora_comparative_edition_witness(&$variables) {
+  drupal_add_css(drupal_get_path('module', 'islandora_comparative_edition') . '/css/islandora_comparative_edition.css');
+  drupal_add_js(drupal_get_path('module', 'islandora_comparative_edition') . '/js/islandora_comparative_edition.js');
+}
+
+/**
+ * Implements template_preprocess_HOOK().
+ */
+function template_preprocess_islandora_comparative_edition_page(&$variables) {
+  drupal_add_library( 'system' , 'ui.tabs' );
+  drupal_add_css(drupal_get_path('module', 'islandora_comparative_edition') . '/css/islandora_comparative_edition.css');
+  drupal_add_js(drupal_get_path('module', 'islandora_comparative_edition') . '/js/islandora_comparative_edition.js');
+  module_load_include('inc', 'islandora', 'includes/solution_packs');
+  
+  $islandora_object = $variables['islandora_object'];
+  
+  // Check for a JP2 Datastream and feed it to the viewer
+  if (isset($islandora_object['JP2'])) {
+    $params = array();
+    $jp2_url = url("islandora/object/{$islandora_object->id}/datastream/JP2/view",
+      array(
+      'absolute' => TRUE,
+      ));
+    $params['jp2_url'] = $jp2_url; 
+    $viewer = islandora_get_viewer($params, 'islandora_comparative_edition_page_viewers', $islandora_object);
+  }
+  
+  if (isset($viewer)) {
+    $variables['page_image'] = $viewer;
+  } else {
+    $variables['page_image'] = "<img src='/islandora/object/{$islandora_object->id}/datastream/OBJ/view'>";
+  }
+  
+  // Retrieve the HTML datastream and place its content in memory
+  if (isset($islandora_object['HTML'])) {
+    $variables['display_html'] = $islandora_object['HTML']->content;
+  } else {
+    watchdog('islandora_comparative_edition', "Object ID {$islandora_object->id} has no HTML datastream.");
+    $variables['display_html'] = "<h3>No HTML datastream found.</h3>";
+  }  
+  
+  // Retrieve the PAGE-TEI datastream and place its content in memory
+  if (isset($islandora_object['PAGE-TEI'])) {
+    $variables['page_tei'] = '<xmp>' . $islandora_object['PAGE-TEI']->content . '</xmp>';
+  } else {
+    watchdog('islandora_comparative_edition', "Object ID {$islandora_object->id} has no PAGE-TEI datastream.");
+    $variables['page_tei'] = "<h3>No PAGE-TEI datastream found.</h3>";
+  }  
+}
+
+/**
+ * Implements hook_islandora_xml_form_builder_forms().
+ */
+function islandora_comparative_edition_islandora_xml_form_builder_forms() {
+  $module_path = drupal_get_path('module', 'islandora_comparative_edition');
+  return array(
+    'Comparative Edition' => array(
+      'form_file' => "$module_path/xml/forms/islandora_comparative_edition_form_mods.xml",
+    ),
+  );
+}
+
+/**
+ * Implements hook_islandora_xml_form_builder_form_associations().
+ */
+function islandora_comparative_edition_islandora_xml_form_builder_form_associations() {
+  return array(
+    'islandora_comparative_edition_mods_form' => array(
+      'content_model' => 'islandora:comparativeEditionCModel',
+      'form_name' => 'Comparative Edition',
+      'dsid' => 'MODS',
+      'title_field' => array('titleInfo', 'title'),
+      'transform' => 'mods_to_dc.xsl',
+      'template' => FALSE,
+    ),
+  );
+}
+
+/**
+ * Implements hook_islandora_ingest_steps().
+ */
+function islandora_comparative_edition_islandora_comparativeEditionCModel_islandora_ingest_steps() {
+  return array(
+    'islandora_comp_file_upload' => array(
+      'weight' => 10,
+      'type' => 'form',
+      'form_id' => 'islandora_comparative_edition_comp_upload_form',
+      'module' => 'islandora_comparative_edition',
+      'file' => 'includes/comp_upload.form.inc',
+    ),
+  );
+}
+
+/**
+ * Implements hook_CMODEL_islandora_derivative().
+ */
+function islandora_comparative_edition_islandora_comparativeEditionCModel_islandora_derivative() {
+  $mod_path = drupal_get_path('module', 'islandora_comparative_edition');
+  return array(
+    array(
+      'source_dsid' => 'OBJ',
+      'destination_dsid' => 'TN',
+      'weight' => 0,
+      'function' => array(
+        'islandora_comparative_edition_create_tn_derivative',
+      ),
+      'file' => "$mod_path/includes/derivatives.inc",
+    ),
+  );
+}
+
+/**
+ * Implements hook_islandora_breadcrumbs_alter().
+ */
+function islandora_comparative_edition_islandora_breadcrumbs_alter(&$breadcrumbs, $context, $object = NULL) {
+  module_load_include('inc', 'islandora_comparative_edition', 'includes/breadcrumb');
+  if (in_array('islandora:comparativeEditionWitnessCModel', $object->models)) {
+    $comp_parent = _get_comparative_parent($object);
+    $comp_parent_collection = _get_collection_parent($comp_parent);
+    $breadcrumbs[] = _create_breadcrumb_html($comp_parent_collection);
+    $breadcrumbs[] = _create_breadcrumb_html($comp_parent);
+  }
+  if (in_array('islandora:comparativeEditionPageCModel', $object->models)) {
+    $witness_parent = _get_comparative_parent($object);
+    $comp_parent = _get_comparative_parent($witness_parent);
+    $comp_parent_collection = _get_collection_parent($comp_parent);
+    $breadcrumbs[] = _create_breadcrumb_html($comp_parent_collection);
+    $breadcrumbs[] = _create_breadcrumb_html($comp_parent);
+    $breadcrumbs[] = _create_breadcrumb_html($witness_parent);
+  }
+}

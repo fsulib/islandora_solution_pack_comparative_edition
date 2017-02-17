@@ -2,22 +2,22 @@
 
 /**
  * @file
- * This is the template file for genetic edition page objects
+ * This is the template file for comparative edition page objects
  */
 ?>
 
-<div id="igesp-page-header">
+<div id="icesp-page-header">
   
   <div id="switch-view-controls">
-    <button type="button" id="igesp-focus-button" class="igesp-button-active" disabled>Focus View</button>
-    <button type="button" id="igesp-comparison-button">Comparison View</button>
+    <button type="button" id="icesp-focus-button" class="icesp-button-active" disabled>Focus View</button>
+    <button type="button" id="icesp-comparison-button">Comparison View</button>
   </div>
   
 </div>  
   
-<div id="igesp-comparison-tabs-container">
+<div id="icesp-comparison-tabs-container">
   
-  <div id="igesp-tabs">
+  <div id="icesp-tabs">
     <ul>
       <li><a href="#tab-1">Image</a></li>
       <li><a href="#tab-2">Transcript</a></li>
@@ -38,7 +38,7 @@
   
   </div>
   
-  <div id="igesp-tabs-comparison">
+  <div id="icesp-tabs-comparison">
     <ul>
       <li><a href="#tab-comp-2">Transcript</a></li>
       <li><a href="#tab-comp-3">TEI</a></li>
