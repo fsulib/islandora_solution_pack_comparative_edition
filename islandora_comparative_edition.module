@@ -279,14 +279,59 @@ function islandora_comparative_edition_islandora_comparativeEditionCModel_island
  * Implements hook_CMODEL_islandora_derivative().
  */
 function islandora_comparative_edition_islandora_comparativeEditionCModel_islandora_derivative() {
-  $mod_path = drupal_get_path('module', 'islandora_comparative_edition');
+  $mod_path = drupal_get_path('module', 'islandora_large_image');
   return array(
     array(
       'source_dsid' => 'OBJ',
       'destination_dsid' => 'TN',
       'weight' => 0,
       'function' => array(
-        'islandora_comparative_edition_create_tn_derivative',
+        'islandora_large_image_create_tn_derivative',
+      ),
+      'file' => "$mod_path/includes/derivatives.inc",
+    ),
+  );
+}
+
+/**
+ * Implements hook_CMODEL_islandora_derivative().
+ */
+function islandora_comparative_edition_islandora_comparativeEditionWitnessCModel_islandora_derivative() {
+  $mod_path = drupal_get_path('module', 'islandora_large_image');
+  return array(
+    array(
+      'source_dsid' => 'OBJ',
+      'destination_dsid' => 'TN',
+      'weight' => 0,
+      'function' => array(
+        'islandora_large_image_create_tn_derivative',
+      ),
+      'file' => "$mod_path/includes/derivatives.inc",
+    ),
+  );
+}
+
+/**
+ * Implements hook_CMODEL_islandora_derivative().
+ */
+function islandora_comparative_edition_islandora_comparativeEditionPageCModel_islandora_derivative() {
+  $mod_path = drupal_get_path('module', 'islandora_large_image');
+  return array(
+    array(
+      'source_dsid' => 'OBJ',
+      'destination_dsid' => 'TN',
+      'weight' => 0,
+      'function' => array(
+        'islandora_large_image_create_tn_derivative',
+      ),
+      'file' => "$mod_path/includes/derivatives.inc",
+    ),
+    array(
+      'source_dsid' => 'OBJ',
+      'destination_dsid' => 'JP2',
+      'weight' => 0,
+      'function' => array(
+        'islandora_large_image_create_jp2_derivative',
       ),
       'file' => "$mod_path/includes/derivatives.inc",
     ),
