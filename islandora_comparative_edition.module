@@ -199,20 +199,20 @@ function template_preprocess_islandora_comparative_edition_page(&$variables) {
   $islandora_object = $variables['islandora_object'];
   
   // Check for a JP2 Datastream and feed it to the viewer
-  if (isset($islandora_object['JP2'])) {
+  if (isset($islandora_object['JP2']) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $islandora_object['JP2'], user_load(0))) {
     $params = array();
     $jp2_url = url("islandora/object/{$islandora_object->id}/datastream/JP2/view",
       array(
       'absolute' => TRUE,
       ));
     $params['jp2_url'] = $jp2_url; 
-    $viewer = islandora_get_viewer($params, 'islandora_comparative_edition_page_viewers', $islandora_object);
+    $viewer = islandora_get_viewer($params, 'islandora_comparative_edition_page_viewers', $islandora_object);    
   }
   
   if (isset($viewer)) {
     $variables['page_image'] = $viewer;
   } else {
-    $variables['page_image'] = "<img src='/islandora/object/{$islandora_object->id}/datastream/OBJ/view'>";
+    $variables['page_image'] = "<h3>No JP2 Datastream Found or View Objects Permissions for Anonymous disabled.";
   }
   
   // Retrieve the HTML datastream and place its content in memory
