@@ -20,10 +20,7 @@
     <form MIME="image/png"/>
     <form MIME="image/gif"/>
   </dsTypeModel>
-  <dsTypeModel ID="WINDEX" optional="true">
-    <form MIME="application/json"/>
-  </dsTypeModel>
-  <dsTypeModel ID="FULL-TEI" optional="true">
-    <form MIME="text/xml"/>
+  <dsTypeModel ID="DISPLAY-CSS" optional="true">
+    <form MIME="text/css"/>
   </dsTypeModel>
 </dsCompositeModel>

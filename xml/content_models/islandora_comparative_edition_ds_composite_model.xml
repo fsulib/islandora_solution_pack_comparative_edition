@@ -3,9 +3,6 @@
   <dsTypeModel ID="RELS-EXT" optional="true">
     <form FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" MIME="application/rdf+xml"/>
   </dsTypeModel>
-  <dsTypeModel ID="RELS-INT" optional="true">
-    <form FORMAT_URI="info:fedora/fedora-system:FedoraRELSInt-1.0" MIME="application/rdf+xml"/>
-  </dsTypeModel>
   <dsTypeModel ID="MODS" optional="true">
     <form MIME="text/xml"/>
   </dsTypeModel>
@@ -25,14 +22,5 @@
   </dsTypeModel>
   <dsTypeModel ID="MINDEX" optional="true">
     <form MIME="application/json"/>
-  </dsTypeModel>
-  <dsTypeModel ID="DISPLAY-XSLT" optional="true">
-    <form MIME="text/xsl"/>
-  </dsTypeModel>
-  <dsTypeModel ID="INDEX-XSLT" optional="true">
-    <form MIME="text/xsl"/>
-  </dsTypeModel>
-  <dsTypeModel ID="CSS" optional="true">
-    <form MIME="text/css"/>
   </dsTypeModel>
 </dsCompositeModel>
