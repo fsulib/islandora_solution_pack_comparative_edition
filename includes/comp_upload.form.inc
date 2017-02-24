@@ -33,52 +33,8 @@ function islandora_comparative_edition_comp_upload_form(array $form, array &$for
     ),
   );
 
-  $form['css'] = array(
-    '#title' => t('CSS File'),
-    '#type' => 'managed_file',
-    '#required' => TRUE,
-    '#description' => t('Select file to upload for Comparative Editon CSS datastream.<br/>Files must be less than <strong>@size MB.</strong><br/>Allowed file types: <strong>@ext.</strong>', array('@size' => $upload_size, '@ext' => 'css')),
-    '#upload_location' => 'temporary://',
-    '#upload_validators' => array(
-      'file_validate_extensions' => array('css'), 
-      'file_validate_size' => array($upload_size * 1024 * 1024),
-    ),
-  );
-
-  $form['display-xslt'] = array(
-    '#title' => t('DISPLAY-XSLT File'),
-    '#type' => 'managed_file',
-    '#required' => TRUE,
-    '#description' => t('Select file to upload for Comparative Editon DISPLAY datastream.<br/>Files must be less than <strong>@size MB.</strong><br/>Allowed file types: <strong>@ext.</strong>', array('@size' => $upload_size, '@ext' => 'xsl')),
-    '#upload_location' => 'temporary://',
-    '#upload_validators' => array(
-      'file_validate_extensions' => array('xsl'), 
-      'file_validate_size' => array($upload_size * 1024 * 1024),
-    ),
-  );
-
-  $form['index-xslt'] = array(
-    '#title' => t('INDEX-XSLT File'),
-    '#type' => 'managed_file',
-    '#required' => TRUE,
-    '#description' => t('Select file to upload for Comparative Editon DISPLAY datastream.<br/>Files must be less than <strong>@size MB.</strong><br/>Allowed file types: <strong>@ext.</strong>', array('@size' => $upload_size, '@ext' => 'xsl')),
-    '#upload_location' => 'temporary://',
-    '#upload_validators' => array(
-      'file_validate_extensions' => array('xsl'), 
-      'file_validate_size' => array($upload_size * 1024 * 1024),
-    ),
-  );
-
   return $form;
 }
-
-/*
-    '#upload_validators' => array(
-      'file_validate_extensions' => 'xsl', 
-      'file_validate_size' => array($upload_size * 1024 * 1024),
-    ),
-
-*/
 
 /**
  * Addes the uploaded files into the ingestable objects associated datastream.
@@ -105,54 +61,6 @@ function islandora_comparative_edition_comp_upload_form_submit(array $form, arra
     $ds->setContentFromFile($obj_path, FALSE);
     $ds->label = $obj_file->filename;
     $ds->mimetype = $obj_file->filemime;
-  }
-
-  if ($form_state['values']['css']) {
-    if (empty($object['CSS'])) {
-      $ds = $object->constructDatastream('CSS', 'M');
-      $object->ingestDatastream($ds);
-    }
-    else {
-      $ds = $object['CSS'];
-    }
-
-    $css_file = file_load($form_state['values']['css']);
-    $css_path = drupal_realpath($css_file->uri);
-    $ds->setContentFromFile($css_path, FALSE);
-    $ds->label = $css_file->filename;
-    $ds->mimetype = $css_file->filemime;
-  }
-
-  if ($form_state['values']['display-xslt']) {
-    if (empty($object['DISPLAY-XSLT'])) {
-      $ds = $object->constructDatastream('DISPLAY-XSLT', 'M');
-      $object->ingestDatastream($ds);
-    }
-    else {
-      $ds = $object['DISPLAY-XSLT'];
-    }
-
-    $display_file = file_load($form_state['values']['display-xslt']);
-    $display_path = drupal_realpath($display_file->uri);
-    $ds->setContentFromFile($display_path, FALSE);
-    $ds->label = $display_file->filename;
-    $ds->mimetype = $display_file->filemime;
-  }
-
-  if ($form_state['values']['index-xslt']) {
-    if (empty($object['INDEX-XSLT'])) {
-      $ds = $object->constructDatastream('INDEX-XSLT', 'M');
-      $object->ingestDatastream($ds);
-    }
-    else {
-      $ds = $object['INDEX-XSLT'];
-    }
-
-    $index_file = file_load($form_state['values']['index-xslt']);
-    $index_path = drupal_realpath($index_file->uri);
-    $ds->setContentFromFile($index_path, FALSE);
-    $ds->label = $index_file->filename;
-    $ds->mimetype = $index_file->filemime;
   }
 
 }
