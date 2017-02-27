@@ -129,25 +129,76 @@ class IslandoraComparativeEditionPageObject {
 
 class IslandoraComparativeEditionWitnessIngestPackage { 
 
-  public function validate($package) {
+  public function validate($witness_url) {
+    if (!is_dir($witness_url)) {
+      return array('valid' => FALSE, 'msg' => "Error with unzipped witness at {$witness_url}."); 
+    }
+    else {
+      $witness_files = array();
+      $witness_files['mods'] = glob("{$witness_url}/*.xml");
+      $witness_files['obj'] = glob("{$witness_url}/*.{jpg,jpeg,png,tiff}", GLOB_BRACE);
+      $witness_files['css'] = glob("{$witness_url}/*.css");
+
+      $page_files = glob("{$witness_url}/pages/*");
+      $pages = array();
+      foreach ($page_files as $page_file) {
+	$page_file_parts = explode(".", $page_file);
+	$page_file_parts = explode("/", $page_file_parts[0]);
+        $pages[] = end($page_file_parts);
+      }
+      $pages = array_unique($pages);
+      foreach ($pages as $page) {
+        $witness_files['pages'][$page]['mods'] = "{$witness_url}/pages/{$page}.mods";
+        $witness_files['pages'][$page]['content-xml'] = "{$witness_url}/pages/{$page}.xml";
+        $witness_files['pages'][$page]['display-html'] = "{$witness_url}/pages/{$page}.html";
+        $witness_files['pages'][$page]['pindex'] = "{$witness_url}/pages/{$page}.txt";
+        $witness_files['pages'][$page]['obj'] = glob("{$witness_url}/pages/{$page}*.{jpg,jpeg,png,tiff}", GLOB_BRACE);
+
+      }
+
+    }
+
+    $validation_message = "This is a test";
+    return array('valid' => TRUE, 'msg' => $validation_message, 'files' => $witness_files);
+
   }
 
-  public function ingest($connection, $parameters) {
+  public function ingest($form_state) {
+    $connection = islandora_get_tuque_connection();
+    $target = file_load($form_state['values']['target']);
+    $parameters = $form_state['values'] + array(
+      'zip_file_uri' => $target->uri,
+      'type' => 'zip',
+      'parent_relationship_uri' => 'info:fedora/fedora-system:def/relations-external#',
+      'parent_relationship_pred' => 'isMemberOf',
+      'wait_for_metadata' => FALSE,
+      'directory_dedup' => FALSE,
+      'content_models' => array('islandora:comparativeEditionWitnessCModel'),
+    );
     $file_url = drupal_realpath($parameters['zip_file_uri']);
-    $tmpdir = variable_get('file_temporary_path', '/tmp') . "/witness_ingest";
-
+    $witness_url = variable_get('file_temporary_path', '/tmp') . "/cesp-witness";
     $zip = new ZipArchive;
     $response = $zip->open($file_url);
     if ($response === TRUE) {
-      $zip->extractTo($tmpdir);
+      $zip->extractTo($witness_url);
       $zip->close();
     } else {
-      watchdog('gesp', "Error extracting zip to tmp directory: temporary://witness_ingest/");
+      watchdog('Islandora Solution Pack Comparative Edition', "Error extracting witness ingest zip package to tmp directory: '$witness_url'");
       break;
     }
-  
-    $witness_object = new IslandoraComparativeEditionWitnessObject();
-    $witness_object->ingest($connection, $parameters, $tmpdir);
+
+    $witness = $this->validate($witness_url);
+    if ($witness['valid']) {
+      watchdog('cesp', json_encode($witness));
+      //$witness_object = new IslandoraComparativeEditionWitnessObject();
+      //$witness_object->ingest($witness['files']);
+    }
+    else {
+      drupal_set_message("The submitted witness package could not be ingested because it was missing the following parts: {$witness['msg']}", 'error');
+    }
+
+
+    $deletion = file_delete($target);
   }
 
 }

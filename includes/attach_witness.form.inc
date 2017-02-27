@@ -35,21 +35,8 @@ function islandora_comparative_edition_attach_witness_form($form, &$form_state, 
 }
 
 function islandora_comparative_edition_attach_witness_form_submit($form, $form_state) {
-  $target = file_load($form_state['values']['target']);
-  $connection = islandora_get_tuque_connection();
-  $parameters = $form_state['values'] + array(
-    'zip_file_uri' => $target->uri,
-    'type' => 'zip',
-    'parent_relationship_uri' => 'info:fedora/fedora-system:def/relations-external#',
-    'parent_relationship_pred' => 'isMemberOf',
-    'wait_for_metadata' => FALSE,
-    'directory_dedup' => FALSE,
-    'content_models' => array('islandora:comparativeEditionWitnessCModel'),
-  );
-
   module_load_include('inc', 'islandora_comparative_edition', 'includes/classes');
   $package = new IslandoraComparativeEditionWitnessIngestPackage();
-  $package->ingest($connection, $parameters);
-  $deletion = file_delete($target);
+  $package->ingest($form_state);
   drupal_goto("islandora/object/{$form_state['values']['parent']}");
 }
