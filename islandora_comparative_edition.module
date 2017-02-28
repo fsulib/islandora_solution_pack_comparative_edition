@@ -33,8 +33,26 @@ function islandora_comparative_edition_menu() {
     'type' => MENU_LOCAL_ACTION,
     'weight' => 1,
   );
+  
+  $menu['islandora/object/%islandora_object/mindex/%'] = array (
+    'page callback' => 'icesp_get_mindex',
+    'page arguments' => array(2,4),
+    'access callback' => TRUE,
+  );
 
   return $menu;
+}
+
+/**
+ * Callback function for mindex query.
+ */
+function icesp_get_mindex($pid, $sentence_id) {
+  module_load_include('inc', 'islandora_comparative_edition', 'includes/classes');
+  //$ce = IslandoraComparativeEditionPageObject::getGrandparent($pid);
+  $ce = islandora_object_load('islandora:1');
+  $mindex = json_decode($ce['MINDEX']->content);
+  print json_encode($mindex->{$sentence_id});
+  drupal_exit();
 }
 
 /**
@@ -191,6 +209,7 @@ function template_preprocess_islandora_comparative_edition_witness(&$variables) 
  * Implements template_preprocess_HOOK().
  */
 function template_preprocess_islandora_comparative_edition_page(&$variables) {
+  global $base_url;
   drupal_add_library( 'system' , 'ui.tabs' );
   drupal_add_css(drupal_get_path('module', 'islandora_comparative_edition') . '/css/islandora_comparative_edition.css');
   drupal_add_js(drupal_get_path('module', 'islandora_comparative_edition') . '/js/islandora_comparative_edition.js');
@@ -206,29 +225,37 @@ function template_preprocess_islandora_comparative_edition_page(&$variables) {
       'absolute' => TRUE,
       ));
     $params['jp2_url'] = $jp2_url; 
-    $viewer = islandora_get_viewer($params, 'islandora_comparative_edition_page_viewers', $islandora_object);    
+    $viewer = islandora_get_viewer($params, 'islandora_comparative_edition_page_viewers', $islandora_object);
+    
+    if(!$viewer) {
+      $obj_url = url("islandora/object/{$islandora_object->id}/datastream/OBJ/view",
+        array(
+          'absolute' => TRUE,
+        ));
+      $viewer = '<img src="' . $obj_url . '"></img>';
+    }
   }
   
   if (isset($viewer)) {
     $variables['page_image'] = $viewer;
   } else {
-    $variables['page_image'] = "<h3>No JP2 Datastream Found or View Objects Permissions for Anonymous disabled.";
+    $variables['page_image'] = "<h3>No JP2 Datastream Found or View Objects Permissions for Anonymous disabled.</h3>";
   }
   
   // Retrieve the HTML datastream and place its content in memory
-  if (isset($islandora_object['HTML'])) {
-    $variables['display_html'] = $islandora_object['HTML']->content;
+  if (isset($islandora_object['DISPLAY-HTML'])) {
+    $variables['display_html'] = $islandora_object['DISPLAY-HTML']->content;
   } else {
-    watchdog('islandora_comparative_edition', "Object ID {$islandora_object->id} has no HTML datastream.");
-    $variables['display_html'] = "<h3>No HTML datastream found.</h3>";
+    watchdog('islandora_comparative_edition', "Object ID {$islandora_object->id} has no DISPLAY-HTML datastream.");
+    $variables['display_html'] = "<h3>No DISPLAY-HTML datastream found.</h3>";
   }  
   
   // Retrieve the PAGE-TEI datastream and place its content in memory
-  if (isset($islandora_object['PAGE-TEI'])) {
-    $variables['page_tei'] = '<xmp>' . $islandora_object['PAGE-TEI']->content . '</xmp>';
+  if (isset($islandora_object['CONTENT-XML'])) {
+    $variables['page_tei'] = '<xmp>' . $islandora_object['CONTENT-XML']->content . '</xmp>';
   } else {
-    watchdog('islandora_comparative_edition', "Object ID {$islandora_object->id} has no PAGE-TEI datastream.");
-    $variables['page_tei'] = "<h3>No PAGE-TEI datastream found.</h3>";
+    watchdog('islandora_comparative_edition', "Object ID {$islandora_object->id} has no CONTENT-XML datastream.");
+    $variables['page_tei'] = "<h3>No CONTENT-XML datastream found.</h3>";
   }  
 }
 
