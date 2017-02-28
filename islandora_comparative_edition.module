@@ -48,9 +48,9 @@ function islandora_comparative_edition_menu() {
  */
 function icesp_get_mindex($pid, $sentence_id) {
   module_load_include('inc', 'islandora_comparative_edition', 'includes/classes');
-  //$ce = IslandoraComparativeEditionPageObject::getGrandparent($pid);
-  $ce = islandora_object_load('islandora:1');
-  $mindex = json_decode($ce['MINDEX']->content);
+  $ce_pid = IslandoraComparativeEditionPageObject::getGrandparent($pid);
+  $ce_object = islandora_object_load($ce_pid);
+  $mindex = json_decode($ce_object['MINDEX']->content);
   print json_encode($mindex->{$sentence_id});
   drupal_exit();
 }
@@ -209,8 +209,8 @@ function template_preprocess_islandora_comparative_edition_witness(&$variables) 
  * Implements template_preprocess_HOOK().
  */
 function template_preprocess_islandora_comparative_edition_page(&$variables) {
-  global $base_url;
   drupal_add_library( 'system' , 'ui.tabs' );
+  drupal_add_library( 'system' , 'ui.dialog' );
   drupal_add_css(drupal_get_path('module', 'islandora_comparative_edition') . '/css/islandora_comparative_edition.css');
   drupal_add_js(drupal_get_path('module', 'islandora_comparative_edition') . '/js/islandora_comparative_edition.js');
   module_load_include('inc', 'islandora', 'includes/solution_packs');

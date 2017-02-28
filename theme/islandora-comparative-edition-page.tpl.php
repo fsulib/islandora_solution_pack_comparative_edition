@@ -55,3 +55,5 @@
   </div>
   
 </div>
+
+<div id="icesp-dialog"><div id="icesp-dialog-text"></div></div>

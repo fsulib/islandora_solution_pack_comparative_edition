@@ -148,3 +148,11 @@ p.icesp-witness-page-label {
   height: 500px;
   overflow: scroll;
 }
+
+.icesp-comparable {
+  cursor: pointer;
+}
+
+.icesp-comparable:hover {
+  text-decoration: underline;
+}

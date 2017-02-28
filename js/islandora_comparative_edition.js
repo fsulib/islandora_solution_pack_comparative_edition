@@ -1,6 +1,5 @@
 /* Javascript file for Comparative Editions Solution Pack Module */
 
-
 jQuery(document).ready(function($) {
   
   $("#icesp-tabs").tabs();
@@ -35,5 +34,19 @@ jQuery(document).ready(function($) {
     $("#icesp-tabs-comparison").addClass('icesp-right-column');
 
   });
+  
+  var comp_units = document.getElementsByClassName('icesp-comparable');
+ 
+  for(var i=0;i<comp_units.length;i++){
+    comp_units[i].addEventListener("click", function(){
+      var mindex_location = window.location.href + "/mindex/" + this.id;
+      
+      $.get(mindex_location, function( results_html ) {
+        $("#icesp-dialog-text").text(results_html);
+        $("#icesp-dialog").dialog();
+      });      
+      
+    }, false);   
+  }
   
 });
