@@ -8,6 +8,20 @@
 class IslandoraComparativeEditionObject { 
 
   public static function getChildren($pid) {
+    $query = <<<EOQ
+SELECT ?child FROM <#ri> WHERE {
+  ?child <http://islandora.ca/ontology/relsext#isMemberOf> <info:fedora/{$pid}>
+}
+EOQ;
+
+    $connection = islandora_get_tuque_connection();
+    $results = $connection->repository->ri->sparqlQuery($query);
+    $children = array();
+    foreach ($results as $result) {
+      $children[] = $result['child']['value'];
+    }
+
+    return $children;
   }
 
 }
@@ -15,9 +29,27 @@ class IslandoraComparativeEditionObject {
 class IslandoraComparativeEditionWitnessObject { 
 
   public static function getParent($pid) {
+    $object = islandora_object_load($pid);
+    $parent = $object->relationships->get(ISLANDORA_RELS_EXT_URI, 'isMemberOf');    
+    return $parent[0]['object']['value'];
   }
 
   public static function getChildren($pid) {
+
+    $query = <<<EOQ
+SELECT ?child FROM <#ri> WHERE {
+  ?child <http://islandora.ca/ontology/relsext#isMemberOf> <info:fedora/{$pid}>
+}
+EOQ;
+
+    $connection = islandora_get_tuque_connection();
+    $results = $connection->repository->ri->sparqlQuery($query);
+    $children = array();
+    foreach ($results as $result) {
+      $children[] = $result['child']['value'];
+    }
+
+    return $children;
   }
 
   public function ingest($parameters, $files) {
@@ -70,6 +102,18 @@ class IslandoraComparativeEditionWitnessObject {
 class IslandoraComparativeEditionPageObject { 
 
   public static function getParent($pid) {
+    $object = islandora_object_load($pid);
+    $parent = $object->relationships->get(ISLANDORA_RELS_EXT_URI, 'isMemberOf');    
+    return $parent[0]['object']['value'];
+  }
+
+  public static function getGrandparent($pid) {
+    $parent = self::getParent($pid);
+    $grandparent = IslandoraComparativeEditionWitnessObject::getParent($parent);
+    return $grandparent; 
+  }
+
+  public static function getSiblings($pid) {
   }
 
   public function ingest($files, $parent_id) {
