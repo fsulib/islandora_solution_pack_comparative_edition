@@ -48,7 +48,11 @@ jQuery(document).ready(function($) {
         var result_html = '';
         
         keys.forEach(function(key) {
-          result_html = result_html + key + results_object[key];
+          var sentence_object = results_object[key];
+          var sentence_keys  = Object.keys(sentence_object);
+          sentence_keys.forEach(function(sentence_key) {
+            result_html = result_html + sentence_key + sentence_object[sentence_key];
+          });
         });
         
         $("#icesp-comparison-table").html(result_html);
