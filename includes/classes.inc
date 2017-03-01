@@ -7,6 +7,52 @@
 
 class IslandoraComparativeEditionObject { 
 
+  public static function formatSentencePart($pid, $part) {
+    $parent_pid = IslandoraComparativeEditionPageObject::getParent($pid);
+    $parent_label = islandora_object_load($parent_pid)->label;
+    $page_label = islandora_object_load($pid)->label; 
+    $table_header = "<a class='icesp-table-row' href='/islandora/object/{$pid}'><div class='icesp-table-header'>{$parent_label}, Page {$page_label}</div>";
+    $table_data = "<div class='invariant'>{$part}</div></a>";
+    return array($table_header => $table_data);
+  }
+
+  public static function generateMindex($ce_pid) {
+
+    // Gather grandchild pindices
+    $pindices = array();
+    $witnesses = self::getChildren($ce_pid);
+    foreach ($witnesses as $witness) {
+      $pages = IslandoraComparativeEditionWitnessObject::getChildren($witness);
+      foreach ($pages as $page) {
+        $page_object = islandora_object_load($page);
+        $pindices[$page] = $page_object['PINDEX']->content;
+      }
+    }
+    
+    // Extract data from pindices to form array of raw mindex data
+    $mindex = array();
+    foreach ($pindices as $page_pid => $pindex) {
+      $lines = explode("\n", trim($pindex));
+      foreach ($lines as $line) {
+        $sentence = explode("|", $line);
+        $sentence_id = array_shift($sentence);
+        foreach ($sentence as $part) {
+          $mindex[$sentence_id][] = self::formatSentencePart($page_pid, $part);
+        }
+      }
+    }
+
+    $ce_object = islandora_object_load($ce_pid);
+    $mindex_datastream = $ce_object->constructDatastream('MINDEX');
+    $mindex_datastream->label = 'Master Index';
+    $mindex_datastream->mimeType = 'application/json'; 
+    $mindex_datastream->setContentFromString(json_encode($mindex));
+    $ce_object->ingestDatastream($mindex_datastream);
+
+    dpm($mindex);
+
+  }
+
   public static function getChildren($pid) {
     $query = <<<EOQ
 SELECT ?child ?seq FROM <#ri> WHERE {
@@ -100,6 +146,9 @@ EOQ;
       $page_object = new IslandoraComparativeEditionPageObject();
       $page_object->ingest($page, $witness_id);
     }
+
+    // Trigger rebuilding of parent MINDEX
+    IslandoraComparativeEditionObject::generateMindex($parent_id);
 
   }
 
