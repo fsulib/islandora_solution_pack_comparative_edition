@@ -9,18 +9,20 @@ class IslandoraComparativeEditionObject {
 
   public static function getChildren($pid) {
     $query = <<<EOQ
-SELECT ?child FROM <#ri> WHERE {
-  ?child <http://islandora.ca/ontology/relsext#isMemberOf> <info:fedora/{$pid}>
+SELECT ?child ?seq FROM <#ri> WHERE {
+  ?child <http://islandora.ca/ontology/relsext#isMemberOf> <info:fedora/{$pid}> .
+  ?child <http://islandora.ca/ontology/relsext#isSequenceNumber> ?seq .
 }
 EOQ;
-
     $connection = islandora_get_tuque_connection();
     $results = $connection->repository->ri->sparqlQuery($query);
     $children = array();
     foreach ($results as $result) {
-      $children[] = $result['child']['value'];
+      $child = $result['child']['value'];
+      $seq = $result['seq']['value'];
+      $children[$seq] = $child;
     }
-
+    
     return $children;
   }
 
@@ -35,20 +37,21 @@ class IslandoraComparativeEditionWitnessObject {
   }
 
   public static function getChildren($pid) {
-
     $query = <<<EOQ
-SELECT ?child FROM <#ri> WHERE {
-  ?child <http://islandora.ca/ontology/relsext#isMemberOf> <info:fedora/{$pid}>
+SELECT ?child ?seq FROM <#ri> WHERE {
+  ?child <http://islandora.ca/ontology/relsext#isMemberOf> <info:fedora/{$pid}> .
+  ?child <http://islandora.ca/ontology/relsext#isSequenceNumber> ?seq .
 }
 EOQ;
-
     $connection = islandora_get_tuque_connection();
     $results = $connection->repository->ri->sparqlQuery($query);
     $children = array();
     foreach ($results as $result) {
-      $children[] = $result['child']['value'];
+      $child = $result['child']['value'];
+      $seq = $result['seq']['value'];
+      $children[$seq] = $child;
     }
-
+    
     return $children;
   }
 
