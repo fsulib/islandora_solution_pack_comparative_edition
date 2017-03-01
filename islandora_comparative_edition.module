@@ -195,6 +195,16 @@ function template_preprocess_islandora_comparative_edition(&$variables) {
   
   $mods_string = $variables['islandora_object']['MODS']->content;
   $variables['mods_obj'] = simplexml_load_string($mods_string);
+
+  module_load_include('inc', 'islandora_comparative_edition', 'includes/classes');
+  $variables['children'] = array();
+  $children = IslandoraComparativeEditionObject::getChildren($variables['islandora_object']->id);
+  foreach ($children as $child) {
+    $object = islandora_object_load($child);
+    $variables['children'][$child]['pid'] = $object->id;
+    $variables['children'][$child]['label'] = $object->label;
+    $variables['children'][$child]['abstract'] = (string) simplexml_load_string($object['MODS']->content)->abstract; 
+  }
 }
 
 /**
@@ -203,6 +213,18 @@ function template_preprocess_islandora_comparative_edition(&$variables) {
 function template_preprocess_islandora_comparative_edition_witness(&$variables) {
   drupal_add_css(drupal_get_path('module', 'islandora_comparative_edition') . '/css/islandora_comparative_edition.css');
   drupal_add_js(drupal_get_path('module', 'islandora_comparative_edition') . '/js/islandora_comparative_edition.js');
+  
+  $mods_string = $variables['islandora_object']['MODS']->content;
+  $variables['mods_obj'] = simplexml_load_string($mods_string);
+
+  module_load_include('inc', 'islandora_comparative_edition', 'includes/classes');
+  $variables['children'] = array();
+  $children = IslandoraComparativeEditionWitnessObject::getChildren($variables['islandora_object']->id);
+  foreach ($children as $child) {
+    $object = islandora_object_load($child);
+    $variables['children'][$child]['pid'] = $object->id;
+    $variables['children'][$child]['label'] = $object->label;
+  }
 }
 
 /**

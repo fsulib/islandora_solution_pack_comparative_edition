@@ -1,11 +1,3 @@
-<?php
-
-/**
- * @file
- * This is the template file for comparative edition page objects
- */
-?>
-
 <div id="icesp-page-header">
   
   <div id="switch-view-controls">
