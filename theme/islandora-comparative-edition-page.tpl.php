@@ -1,3 +1,7 @@
+<?php 
+//dpm($siblings); //Reference the $siblings array for building next/prev/dropdown UI
+?>
+
 <div id="icesp-page-header">
   
   <div id="switch-view-controls">

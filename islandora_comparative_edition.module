@@ -238,6 +238,9 @@ function template_preprocess_islandora_comparative_edition_page(&$variables) {
   module_load_include('inc', 'islandora', 'includes/solution_packs');
   
   $islandora_object = $variables['islandora_object'];
+
+  module_load_include('inc', 'islandora_comparative_edition', 'includes/classes');
+  $variables['siblings'] = IslandoraComparativeEditionPageObject::getSiblings($islandora_object->id);
   
   // Check for a JP2 Datastream and feed it to the viewer
   if (isset($islandora_object['JP2']) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $islandora_object['JP2'], user_load(0))) {
@@ -264,7 +267,7 @@ function template_preprocess_islandora_comparative_edition_page(&$variables) {
     $variables['page_image'] = "<h3>No JP2 Datastream Found or View Objects Permissions for Anonymous disabled.</h3>";
   }
   
-  // Retrieve the HTML datastream and place its content in memory
+  // Retrieve the DISPLAY-HTML datastream and place its content in memory
   if (isset($islandora_object['DISPLAY-HTML'])) {
     $variables['display_html'] = $islandora_object['DISPLAY-HTML']->content;
   } else {
@@ -272,7 +275,7 @@ function template_preprocess_islandora_comparative_edition_page(&$variables) {
     $variables['display_html'] = "<h3>No DISPLAY-HTML datastream found.</h3>";
   }  
   
-  // Retrieve the PAGE-TEI datastream and place its content in memory
+  // Retrieve the CONTENT-XML datastream and place its content in memory
   if (isset($islandora_object['CONTENT-XML'])) {
     $variables['page_tei'] = '<xmp>' . $islandora_object['CONTENT-XML']->content . '</xmp>';
   } else {
