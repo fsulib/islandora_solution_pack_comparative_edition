@@ -127,8 +127,9 @@ class IslandoraComparativeEditionPageObject {
     $namespace = $namespace[0];
 
     $page_object = $repository->constructObject($namespace);
-    $page_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isMemberOf', $parent_id);
     $page_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:comparativeEditionPageCModel');
+    $page_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isMemberOf', $parent_id);
+    $page_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isSequenceNumber', $files['seq'], RELS_TYPE_PLAIN_LITERAL);
 
     // Construct MODS datastream
     $mods_datastream = $page_object->constructDatastream('MODS');
@@ -230,7 +231,11 @@ class IslandoraComparativeEditionWitnessIngestPackage {
         $pages[] = end($page_file_parts);
       }
 
+      // Sort alphabetically to determine page sequence number
       $pages = array_unique($pages);
+      sort($pages);
+
+      $i = 0;
       foreach ($pages as $page) {
 
         // Validate existence of page MODS record
@@ -283,6 +288,10 @@ class IslandoraComparativeEditionWitnessIngestPackage {
           $validity['msg'] .= "<br/>- missing page image file from {$page}";
         }
 
+        // Increment counter and set as page sequence number
+        $i++;
+        $validity['files']['pages'][$page]['seq'] = $i;
+
       }
 
     }
@@ -316,6 +325,7 @@ class IslandoraComparativeEditionWitnessIngestPackage {
     }
 
     $witness = $this->validate($witness_url);
+    dpm($witness);
     if ($witness['valid']) {
       $witness_object = new IslandoraComparativeEditionWitnessObject();
       $witness_object->ingest($parameters, $witness['files']);
