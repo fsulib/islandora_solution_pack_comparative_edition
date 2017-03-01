@@ -346,7 +346,6 @@ class IslandoraComparativeEditionWitnessIngestPackage {
     }
 
     $witness = $this->validate($witness_url);
-    dpm($witness);
     if ($witness['valid']) {
       $witness_object = new IslandoraComparativeEditionWitnessObject();
       $witness_object->ingest($parameters, $witness['files']);
