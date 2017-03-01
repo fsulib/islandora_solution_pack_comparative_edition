@@ -156,3 +156,31 @@ p.icesp-witness-page-label {
 .icesp-comparable:hover {
   text-decoration: underline;
 }
+
+#icesp-comparison-table {
+  display: table;
+  width: 100%;
+  border-spacing: 5px 5px;
+}
+
+.icesp-table-row {
+  display: table-row;
+}
+
+.icesp-table-header {
+  display: table-header-group;
+  padding: 3px 10px;
+  margin-right: 5px;
+}
+
+.variant {
+  display: table-cell;
+  padding: 3px 10px;
+  border: 1px solid red;
+}
+
+.invariant {
+  display: table-cell;
+  padding: 3px 10px;
+  border: 1px solid green;
+}

@@ -40,10 +40,28 @@ jQuery(document).ready(function($) {
   for(var i=0;i<comp_units.length;i++){
     comp_units[i].addEventListener("click", function(){
       var mindex_location = window.location.href + "/mindex/" + this.id;
+      var sentence_id = this.id;
       
-      $.get(mindex_location, function( results_html ) {
-        $("#icesp-dialog-text").text(results_html);
-        $("#icesp-dialog").dialog();
+      $.get(mindex_location, function( results_json ) {
+        var results_object = JSON.parse(results_json);
+        var keys = Object.keys(results_object);
+        var result_html = '';
+        
+        keys.forEach(function(key) {
+          result_html = result_html + key + results_object[key];
+        });
+        
+        $("#icesp-comparison-table").html(result_html);
+        
+        $( "#icesp-dialog" ).dialog({
+          autoOpen: false,
+          resizable: false,
+          modal: true,
+          width: 'auto'
+        });
+        
+        $("#icesp-dialog").dialog('option', 'title', 'Version comparison of sentence id ' + sentence_id);
+        $("#icesp-dialog").dialog("open");
       });      
       
     }, false);   
