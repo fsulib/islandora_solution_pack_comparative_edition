@@ -57,12 +57,15 @@ EOQ;
     module_load_include('inc', 'islandora', 'includes/utilities');
     $parent_id = $parameters['parent'];
     $parent_namespace = islandora_get_namespace($parent_id);
+    $siblings = IslandoraComparativeEditionObject::getChildren($parent_id); 
+    $seqnum = count($siblings) + 1;
 
     $connection = islandora_get_tuque_connection();
     $repository = $connection->repository;
     $witness_object = $repository->constructObject($parent_namespace);
-    $witness_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isMemberOf', $parent_id);
     $witness_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:comparativeEditionWitnessCModel');
+    $witness_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isMemberOf', $parent_id);
+    $witness_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isSequenceNumber', $seqnum, RELS_TYPE_PLAIN_LITERAL);
 
     // Construct MODS datastream
     $mods_datastream = $witness_object->constructDatastream('MODS');
