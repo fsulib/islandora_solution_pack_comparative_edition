@@ -120,6 +120,24 @@ class IslandoraComparativeEditionPageObject {
   }
 
   public static function getSiblings($pid) {
+    $parent = self::getParent($pid);
+    $query = <<<EOQ
+SELECT ?child ?seq FROM <#ri> WHERE {
+  ?child <http://islandora.ca/ontology/relsext#isMemberOf> <info:fedora/{$parent}> .
+  ?child <http://islandora.ca/ontology/relsext#isSequenceNumber> ?seq .
+}
+EOQ;
+    $connection = islandora_get_tuque_connection();
+    $results = $connection->repository->ri->sparqlQuery($query);
+    $children = array();
+    foreach ($results as $result) {
+      $child = $result['child']['value'];
+      $seq = $result['seq']['value'];
+      $label = islandora_object_load($result['child']['value'])->label;
+      $children[$seq] = array('pid' => $child, 'label' => $label, 'seq' => $seq);
+    }
+    
+    return $children;
   }
 
   public function ingest($files, $parent_id) {
