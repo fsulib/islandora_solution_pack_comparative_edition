@@ -62,6 +62,7 @@ jQuery(document).ready(function($) {
         
         $("#icesp-dialog").dialog('option', 'title', 'Version comparison of sentence id ' + sentence_id);
         $("#icesp-dialog").dialog("open");
+        $(".icesp-table-row").blur();
       });      
       
     }, false);   
