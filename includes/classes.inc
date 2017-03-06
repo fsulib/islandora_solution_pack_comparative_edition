@@ -34,7 +34,7 @@ class IslandoraComparativeEditionObject {
     foreach ($pindices as $page_pid => $pindex) {
       $lines = explode("\n", trim($pindex));
       foreach ($lines as $line) {
-        $sentence = explode("|", $line);
+        $sentence = explode(variable_get('islandora_comparative_edition_pindex_delimiter', '||'), $line);
         $sentence_id = array_shift($sentence);
         foreach ($sentence as $part) {
           $mindex[$sentence_id][] = self::formatSentencePart($page_pid, $part);

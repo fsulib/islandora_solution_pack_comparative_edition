@@ -25,6 +25,13 @@ function islandora_comparative_edition_admin_settings_form(array $form, array &$
     '#default_value' => variable_get('islandora_comparative_edition_collatex_server_url', ''),
     '#size' => 100,
   );
+  $form['islandora_comparative_edition_pindex_delimiter'] = array(
+    '#type' => 'textfield',
+    '#title' => t('PINDEX delimiter'),
+    '#description' => t('Custom delimiter used for splitting lines in PINDEX files'),
+    '#default_value' => variable_get('islandora_comparative_edition_pindex_delimiter', '||'),
+    '#size' => 10,
+  );
   module_load_include('inc', 'islandora', 'includes/solution_packs');
   $form += islandora_viewers_form('islandora_comparative_edition_page_viewers', 'image/jp2');
   $form['page_viewers'] = $form['viewers'];
