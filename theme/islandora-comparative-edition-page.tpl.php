@@ -5,6 +5,13 @@
 <div id="icesp-page-header">
   
   <div id="switch-view-controls">
+    
+    <select>
+    <?php foreach($siblings as $sibling): ?>    
+    <option value="<?php print $sibling['pid']; ?>"><?php print $sibling['label']; ?></option>  
+    <?php endforeach; ?>
+    </select>
+    
     <button type="button" id="icesp-focus-button" class="icesp-button-active" disabled>Focus View</button>
     <button type="button" id="icesp-comparison-button">Comparison View</button>
   </div>

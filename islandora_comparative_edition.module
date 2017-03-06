@@ -240,8 +240,11 @@ function template_preprocess_islandora_comparative_edition_page(&$variables) {
   $islandora_object = $variables['islandora_object'];
 
   module_load_include('inc', 'islandora_comparative_edition', 'includes/classes');
-  $variables['siblings'] = IslandoraComparativeEditionPageObject::getSiblings($islandora_object->id);
-  
+  $siblings = IslandoraComparativeEditionPageObject::getSiblings($islandora_object->id);
+  $variables['siblings'] = $siblings['children'];
+  $variables['previous'] = $siblings['previous'];
+  $variables['next'] = $siblings['next'];
+ 
   // Check for a JP2 Datastream and feed it to the viewer
   if (isset($islandora_object['JP2']) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $islandora_object['JP2'], user_load(0))) {
     $params = array();

@@ -183,10 +183,47 @@ EOQ;
       $child = $result['child']['value'];
       $seq = $result['seq']['value'];
       $label = islandora_object_load($result['child']['value'])->label;
-      $children[$seq] = array('pid' => $child, 'label' => $label, 'seq' => $seq);
+      $children[$child] = array('pid' => $child, 'label' => $label, 'seq' => $seq);
     }
     
-    return $children;
+    foreach ($children as $key => $row) {
+      $sequence[$key] = $row['seq'];
+    }
+    
+    array_multisort($sequence, SORT_ASC, $children);
+    
+    $previous = null;
+    $next = null;
+    $flag = false;
+    
+    // find the previous page
+    foreach($children as $child) {
+      if ($pid == $child['pid']) {
+        break;
+      }
+      else {
+        $previous = $child;
+      }
+    }
+    
+    reset($children);
+    
+    // find the next page
+    foreach($children as $child) {
+      if ($flag) {
+        $next = $child;
+        break;
+      }
+      if ($pid == $child['pid']) {
+        $flag = true;
+      }
+    }
+    
+    return array(
+      'previous' => $previous, 
+      'children' => $children, 
+      'next' => $next
+    );
   }
 
   public function ingest($files, $parent_id) {
