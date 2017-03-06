@@ -29,7 +29,7 @@ function islandora_comparative_edition_admin_settings_form(array $form, array &$
     '#type' => 'textfield',
     '#title' => t('PINDEX delimiter'),
     '#description' => t('Custom delimiter used for splitting lines in PINDEX files'),
-    '#default_value' => variable_get('islandora_comparative_edition_pindex_delimiter', '||'),
+    '#default_value' => variable_get('islandora_comparative_edition_pindex_delimiter', '|'),
     '#size' => 10,
   );
   module_load_include('inc', 'islandora', 'includes/solution_packs');
