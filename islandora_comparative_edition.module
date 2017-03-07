@@ -244,7 +244,10 @@ function template_preprocess_islandora_comparative_edition_page(&$variables) {
   $variables['siblings'] = $siblings['children'];
   $variables['previous'] = $siblings['previous'];
   $variables['next'] = $siblings['next'];
- 
+  $variables['current'] = $siblings['children'][$islandora_object->id];
+  $variables['first'] = array_shift($siblings);
+  $variables['last'] = array_pop($siblings);
+  
   // Check for a JP2 Datastream and feed it to the viewer
   if (isset($islandora_object['JP2']) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $islandora_object['JP2'], user_load(0))) {
     $params = array();

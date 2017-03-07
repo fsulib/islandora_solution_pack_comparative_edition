@@ -35,6 +35,10 @@ jQuery(document).ready(function($) {
 
   });
   
+  $( "#icesp-page-select" ).change(function() {
+    window.location.href =  location.origin + '/islandora/object/'+ this.value;
+  });
+  
   var comp_units = document.getElementsByClassName('icesp-comparable');
  
   for(var i=0;i<comp_units.length;i++){
