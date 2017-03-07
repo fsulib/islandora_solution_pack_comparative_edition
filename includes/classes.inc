@@ -18,8 +18,6 @@ class IslandoraComparativeEditionObject {
 
   public static function generateMindex($ce_pid) {
 
-    /*
-
     // Gather grandchild pindices
     $pindices = array();
     $witnesses = self::getChildren($ce_pid);
@@ -52,11 +50,6 @@ class IslandoraComparativeEditionObject {
     $ce_object->ingestDatastream($mindex_datastream);
 
     dpm($mindex);
-
-    */
-
-    watchdog('cesp', "MINDEX regenerated for {$ce_pid}");
-
   }
 
   public static function getChildren($pid) {
