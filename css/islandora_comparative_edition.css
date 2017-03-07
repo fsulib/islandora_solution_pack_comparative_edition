@@ -112,8 +112,16 @@ p.icesp-witness-page-label {
   color: white;
 }
 
+#icesp-focus-button, #icesp-comparison-button {
+  float: right;
+}
+
 #icesp-tabs-comparison {
   display: none;
+}
+
+#switch-view-controls {
+  margin-bottom: 15px;
 }
 
 #icesp-comparison-tabs-container {

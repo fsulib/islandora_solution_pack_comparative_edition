@@ -1,10 +1,22 @@
-<?php 
-//dpm($siblings); //Reference the $siblings array for building next/prev/dropdown UI
+<?php
+/**
+ * Template file for page level objects 
+ */
 ?>
 
 <div id="icesp-page-header">
   
   <div id="switch-view-controls">
+    
+    <?php if($first): ?>
+      <span class="icesp-first"><a href="/islandora/object/<?php print $first['pid']; ?>">&#9194;</a></span>
+    <?php endif; ?>
+      
+    <?php if($previous): ?>
+      <span class="icesp-previous"><a href="/islandora/object/<?php print $previous['pid']; ?>">&#9668;</a></span>
+    <?php endif; ?>
+    
+    <span class="icesp-go-to-page"> page
     
     <select>
     <?php foreach($siblings as $sibling): ?>    
@@ -12,8 +24,20 @@
     <?php endforeach; ?>
     </select>
     
-    <button type="button" id="icesp-focus-button" class="icesp-button-active" disabled>Focus View</button>
+    (<?php print $current['seq']; ?> of <?php print count($siblings); ?>)  
+      
+    </span>
+      
+    <?php if($next): ?>
+      <span class="icesp-next"><a href="/islandora/object/<?php print $next['pid']; ?>">&#9658;</a></span>
+    <?php endif; ?>
+    
+    <?php if($last): ?>
+      <span class="icesp-last"><a href="/islandora/object/<?php print $last['pid']; ?>">&#9193;</a></span>
+    <?php endif; ?>
+    
     <button type="button" id="icesp-comparison-button">Comparison View</button>
+    <button type="button" id="icesp-focus-button" class="icesp-button-active" disabled>Focus View</button>
   </div>
   
 </div>  
