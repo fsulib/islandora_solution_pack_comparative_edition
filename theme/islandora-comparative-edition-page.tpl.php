@@ -16,11 +16,13 @@
       <span class="icesp-previous"><a href="/islandora/object/<?php print $previous['pid']; ?>">&#9668;</a></span>
     <?php endif; ?>
     
-    <span class="icesp-go-to-page"> page
+    <span id="icesp-go-to-page"> page
     
-    <select>
+    <select id="icesp-page-select">
     <?php foreach($siblings as $sibling): ?>    
-    <option value="<?php print $sibling['pid']; ?>"><?php print $sibling['label']; ?></option>  
+    <option value="<?php print $sibling['pid']; ?>" <?php if ($sibling['pid'] == $current['pid']) { print('selected="selected"'); } ?>>
+      <?php print $sibling['label']; ?>
+    </option>  
     <?php endforeach; ?>
     </select>
     
