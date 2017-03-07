@@ -43,8 +43,8 @@ class IslandoraComparativeEditionObject {
     }
 
     $ce_object = islandora_object_load($ce_pid);
-    $success = $ce_object->purgeDatastream('MINDEX');
-    $ce_object->constructDatastream('MINDEX');
+    $ce_object->purgeDatastream('MINDEX');
+    $mindex_datastream = $ce_object->constructDatastream('MINDEX');
     $mindex_datastream->label = 'Master Index';
     $mindex_datastream->mimeType = 'application/json'; 
     $mindex_datastream->setContentFromString(json_encode($mindex));
