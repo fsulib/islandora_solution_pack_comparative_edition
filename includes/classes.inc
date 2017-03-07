@@ -18,6 +18,8 @@ class IslandoraComparativeEditionObject {
 
   public static function generateMindex($ce_pid) {
 
+    /*
+
     // Gather grandchild pindices
     $pindices = array();
     $witnesses = self::getChildren($ce_pid);
@@ -51,6 +53,10 @@ class IslandoraComparativeEditionObject {
 
     dpm($mindex);
 
+    */
+
+    watchdog('cesp', "MINDEX regenerated for {$ce_pid}");
+
   }
 
   public static function getChildren($pid) {
@@ -75,6 +81,20 @@ EOQ;
 }
 
 class IslandoraComparativeEditionWitnessObject { 
+
+  public static function recursiveDelete($pid) {
+    $object = islandora_object_load($pid);
+    $parent = self::getParent($pid);
+    $children = self::getChildren($pid);
+    $connection = islandora_get_tuque_connection();
+    $repository = $connection->repository;
+  
+    foreach ($children as $child) {
+      $repository->purgeObject($child);
+    }
+  
+    IslandoraComparativeEditionObject::generateMindex($parent);
+  }
 
   public static function getParent($pid) {
     $object = islandora_object_load($pid);

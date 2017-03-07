@@ -413,3 +413,27 @@ function islandora_comparative_edition_islandora_breadcrumbs_alter(&$breadcrumbs
     $breadcrumbs[] = _create_breadcrumb_html($witness_parent);
   }
 }
+
+/**
+ * Implements hook_cmodel_pid_islandora_object_alter().
+ */
+function islandora_comparative_edition_islandora_comparativeEditionWitnessCModel_islandora_object_alter(AbstractObject $object, array &$context) {
+  if ($context['action'] == 'purge' && $context['purge'] == TRUE) {
+    module_load_include('inc', 'islandora_comparative_edition', 'includes/classes');
+    IslandoraComparativeEditionWitnessObject::recursiveDelete($object->id);
+  }
+}
+
+/**
+ * Implements hook_cmodel_pid_islandora_datastream_alter().
+ */
+function islandora_comparative_edition_islandora_comparativeEditionPageCModel_PINDEX_islandora_datastream_alter(AbstractObject $object, AbstractDatastream $datastream, array &$context) {
+  if ($context['action'] == 'purge' && $context['purge'] == TRUE) {
+    drupal_set_message("You have deleted the PINDEX datastream of {$object->id}. This will cause future reindexing to fail. Please replace it.", 'error');
+  }
+  if ($context['action'] == 'modify') {
+    module_load_include('inc', 'islandora_comparative_edition', 'includes/classes');
+    $grandparent_pid = IslandoraComparativeEditionPageObject::getGrandparent($object->id);
+    IslandoraComparativeEditionObject::generateMindex($grandparent_pid);
+  }
+}
