@@ -43,13 +43,12 @@ class IslandoraComparativeEditionObject {
     }
 
     $ce_object = islandora_object_load($ce_pid);
-    $mindex_datastream = $ce_object->constructDatastream('MINDEX');
+    $success = $ce_object->purgeDatastream('MINDEX');
+    $ce_object->constructDatastream('MINDEX');
     $mindex_datastream->label = 'Master Index';
     $mindex_datastream->mimeType = 'application/json'; 
     $mindex_datastream->setContentFromString(json_encode($mindex));
     $ce_object->ingestDatastream($mindex_datastream);
-
-    dpm($mindex);
   }
 
   public static function getChildren($pid) {
