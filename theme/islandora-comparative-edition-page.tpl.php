@@ -7,16 +7,12 @@
 <div id="icesp-page-header">
   
   <div id="switch-view-controls">
-    
-    <?php if($first): ?>
-      <span class="icesp-first"><a href="/islandora/object/<?php print $first['pid']; ?>">&#9194;</a></span>
-    <?php endif; ?>
       
     <?php if($previous): ?>
-      <span class="icesp-previous"><a href="/islandora/object/<?php print $previous['pid']; ?>">&#9668;</a></span>
+      <span class="icesp-previous"><a href="/islandora/object/<?php print $previous['pid']; ?>">&#9668; Prev</a></span>
     <?php endif; ?>
     
-    <span id="icesp-go-to-page"> page
+    <span id="icesp-go-to-page">
     
     <select id="icesp-page-select">
     <?php foreach($siblings as $sibling): ?>    
@@ -25,17 +21,11 @@
     </option>  
     <?php endforeach; ?>
     </select>
-    
-    (<?php print $current['seq']; ?> of <?php print count($siblings); ?>)  
       
     </span>
       
     <?php if($next): ?>
-      <span class="icesp-next"><a href="/islandora/object/<?php print $next['pid']; ?>">&#9658;</a></span>
-    <?php endif; ?>
-    
-    <?php if($last): ?>
-      <span class="icesp-last"><a href="/islandora/object/<?php print $last['pid']; ?>">&#9193;</a></span>
+      <span class="icesp-next"><a href="/islandora/object/<?php print $next['pid']; ?>">Next &#9658;</a></span>
     <?php endif; ?>
     
     <button type="button" id="icesp-comparison-button">Comparison View</button>

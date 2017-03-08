@@ -116,6 +116,32 @@ p.icesp-witness-page-label {
   float: right;
 }
 
+.icesp-previous {
+  margin-right: 10px;
+}
+
+.icesp-previous a {
+  text-decoration: none;
+  color: black;
+}
+
+.icesp-previous a:hover {
+  text-decoration: none;
+}
+
+.icesp-next {
+  margin-left: 10px;
+}
+
+.icesp-next a {
+  text-decoration: none;
+  color: black;
+}
+
+.icesp-next a:hover {
+  text-decoration: none;
+}
+
 #icesp-tabs-comparison {
   display: none;
 }
