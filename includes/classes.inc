@@ -19,15 +19,27 @@ class IslandoraComparativeEditionObject {
   public static function generateMindex($ce_pid) {
 
     // Gather grandchild pindices
+    $missing_pindices = array();
     $pindices = array();
     $witnesses = self::getChildren($ce_pid);
     foreach ($witnesses as $witness) {
       $pages = IslandoraComparativeEditionWitnessObject::getChildren($witness);
       foreach ($pages as $page) {
         $page_object = islandora_object_load($page);
-        $pindices[$page] = $page_object['PINDEX']->content;
+        if ($page_object['PINDEX']) {
+          $pindices[$page] = $page_object['PINDEX']->content;
+        }
+        else {
+          $missing_pindices[] = $page_object->id;
+        }
       }
     }
+
+    $missing_pindices_msg = "The following pages are missing PINDEX datastreams, causing errors while rebuilding {$ce_pid}'s MINDEX:";
+    foreach ($missing_pindices as $missing_pindex) {
+      $missing_pindices_msg .= "<br/>- {$missing_pindex}";
+    }
+    drupal_set_message($missing_pindices_msg, 'error');
     
     // Extract data from pindices to form array of raw mindex data
     $mindex = array();
@@ -49,6 +61,8 @@ class IslandoraComparativeEditionObject {
     $mindex_datastream->mimeType = 'application/json'; 
     $mindex_datastream->setContentFromString(json_encode($mindex));
     $ce_object->ingestDatastream($mindex_datastream);
+
+    watchdog("Islandora Comparative Editions", "MINDEX for '{$ce_object->id}' has been rebuilt.");
   }
 
   public static function getChildren($pid) {

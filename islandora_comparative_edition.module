@@ -428,15 +428,17 @@ function islandora_comparative_edition_islandora_comparativeEditionWitnessCModel
 }
 
 /**
- * Implements hook_cmodel_pid_islandora_datastream_alter().
+ * Implements hook_cmodel_pid_dsid_islandora_datastream_purged().
  */
-function islandora_comparative_edition_islandora_comparativeEditionPageCModel_PINDEX_islandora_datastream_alter(AbstractObject $object, AbstractDatastream $datastream, array &$context) {
-  if ($context['action'] == 'purge' && $context['purge'] == TRUE) {
-    drupal_set_message("You have deleted the PINDEX datastream of {$object->id}. This will cause future reindexing to fail. Please replace it.", 'error');
-  }
-  if ($context['action'] == 'modify') {
-    module_load_include('inc', 'islandora_comparative_edition', 'includes/classes');
-    $grandparent_pid = IslandoraComparativeEditionPageObject::getGrandparent($object->id);
-    IslandoraComparativeEditionObject::generateMindex($grandparent_pid);
-  }
+function islandora_comparative_edition_islandora_comparativeEditionPageCModel_PINDEX_islandora_datastream_purged(AbstractObject $object, $dsid) {
+  drupal_set_message("You have deleted the PINDEX datastream of {$object->id}. This will cause future reindexing to fail. Please replace it.", 'error');
+}
+
+/**
+ * Implements hook_cmodel_pid_dsid_islandora_datastream_modified().
+ */
+function islandora_comparative_edition_islandora_comparativeEditionPageCModel_PINDEX_islandora_datastream_modified(AbstractObject $object, AbstractDatastream $datastream, array $params) {
+  module_load_include('inc', 'islandora_comparative_edition', 'includes/classes');
+  $grandparent_pid = IslandoraComparativeEditionPageObject::getGrandparent($object->id);
+  IslandoraComparativeEditionObject::generateMindex($grandparent_pid);
 }
