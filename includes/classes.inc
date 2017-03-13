@@ -7,13 +7,61 @@
 
 class IslandoraComparativeEditionObject { 
 
-  public static function formatSentencePart($pid, $part) {
-    $parent_pid = IslandoraComparativeEditionPageObject::getParent($pid);
-    $parent_label = islandora_object_load($parent_pid)->label;
-    $page_label = islandora_object_load($pid)->label; 
-    $table_header = "<a class='icesp-table-row' href='/islandora/object/{$pid}'><div class='icesp-table-header'>{$parent_label}, Page {$page_label}</div>";
-    $table_data = "{$part}</a>";
-    return array($table_header => $table_data);
+  public static function formatSentenceUnaligned($sentence_array) {
+    $formatted_sentence_array;
+    foreach ($sentence_array as $pid => $versions) {
+      $page_label = islandora_object_load($pid)->label; 
+      $parent_pid = IslandoraComparativeEditionPageObject::getParent($pid);
+      $parent_label = islandora_object_load($parent_pid)->label;
+      $table_header = "<a class='icesp-table-row' href='/islandora/object/{$pid}'><div class='icesp-table-header'>{$parent_label}, Page {$page_label}</div>";
+      foreach ($versions as $version) {
+        $formatted_sentence_array[] = array($table_header => "<div class='icesp-unaligned'>{$version}</div></a>");
+      }
+    }
+ 
+    return $formatted_sentence_array;
+  }
+
+  public static function formatSentenceAligned($sentence_array) {
+    $collatex_url = variable_get('islandora_comparative_edition_collatex_server_url', 'https://collatex.net/demo/collate');
+    $formatted_sentence_array = array();
+    
+    // Build CollateX request
+    $collatex_request = array();
+    $collatex_request['algorithm'] = variable_get('islandora_comparative_edition_collatex_alignment_algorithm', 'dekker');
+    /* looks like this
+$test_text = ' 
+{
+  "witnesses" : [
+    {
+      "id" : "Witness 1",
+      "content" : "A black cat in a black basket"
+    },
+    {
+      "id" : "Witness 1",
+      "content" : "A black cat in a black basket"
+    },
+    {
+      "id" : "Hey",
+      "content" : "A striped cat in a black basket"
+    },
+    {
+      "id" : "Test",
+      "content" : "A striped cat in a white basket"
+    }
+  ],
+  "algorithm": "medite"
+}
+';
+*/
+
+    $all_sentence_versions = array();
+    foreach ($sentence_array as $pid => $versions) {
+      foreach ($versions as $version) {
+      }
+    }
+
+    return $formatted_sentence_array;
   }
 
   public static function generateMindex($ce_pid) {
@@ -35,25 +83,40 @@ class IslandoraComparativeEditionObject {
       }
     }
 
-    $missing_pindices_msg = "The following pages are missing PINDEX datastreams, causing errors while rebuilding {$ce_pid}'s MINDEX:";
-    foreach ($missing_pindices as $missing_pindex) {
-      $missing_pindices_msg .= "<br/>- {$missing_pindex}";
+    // Notify user if missing PINDEX found during reindexing
+    if (!empty($missing_pindices)) {
+      $missing_pindices_msg = "The following pages are missing PINDEX datastreams, causing errors while rebuilding {$ce_pid}'s MINDEX:";
+      foreach ($missing_pindices as $missing_pindex) {
+        $missing_pindices_msg .= "<br/>- {$missing_pindex}";
+      }
+      drupal_set_message($missing_pindices_msg, 'error');
     }
-    drupal_set_message($missing_pindices_msg, 'error');
-    
-    // Extract data from pindices to form array of raw mindex data
-    $mindex = array();
+
+    // Extract data from pindices to form collation array
+    $collation = array();
     foreach ($pindices as $page_pid => $pindex) {
       $lines = explode("\n", trim($pindex));
       foreach ($lines as $line) {
         $sentence = explode(variable_get('islandora_comparative_edition_pindex_delimiter', '|'), $line);
         $sentence_id = array_shift($sentence);
         foreach ($sentence as $part) {
-          $mindex[$sentence_id][] = self::formatSentencePart($page_pid, $part);
+          $collation[$sentence_id][$page_pid][] = $part;
         }
       }
     }
+ 
+    // Format collated sentences into MINDEX
+    $mindex = array();
+    foreach ($collation as $sentence_id => $sentence_array) {
+      if (!variable_get('islandora_comparative_edition_collatex_enabled', FALSE)) {
+        $mindex[$sentence_id] = self::formatSentenceUnaligned($sentence_array);
+      }
+      else {
+        $mindex[$sentence_id] = self::formatSentenceAligned($sentence_array);
+      }
+    }
 
+    // Write data to MINDEX datastream
     $ce_object = islandora_object_load($ce_pid);
     $ce_object->purgeDatastream('MINDEX');
     $mindex_datastream = $ce_object->constructDatastream('MINDEX');
@@ -61,7 +124,6 @@ class IslandoraComparativeEditionObject {
     $mindex_datastream->mimeType = 'application/json'; 
     $mindex_datastream->setContentFromString(json_encode($mindex));
     $ce_object->ingestDatastream($mindex_datastream);
-
     watchdog("Islandora Comparative Editions", "MINDEX for '{$ce_object->id}' has been rebuilt.");
   }
 

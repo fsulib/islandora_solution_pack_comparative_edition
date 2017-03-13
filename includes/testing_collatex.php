@@ -5,6 +5,7 @@
 //$url = 'http://146.201.32.3/collatex/collate';
 $url = 'https://collatex.net/demo/collate';
 
+/*
 $test_text = '{
   "witnesses" : [
     {
@@ -25,6 +26,32 @@ $test_text = '{
     }
   ]
 }';
+*/
+
+$test_text = '
+{
+  "witnesses" : [
+    {
+      "id" : "Witness 1",
+      "content" : "A black cat in a black basket"
+    },
+    {
+      "id" : "Witness 1",
+      "content" : "A black cat in a black basket"
+    },
+    {
+      "id" : "Hella",
+      "content" : "A striped cat in a black basket"
+    },
+    {
+      "id" : "Die",
+      "content" : "A striped cat in a white basket"
+    }
+  ],
+  "algorithm": "medite"
+}
+';
+
 
 $curl = curl_init($url);
 curl_setopt($curl, CURLOPT_HEADER, false);
