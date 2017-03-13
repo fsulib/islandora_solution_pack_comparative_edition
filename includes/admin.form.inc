@@ -18,13 +18,52 @@
  */
 function islandora_comparative_edition_admin_settings_form(array $form, array &$form_state) {
   $form = array();
-  $form['islandora_comparative_edition_collatex_server_url'] = array(
-    '#type' => 'textfield',
-    '#title' => t('CollateX endpoint'),
-    '#description' => t('URL for a running CollateX service.'),
-    '#default_value' => variable_get('islandora_comparative_edition_collatex_server_url', ''),
-    '#size' => 100,
+
+  $form['collatex'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Collation configuration'),
+    '#collapsible' => TRUE,
   );
+
+  $form['collatex']['islandora_comparative_edition_collatex_enabled'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable CollateX alignment'),
+    '#default_value' => variable_get('islandora_comparative_edition_collatex_enabled', FALSE),
+  );
+
+  $form['collatex']['islandora_comparative_edition_collatex_server_url'] = array(
+    '#type' => 'textfield',
+    '#title' => t('CollateX API endpoint'),
+    '#description' => t('URL for a running CollateX service (should end in /collate)'),
+    '#default_value' => variable_get('islandora_comparative_edition_collatex_server_url', 'https://collatex.net/demo/collate'),
+    '#size' => 40,
+    '#states' => array(
+      'visible' => array(
+        ':input[name="islandora_comparative_edition_collatex_enabled"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+
+  $form['collatex']['islandora_comparative_edition_collatex_alignment_algorithm'] = array(
+    '#type' => 'select',
+    '#title' => t('Alignment algorithm'),
+    '#description' => t('See <a href="https://collatex.net/doc/#alignment-algorithms">https://collatex.net/doc/#alignment-algorithms</a> for details.'),
+    '#default_value' => variable_get('islandora_comparative_edition_collatex_alignment_algorithm', 'dekker'),
+    '#options' => array(
+      'dekker' => 'Dekker',
+      'needleman-wunsch' => 'Needleman-Wunsch',
+      'medite' => 'MEDITE',
+    ),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="islandora_comparative_edition_collatex_enabled"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+
+
+
+
   $form['islandora_comparative_edition_pindex_delimiter'] = array(
     '#type' => 'textfield',
     '#title' => t('PINDEX delimiter'),

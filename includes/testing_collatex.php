@@ -2,7 +2,8 @@
 
 <?php
 
-$url = 'http://146.201.32.3/collatex/collate';
+//$url = 'http://146.201.32.3/collatex/collate';
+$url = 'https://collatex.net/demo/collate';
 
 $test_text = '{
   "witnesses" : [

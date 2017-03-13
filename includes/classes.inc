@@ -12,7 +12,7 @@ class IslandoraComparativeEditionObject {
     $parent_label = islandora_object_load($parent_pid)->label;
     $page_label = islandora_object_load($pid)->label; 
     $table_header = "<a class='icesp-table-row' href='/islandora/object/{$pid}'><div class='icesp-table-header'>{$parent_label}, Page {$page_label}</div>";
-    $table_data = "<div class='invariant'>{$part}</div></a>";
+    $table_data = "{$part}</a>";
     return array($table_header => $table_data);
   }
 
