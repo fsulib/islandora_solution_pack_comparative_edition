@@ -29,37 +29,32 @@ class IslandoraComparativeEditionObject {
     // Build CollateX request
     $collatex_request = array();
     $collatex_request['algorithm'] = variable_get('islandora_comparative_edition_collatex_alignment_algorithm', 'dekker');
-    /* looks like this
-$test_text = ' 
-{
-  "witnesses" : [
-    {
-      "id" : "Witness 1",
-      "content" : "A black cat in a black basket"
-    },
-    {
-      "id" : "Witness 1",
-      "content" : "A black cat in a black basket"
-    },
-    {
-      "id" : "Hey",
-      "content" : "A striped cat in a black basket"
-    },
-    {
-      "id" : "Test",
-      "content" : "A striped cat in a white basket"
-    }
-  ],
-  "algorithm": "medite"
-}
-';
-*/
 
     $all_sentence_versions = array();
     foreach ($sentence_array as $pid => $versions) {
       foreach ($versions as $version) {
+        $collatex_request['witnesses'][] = array("id" => $pid, "content" => $version);
       }
     }
+
+    $curl = curl_init($collatex_url);
+    curl_setopt($curl, CURLOPT_HEADER, false);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+      "Content-type: application/json",
+      "Accept: application/json"
+    ));
+    curl_setopt($curl, CURLOPT_POST, true);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($collatex_request));
+    $collatex_response = json_decode(curl_exec($curl), TRUE);
+    $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    if ($status != 200) { 
+      drupal_set_message("Error connecting to {$collatex_url}, recieved a non-200 response.", 'error');
+    }
+    curl_close($curl);
+
+    dpm($collatex_response);
+
 
     return $formatted_sentence_array;
   }
