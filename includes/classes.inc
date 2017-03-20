@@ -64,18 +64,18 @@ class IslandoraComparativeEditionObject {
     }
 
     $formatted_sentence_values = array();
-    $witness_count = count($formatted_sentence_keys);
-    for ($i = 1; $i < $witness_count; $i++) {
+    $witness_count = count($formatted_sentence_keys) - 1;
+    for ($i = 0; $i <= $witness_count; $i++) {
       $formatted_sentence_values[$i] = "<div class='icesp-aligned'>";
     }
 
     foreach ($collatex_response['table'] as $section) {
 
       // Determine if section is invariant
-      $section_count = count($section);
+      $section_count = count($section) - 1;
       $exemplar = $section[0];
       $variant = FALSE;
-      for ($i = 1; $i < $section_count; $i++) {
+      for ($i = 0; $i <= $section_count; $i++) {
         if ($section[$i] !== $exemplar) {
           $variant = TRUE;
           break;
@@ -88,19 +88,20 @@ class IslandoraComparativeEditionObject {
         foreach ($version as $token) {
           $formatted_sentence_values[$key] .= $token;
         }
+        $formatted_sentence_values[$key] = rtrim($formatted_sentence_values[$key], " "); //Trim final space
         $formatted_sentence_values[$key] .= "</div>";
       }
     }
 
-    for ($i = 1; $i < $witness_count; $i++) {
-      $formatted_sentence_values[$i] = "</div></a>";
+    foreach ($formatted_sentence_values as $key => $value) {
+      $formatted_sentence_values[$key] .= "</div></a>";
     }
 
     foreach ($formatted_sentence_keys as $key => $value) {
       $formatted_sentence_array[$value] = $formatted_sentence_values[$key];
     }
 
-    dpm($formatted_sentence_array);
+    //dpm($formatted_sentence_array);
     return $formatted_sentence_array;
   }
 
