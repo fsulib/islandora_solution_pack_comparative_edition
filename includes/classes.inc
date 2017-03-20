@@ -33,9 +33,11 @@ class IslandoraComparativeEditionObject {
     $all_sentence_versions = array();
     foreach ($sentence_array as $pid => $versions) {
       foreach ($versions as $version) {
-        $collatex_request['witnesses'][] = array("id" => $pid, "content" => $version);
+        $collatex_request['witnesses'][] = array("id" => $pid . "." . rand(), "content" => $version); // Add random number to differentiate sentences from same PID
       }
     }
+
+    dpm($collatex_request);
 
     $curl = curl_init($collatex_url);
     curl_setopt($curl, CURLOPT_HEADER, false);
@@ -53,10 +55,14 @@ class IslandoraComparativeEditionObject {
     }
     curl_close($curl);
 
+    dpm($collatex_response);
+
     // Format CollateX response
     $formatted_sentence_keys = array();
     foreach ($collatex_response['witnesses'] as $key => $pid) {
-      $page_label = islandora_object_load($pid)->label; 
+      $stripped_pid = preg_replace('/\.\d{10}$/', '', $pid);
+      dpm($stripped_pid);
+      $page_label = islandora_object_load($stripped_pid)->label; 
       $parent_pid = IslandoraComparativeEditionPageObject::getParent($pid);
       $parent_label = islandora_object_load($parent_pid)->label;
       $table_header = "<a class='icesp-table-row' href='/islandora/object/{$pid}'><div class='icesp-table-header'>{$parent_label}, Page {$page_label}</div>";
@@ -98,10 +104,11 @@ class IslandoraComparativeEditionObject {
     }
 
     foreach ($formatted_sentence_keys as $key => $value) {
-      $formatted_sentence_array[$value] = $formatted_sentence_values[$key];
+      $formatted_sentence_array[] = array($formatted_sentence_keys[$key] => $formatted_sentence_values[$key]);
     }
 
-    //dpm($formatted_sentence_array);
+    dpm($formatted_sentence_array);
+
     return $formatted_sentence_array;
   }
 
