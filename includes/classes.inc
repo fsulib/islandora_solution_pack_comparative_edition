@@ -53,9 +53,54 @@ class IslandoraComparativeEditionObject {
     }
     curl_close($curl);
 
-    dpm($collatex_response);
+    // Format CollateX response
+    $formatted_sentence_keys = array();
+    foreach ($collatex_response['witnesses'] as $key => $pid) {
+      $page_label = islandora_object_load($pid)->label; 
+      $parent_pid = IslandoraComparativeEditionPageObject::getParent($pid);
+      $parent_label = islandora_object_load($parent_pid)->label;
+      $table_header = "<a class='icesp-table-row' href='/islandora/object/{$pid}'><div class='icesp-table-header'>{$parent_label}, Page {$page_label}</div>";
+      $formatted_sentence_keys[$key] = $table_header;
+    }
 
+    $formatted_sentence_values = array();
+    $witness_count = count($formatted_sentence_keys);
+    for ($i = 1; $i < $witness_count; $i++) {
+      $formatted_sentence_values[$i] = "<div class='icesp-aligned'>";
+    }
 
+    foreach ($collatex_response['table'] as $section) {
+
+      // Determine if section is invariant
+      $section_count = count($section);
+      $exemplar = $section[0];
+      $variant = FALSE;
+      for ($i = 1; $i < $section_count; $i++) {
+        if ($section[$i] !== $exemplar) {
+          $variant = TRUE;
+          break;
+        }
+      }
+
+      foreach ($section as $key => $version) {
+        $variance = ($variant ? "variant" : "invariant");
+        $formatted_sentence_values[$key] .= "<div class='icesp-section-{$variance}'>";
+        foreach ($version as $token) {
+          $formatted_sentence_values[$key] .= $token;
+        }
+        $formatted_sentence_values[$key] .= "</div>";
+      }
+    }
+
+    for ($i = 1; $i < $witness_count; $i++) {
+      $formatted_sentence_values[$i] = "</div></a>";
+    }
+
+    foreach ($formatted_sentence_keys as $key => $value) {
+      $formatted_sentence_array[$value] = $formatted_sentence_values[$key];
+    }
+
+    dpm($formatted_sentence_array);
     return $formatted_sentence_array;
   }
 
