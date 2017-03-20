@@ -33,11 +33,9 @@ class IslandoraComparativeEditionObject {
     $all_sentence_versions = array();
     foreach ($sentence_array as $pid => $versions) {
       foreach ($versions as $version) {
-        $collatex_request['witnesses'][] = array("id" => $pid . "." . rand(), "content" => $version); // Add random number to differentiate sentences from same PID
+        $collatex_request['witnesses'][] = array("id" => $pid . "." . rand(1000000000, 9999999999), "content" => $version); // Add 10 digit random number to differentiate sentences from same PID
       }
     }
-
-    dpm($collatex_request);
 
     $curl = curl_init($collatex_url);
     curl_setopt($curl, CURLOPT_HEADER, false);
@@ -55,17 +53,14 @@ class IslandoraComparativeEditionObject {
     }
     curl_close($curl);
 
-    dpm($collatex_response);
-
     // Format CollateX response
     $formatted_sentence_keys = array();
     foreach ($collatex_response['witnesses'] as $key => $pid) {
       $stripped_pid = preg_replace('/\.\d{10}$/', '', $pid);
-      dpm($stripped_pid);
       $page_label = islandora_object_load($stripped_pid)->label; 
-      $parent_pid = IslandoraComparativeEditionPageObject::getParent($pid);
+      $parent_pid = IslandoraComparativeEditionPageObject::getParent($stripped_pid);
       $parent_label = islandora_object_load($parent_pid)->label;
-      $table_header = "<a class='icesp-table-row' href='/islandora/object/{$pid}'><div class='icesp-table-header'>{$parent_label}, Page {$page_label}</div>";
+      $table_header = "<a class='icesp-table-row' href='/islandora/object/{$stripped_pid}'><div class='icesp-table-header'>{$parent_label}, Page {$page_label}</div>";
       $formatted_sentence_keys[$key] = $table_header;
     }
 
@@ -90,6 +85,9 @@ class IslandoraComparativeEditionObject {
 
       foreach ($section as $key => $version) {
         $variance = ($variant ? "variant" : "invariant");
+        if (count($version) == 0) {
+          $variance = "empty";
+        }
         $formatted_sentence_values[$key] .= "<div class='icesp-section-{$variance}'>";
         foreach ($version as $token) {
           $formatted_sentence_values[$key] .= $token;
@@ -106,8 +104,6 @@ class IslandoraComparativeEditionObject {
     foreach ($formatted_sentence_keys as $key => $value) {
       $formatted_sentence_array[] = array($formatted_sentence_keys[$key] => $formatted_sentence_values[$key]);
     }
-
-    dpm($formatted_sentence_array);
 
     return $formatted_sentence_array;
   }
