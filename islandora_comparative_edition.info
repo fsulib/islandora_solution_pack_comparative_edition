@@ -1,6 +1,5 @@
 name = Islandora Comparative Editions Solution Pack
 description = Allows for the creation of comparative edition objects in Islandora.
-dependencies[] = imagemagick
 dependencies[] = islandora
 dependencies[] = islandora_large_image
 package = Islandora Solution Packs
