@@ -60,7 +60,7 @@
   <div id="icesp-tabs-comparison">
     <ul>
       <li><a href="#tab-comp-2">Transcript</a></li>
-      <li><a href="#tab-comp-3">TEI</a></li>
+      <li><a href="#tab-comp-3">XML</a></li>
     </ul>
     
     <div id="tab-comp-2">
