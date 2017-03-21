@@ -40,7 +40,7 @@
     <ul>
       <li><a href="#tab-1">Image</a></li>
       <li><a href="#tab-2">Transcript</a></li>
-      <li><a href="#tab-3">TEI</a></li>
+      <li><a href="#tab-3">XML</a></li>
     </ul>
   
     <div id="tab-1">

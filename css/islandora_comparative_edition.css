@@ -202,19 +202,31 @@ p.icesp-witness-page-label {
 }
 
 .icesp-table-header {
-  display: table-header-group;
+  display: table-cell;
   padding: 3px 10px;
-  margin-right: 5px;
+  font-weight: bold;
+  background-color: #dadada;
+  background-origin: border-box;
 }
 
-.variant {
+.icesp-section-variant {
   display: table-cell;
   padding: 3px 10px;
   border: 1px solid red;
 }
 
-.invariant {
+.icesp-section-invariant {
   display: table-cell;
   padding: 3px 10px;
   border: 1px solid green;
+}
+
+.icesp-section-empty {
+  display: table-cell;
+  padding: 3px 10px;
+}
+
+.icesp-unaligned {
+  display: table-cell;
+  padding-left: 10px;
 }

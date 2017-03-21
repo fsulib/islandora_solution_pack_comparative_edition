@@ -67,7 +67,8 @@ class IslandoraComparativeEditionObject {
     $formatted_sentence_values = array();
     $witness_count = count($formatted_sentence_keys) - 1;
     for ($i = 0; $i <= $witness_count; $i++) {
-      $formatted_sentence_values[$i] = "<div class='icesp-aligned'>";
+      //$formatted_sentence_values[$i] = "<div class='icesp-aligned'>";
+      $formatted_sentence_values[$i] = "";
     }
 
     foreach ($collatex_response['table'] as $section) {
@@ -98,7 +99,8 @@ class IslandoraComparativeEditionObject {
     }
 
     foreach ($formatted_sentence_values as $key => $value) {
-      $formatted_sentence_values[$key] .= "</div></a>";
+      //$formatted_sentence_values[$key] .= "</div></a>";
+      $formatted_sentence_values[$key] .= "</a>";
     }
 
     foreach ($formatted_sentence_keys as $key => $value) {
