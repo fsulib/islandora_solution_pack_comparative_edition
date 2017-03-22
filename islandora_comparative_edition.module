@@ -34,8 +34,8 @@ function islandora_comparative_edition_menu() {
     'weight' => 1,
   );
   
-  $menu['islandora/object/%islandora_object/mindex/%'] = array (
-    'page callback' => 'icesp_get_mindex',
+  $menu['islandora/object/%islandora_object/analysis_mindex/%'] = array (
+    'page callback' => 'icesp_get_analysis_mindex',
     'page arguments' => array(2,4),
     'access callback' => TRUE,
   );
@@ -46,11 +46,11 @@ function islandora_comparative_edition_menu() {
 /**
  * Callback function for mindex query.
  */
-function icesp_get_mindex($pid, $sentence_id) {
+function icesp_get_analysis_mindex($pid, $sentence_id) {
   module_load_include('inc', 'islandora_comparative_edition', 'includes/classes');
   $ce_pid = IslandoraComparativeEditionPageObject::getGrandparent($pid);
   $ce_object = islandora_object_load($ce_pid);
-  $mindex = json_decode($ce_object['MINDEX']->content);
+  $mindex = json_decode($ce_object['ANALYSIS-MINDEX']->content);
   print json_encode($mindex->{$sentence_id});
   drupal_exit();
 }

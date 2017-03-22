@@ -28,7 +28,10 @@
   <dsTypeModel ID="CONTENT-XML" optional="true">
     <form MIME="text/xml"/>
   </dsTypeModel>
-  <dsTypeModel ID="PINDEX" optional="true">
+  <dsTypeModel ID="HTML-PINDEX" optional="true">
+    <form MIME="text/html"/>
+  </dsTypeModel>
+  <dsTypeModel ID="TEXT-PINDEX" optional="true">
     <form MIME="text/plain"/>
   </dsTypeModel>
 </dsCompositeModel>

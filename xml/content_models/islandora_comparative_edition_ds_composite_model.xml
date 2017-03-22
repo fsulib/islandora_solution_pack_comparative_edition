@@ -20,7 +20,10 @@
     <form MIME="image/png"/>
     <form MIME="image/gif"/>
   </dsTypeModel>
-  <dsTypeModel ID="MINDEX" optional="true">
+  <dsTypeModel ID="DISPLAY-MINDEX" optional="true">
+    <form MIME="application/json"/>
+  </dsTypeModel>
+    <dsTypeModel ID="ANALYSIS-MINDEX" optional="true">
     <form MIME="application/json"/>
   </dsTypeModel>
 </dsCompositeModel>

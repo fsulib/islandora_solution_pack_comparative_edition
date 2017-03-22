@@ -110,9 +110,9 @@ class IslandoraComparativeEditionObject {
     return $formatted_sentence_array;
   }
 
-  public static function generateMindex($ce_pid) {
+  public static function generateAnalysisMindex($ce_pid) {
 
-    // Gather grandchild pindices
+    // Gather grandchild text pindices
     $missing_pindices = array();
     $pindices = array();
     $witnesses = self::getChildren($ce_pid);
@@ -120,8 +120,8 @@ class IslandoraComparativeEditionObject {
       $pages = IslandoraComparativeEditionWitnessObject::getChildren($witness);
       foreach ($pages as $page) {
         $page_object = islandora_object_load($page);
-        if ($page_object['PINDEX']) {
-          $pindices[$page] = $page_object['PINDEX']->content;
+        if ($page_object['TEXT-PINDEX']) {
+          $pindices[$page] = $page_object['TEXT-PINDEX']->content;
         }
         else {
           $missing_pindices[] = $page_object->id;
@@ -129,7 +129,7 @@ class IslandoraComparativeEditionObject {
       }
     }
 
-    // Notify user if missing PINDEX found during reindexing
+    // Notify user if missing TEXT-PINDEX found during reindexing
     if (!empty($missing_pindices)) {
       $missing_pindices_msg = "The following pages are missing PINDEX datastreams, causing errors while rebuilding {$ce_pid}'s MINDEX:";
       foreach ($missing_pindices as $missing_pindex) {
@@ -151,7 +151,7 @@ class IslandoraComparativeEditionObject {
       }
     }
  
-    // Format collated sentences into MINDEX
+    // Format collated sentences into ANALYSIS-MINDEX
     $mindex = array();
     foreach ($collation as $sentence_id => $sentence_array) {
       if (!variable_get('islandora_comparative_edition_collatex_enabled', FALSE)) {
@@ -162,15 +162,15 @@ class IslandoraComparativeEditionObject {
       }
     }
 
-    // Write data to MINDEX datastream
+    // Write data to ANALYSIS-MINDEX datastream
     $ce_object = islandora_object_load($ce_pid);
-    $ce_object->purgeDatastream('MINDEX');
-    $mindex_datastream = $ce_object->constructDatastream('MINDEX');
-    $mindex_datastream->label = 'Master Index';
+    $ce_object->purgeDatastream('ANALYSIS-MINDEX');
+    $mindex_datastream = $ce_object->constructDatastream('ANALYSIS-MINDEX');
+    $mindex_datastream->label = 'Analysis Master Index';
     $mindex_datastream->mimeType = 'application/json'; 
     $mindex_datastream->setContentFromString(json_encode($mindex));
     $ce_object->ingestDatastream($mindex_datastream);
-    watchdog("Islandora Comparative Editions", "MINDEX for '{$ce_object->id}' has been rebuilt.");
+    watchdog("Islandora Comparative Editions", "ANALYSIS-MINDEX for '{$ce_object->id}' has been rebuilt.");
   }
 
   public static function getChildren($pid) {
@@ -207,7 +207,7 @@ class IslandoraComparativeEditionWitnessObject {
       $repository->purgeObject($child);
     }
   
-    IslandoraComparativeEditionObject::generateMindex($parent);
+    IslandoraComparativeEditionObject::generateAnalysisMindex($parent);
   }
 
   public static function getParent($pid) {
@@ -281,8 +281,8 @@ EOQ;
       $page_object->ingest($page, $witness_id);
     }
 
-    // Trigger rebuilding of parent MINDEX
-    IslandoraComparativeEditionObject::generateMindex($parent_id);
+    // Trigger rebuilding of parent ANALYSIS-MINDEX
+    IslandoraComparativeEditionObject::generateAnalysisMindex($parent_id);
 
   }
 
@@ -401,13 +401,21 @@ EOQ;
     $xml_datastream->mimeType = 'application/xml'; 
     $xml_datastream->setContentFromFile($files['xml']);
     $page_object->ingestDatastream($xml_datastream);
+    
+        // Construct HTML-PINDEX datastream 
+    $html_pindex_datastream = $page_object->constructDatastream('HTML-PINDEX');
+    $html_pindex_datastream->label = 'HTML-PINDEX';
+    $html_pindex_datastream->mimeType = 'text/html'; 
+    $html_pindex_datastream->setContentFromFile($files['html-pindex']);
+    $page_object->ingestDatastream($html_pindex_datastream);
 
-    // Construct PINDEX datastream 
-    $pindex_datastream = $page_object->constructDatastream('PINDEX');
-    $pindex_datastream->label = 'PINDEX';
-    $pindex_datastream->mimeType = 'text/plain'; 
-    $pindex_datastream->setContentFromFile($files['pindex']);
-    $page_object->ingestDatastream($pindex_datastream);
+
+    // Construct TEXT-PINDEX datastream 
+    $text_pindex_datastream = $page_object->constructDatastream('TEXT-PINDEX');
+    $text_pindex_datastream->label = 'TEXT-PINDEX';
+    $text_pindex_datastream->mimeType = 'text/plain'; 
+    $text_pindex_datastream->setContentFromFile($files['text-pindex']);
+    $page_object->ingestDatastream($text_pindex_datastream);
 
 
     $page_id = $repository->ingestObject($page_object)->id;
@@ -508,15 +516,25 @@ class IslandoraComparativeEditionWitnessIngestPackage {
           $validity['valid'] = FALSE;
           $validity['msg'] .= "<br/>- missing page HTML file from {$page}";
         }
-
-        // Validate existence of page PINDEX file 
-        $witness_files['pages'][$page]['pindex'] = "{$witness_url}/pages/{$page}.txt";
-        if (@file_exists($witness_files['pages'][$page]['pindex'])) {
-          $validity['files']['pages'][$page]['pindex'] = $witness_files['pages'][$page]['pindex'];
+           
+        // Validate existence of page HTML-PINDEX file 
+        $witness_files['pages'][$page]['html-pindex'] = "{$witness_url}/pages/{$page}.index";
+        if (@file_exists($witness_files['pages'][$page]['html-pindex'])) {
+          $validity['files']['pages'][$page]['html-pindex'] = $witness_files['pages'][$page]['html-pindex'];
         }
         else {
           $validity['valid'] = FALSE;
-          $validity['msg'] .= "<br/>- missing page PINDEX file from {$page}";
+          $validity['msg'] .= "<br/>- missing page HTML-PINDEX file from {$page}";
+        }
+
+        // Validate existence of page TEXT-PINDEX file 
+        $witness_files['pages'][$page]['text-pindex'] = "{$witness_url}/pages/{$page}.txt";
+        if (@file_exists($witness_files['pages'][$page]['text-pindex'])) {
+          $validity['files']['pages'][$page]['text-pindex'] = $witness_files['pages'][$page]['text-pindex'];
+        }
+        else {
+          $validity['valid'] = FALSE;
+          $validity['msg'] .= "<br/>- missing page TEXT-PINDEX file from {$page}";
         }
 
         // Validate existence of page image file 

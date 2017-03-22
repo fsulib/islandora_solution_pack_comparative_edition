@@ -43,7 +43,7 @@ jQuery(document).ready(function($) {
  
   for(var i=0;i<comp_units.length;i++){
     comp_units[i].addEventListener("click", function(){
-      var mindex_location = window.location.href + "/mindex/" + this.id;
+      var mindex_location = window.location.href + "/analysis_mindex/" + this.id;
       var sentence_id = this.id;
       
       $.get(mindex_location, function( results_json ) {
