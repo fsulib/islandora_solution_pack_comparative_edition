@@ -580,7 +580,7 @@ class IslandoraComparativeEditionWitnessIngestPackage {
       $zip->close();
     } else {
       watchdog('Islandora Solution Pack Comparative Edition', "Error extracting witness ingest zip package to tmp directory: '$witness_url'");
-      break;
+      exit();
     }
 
     $witness = $this->validate($witness_url);
