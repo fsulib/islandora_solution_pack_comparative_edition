@@ -131,7 +131,7 @@ class IslandoraComparativeEditionObject {
 
     // Notify user if missing TEXT-PINDEX found during reindexing
     if (!empty($missing_pindices)) {
-      $missing_pindices_msg = "The following pages are missing PINDEX datastreams, causing errors while rebuilding {$ce_pid}'s MINDEX:";
+      $missing_pindices_msg = "The following pages are missing TEXT-PINDEX datastreams, causing errors while rebuilding {$ce_pid}'s ANALYSIS-MINDEX:";
       foreach ($missing_pindices as $missing_pindex) {
         $missing_pindices_msg .= "<br/>- {$missing_pindex}";
       }
@@ -172,6 +172,64 @@ class IslandoraComparativeEditionObject {
     $ce_object->ingestDatastream($mindex_datastream);
     watchdog("Islandora Comparative Editions", "ANALYSIS-MINDEX for '{$ce_object->id}' has been rebuilt.");
   }
+  
+  public static function generateDisplayMindex($ce_pid) {
+
+    // Gather grandchild text pindices
+    $missing_pindices = array();
+    $pindices = array();
+    $witnesses = self::getChildren($ce_pid);
+    foreach ($witnesses as $witness) {
+      $pages = IslandoraComparativeEditionWitnessObject::getChildren($witness);
+      foreach ($pages as $page) {
+        $page_object = islandora_object_load($page);
+        if ($page_object['TEXT-PINDEX']) {
+          $pindices[$page] = $page_object['HTML-PINDEX']->content;
+        }
+        else {
+          $missing_pindices[] = $page_object->id;
+        }
+      }
+    }
+
+    // Notify user if missing HTML-PINDEX found during reindexing
+    if (!empty($missing_pindices)) {
+      $missing_pindices_msg = "The following pages are missing TEXT-PINDEX datastreams, causing errors while rebuilding {$ce_pid}'s DISPLAY-MINDEX:";
+      foreach ($missing_pindices as $missing_pindex) {
+        $missing_pindices_msg .= "<br/>- {$missing_pindex}";
+      }
+      drupal_set_message($missing_pindices_msg, 'error');
+    }
+
+    // Extract data from pindices to form collation array
+    $collation = array();
+    foreach ($pindices as $page_pid => $pindex) {
+      $lines = explode("\n", trim($pindex));
+      foreach ($lines as $line) {
+        $sentence = explode(variable_get('islandora_comparative_edition_pindex_delimiter', '|'), $line);
+        $sentence_id = array_shift($sentence);
+        foreach ($sentence as $part) {
+          $collation[$sentence_id][$page_pid][] = $part;
+        }
+      }
+    }
+ 
+    // Format collated sentences into DISPLAY-MINDEX
+    $mindex = array();
+    foreach ($collation as $sentence_id => $sentence_array) {
+      $mindex[$sentence_id] = self::formatSentenceUnaligned($sentence_array);
+    }
+
+    // Write data to DISPLAY-MINDEX datastream
+    $ce_object = islandora_object_load($ce_pid);
+    $ce_object->purgeDatastream('DISPLAY-MINDEX');
+    $mindex_datastream = $ce_object->constructDatastream('DISPLAY-MINDEX');
+    $mindex_datastream->label = 'Display Master Index';
+    $mindex_datastream->mimeType = 'application/json'; 
+    $mindex_datastream->setContentFromString(json_encode($mindex));
+    $ce_object->ingestDatastream($mindex_datastream);
+    watchdog("Islandora Comparative Editions", "DISPLAY-MINDEX for '{$ce_object->id}' has been rebuilt.");
+  }
 
   public static function getChildren($pid) {
     $query = <<<EOQ
@@ -208,6 +266,7 @@ class IslandoraComparativeEditionWitnessObject {
     }
   
     IslandoraComparativeEditionObject::generateAnalysisMindex($parent);
+    IslandoraComparativeEditionObject::generateDisplayMindex($parent);
   }
 
   public static function getParent($pid) {
@@ -283,6 +342,9 @@ EOQ;
 
     // Trigger rebuilding of parent ANALYSIS-MINDEX
     IslandoraComparativeEditionObject::generateAnalysisMindex($parent_id);
+    
+    // Trigger rebuilding of parent DISPLAY-MINDEX
+    IslandoraComparativeEditionObject::generateDisplayMindex($parent_id);
 
   }
 
