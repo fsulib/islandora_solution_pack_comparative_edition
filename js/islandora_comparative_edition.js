@@ -43,13 +43,18 @@ jQuery(document).ready(function($) {
  
   for(var i=0;i<comp_units.length;i++){
     comp_units[i].addEventListener("click", function(){
-      var mindex_location = window.location.href + "/analysis_mindex/" + this.id;
+      var display_mindex_location = window.location.href + "/display_mindex/" + this.id;
+      var analysis_mindex_location = window.location.href + "/analysis_mindex/" + this.id;
       var sentence_id = this.id;
       
-      $.get(mindex_location, function( results_json ) {
+      $.ajaxSetup({async:false});
+      
+      // add the display tab
+      $.get(display_mindex_location, function( results_json ) {
         var results_object = JSON.parse(results_json);
         var keys = Object.keys(results_object);
-        var result_html = '';
+        var result_html = '<div id="icesp-dialog-tabs"><ul><li><a href="#dtab-1">Display</a></li><li><a href="#dtab-2">Analysis</a></li></ul>';
+        result_html = result_html + '<div id="dtab-1">';
         
         keys.forEach(function(key) {
           var sentence_object = results_object[key];
@@ -59,19 +64,39 @@ jQuery(document).ready(function($) {
           });
         });
         
-        $("#icesp-comparison-table").html(result_html);
+        result_html = result_html + '</div>';
+        $("#icesp-comparison-table").append(result_html);
+      });
+      
+      // add the analysis tab
+      $.get(analysis_mindex_location, function( results_json ) {
+        var results_object = JSON.parse(results_json);
+        var keys = Object.keys(results_object);
+        var result_html = '<div id="dtab-2">';
         
-        $( "#icesp-dialog" ).dialog({
-          autoOpen: false,
-          resizable: false,
-          modal: true,
-          width: 'auto'
+        keys.forEach(function(key) {
+          var sentence_object = results_object[key];
+          var sentence_keys  = Object.keys(sentence_object);
+          sentence_keys.forEach(function(sentence_key) {
+            result_html = result_html + sentence_key + sentence_object[sentence_key];
+          });
         });
         
-        $("#icesp-dialog").dialog('option', 'title', 'Version comparison of sentence id ' + sentence_id);
-        $("#icesp-dialog").dialog("open");
-        $(".icesp-table-row").blur();
-      });      
+        result_html = result_html + '</div></div>';        
+        $("#icesp-comparison-table").append(result_html);
+      });
+      
+      $( "#icesp-dialog" ).dialog({
+        autoOpen: false,
+        resizable: false,
+        modal: true,
+        width: 'auto'
+      });
+        
+      $("#icesp-dialog").dialog('option', 'title', 'Version comparison of sentence id ' + sentence_id);
+      $("#icesp-dialog").dialog("open");
+      $(".icesp-table-row").blur();
+      $("#icesp-dialog-tabs").tabs();
       
     }, false);   
   }
