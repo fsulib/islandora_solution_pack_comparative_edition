@@ -82,8 +82,8 @@ jQuery(document).ready(function($) {
           });
         });
         
-        result_html = result_html + '</div></div>';        
-        $("#icesp-comparison-table").append(result_html);
+        result_html = result_html + '</div>';        
+        $("#icesp-dialog-tabs").append(result_html);
       });
       
       $( "#icesp-dialog" ).dialog({
