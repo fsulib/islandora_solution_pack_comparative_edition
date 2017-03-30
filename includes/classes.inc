@@ -550,17 +550,17 @@ class IslandoraComparativeEditionWitnessIngestPackage {
       foreach ($pages as $page) {
 
         // Validate existence of page MODS record
-        $witness_files['pages'][$page]['mods'] = "{$witness_url}/pages/{$page}.mods";
+        $witness_files['pages'][$page]['mods'] = "{$witness_url}/pages/{$page}.mods.xml";
         if (@file_exists($witness_files['pages'][$page]['mods'])) {
           $validity['files']['pages'][$page]['mods'] = $witness_files['pages'][$page]['mods'];
         }
         else {
           $validity['valid'] = FALSE;
-          $validity['msg'] .= "<br/>- missing page MODS record from {$page} (this must have the file extension '.mods')";
+          $validity['msg'] .= "<br/>- missing page MODS record from {$page}.";
         }
 
         // Validate existence of page XML file 
-        $witness_files['pages'][$page]['xml'] = "{$witness_url}/pages/{$page}.xml";
+        $witness_files['pages'][$page]['xml'] = "{$witness_url}/pages/{$page}.content.xml";
         if (@file_exists($witness_files['pages'][$page]['xml'])) {
           $validity['files']['pages'][$page]['xml'] = $witness_files['pages'][$page]['xml'];
         }
@@ -570,7 +570,7 @@ class IslandoraComparativeEditionWitnessIngestPackage {
         }
 
         // Validate existence of page HTML file 
-        $witness_files['pages'][$page]['html'] = "{$witness_url}/pages/{$page}.html";
+        $witness_files['pages'][$page]['html'] = "{$witness_url}/pages/{$page}.display.html";
         if (@file_exists($witness_files['pages'][$page]['html'])) {
           $validity['files']['pages'][$page]['html'] = $witness_files['pages'][$page]['html'];
         }
@@ -580,7 +580,7 @@ class IslandoraComparativeEditionWitnessIngestPackage {
         }
            
         // Validate existence of page HTML-PINDEX file 
-        $witness_files['pages'][$page]['html-pindex'] = "{$witness_url}/pages/{$page}.index";
+        $witness_files['pages'][$page]['html-pindex'] = "{$witness_url}/pages/{$page}.index.html";
         if (@file_exists($witness_files['pages'][$page]['html-pindex'])) {
           $validity['files']['pages'][$page]['html-pindex'] = $witness_files['pages'][$page]['html-pindex'];
         }
@@ -590,7 +590,7 @@ class IslandoraComparativeEditionWitnessIngestPackage {
         }
 
         // Validate existence of page TEXT-PINDEX file 
-        $witness_files['pages'][$page]['text-pindex'] = "{$witness_url}/pages/{$page}.txt";
+        $witness_files['pages'][$page]['text-pindex'] = "{$witness_url}/pages/{$page}.index.txt";
         if (@file_exists($witness_files['pages'][$page]['text-pindex'])) {
           $validity['files']['pages'][$page]['text-pindex'] = $witness_files['pages'][$page]['text-pindex'];
         }
@@ -600,7 +600,7 @@ class IslandoraComparativeEditionWitnessIngestPackage {
         }
 
         // Validate existence of page image file 
-        $witness_files['pages'][$page]['obj'] = glob("{$witness_url}/pages/{$page}*.{jpg,jpeg,png,tiff}", GLOB_BRACE);
+        $witness_files['pages'][$page]['obj'] = glob("{$witness_url}/pages/{$page}.obj.{jpg,jpeg,png,tiff}", GLOB_BRACE);
         if (@file_exists($witness_files['pages'][$page]['obj'][0])) {
           $validity['files']['pages'][$page]['obj'] = $witness_files['pages'][$page]['obj'][0];
         }
