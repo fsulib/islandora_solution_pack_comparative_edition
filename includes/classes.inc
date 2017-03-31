@@ -33,7 +33,8 @@ class IslandoraComparativeEditionObject {
     $all_sentence_versions = array();
     foreach ($sentence_array as $pid => $versions) {
       foreach ($versions as $version) {
-        $collatex_request['witnesses'][] = array("id" => $pid . "." . rand(1000000000, 9999999999), "content" => $version); // Add 10 digit random number to differentiate sentences from same PID
+        // Add 10 digit random number to differentiate sentences from same PID
+        $collatex_request['witnesses'][] = array("id" => $pid . "." . rand(1000000000, 9999999999), "content" => $version);
       }
     }
 
@@ -67,7 +68,6 @@ class IslandoraComparativeEditionObject {
     $formatted_sentence_values = array();
     $witness_count = count($formatted_sentence_keys) - 1;
     for ($i = 0; $i <= $witness_count; $i++) {
-      //$formatted_sentence_values[$i] = "<div class='icesp-aligned'>";
       $formatted_sentence_values[$i] = "";
     }
 
@@ -93,13 +93,13 @@ class IslandoraComparativeEditionObject {
         foreach ($version as $token) {
           $formatted_sentence_values[$key] .= $token;
         }
-        $formatted_sentence_values[$key] = rtrim($formatted_sentence_values[$key], " "); //Trim final space
+        //Trim final space
+        $formatted_sentence_values[$key] = rtrim($formatted_sentence_values[$key], " ");
         $formatted_sentence_values[$key] .= "</div>";
       }
     }
 
     foreach ($formatted_sentence_values as $key => $value) {
-      //$formatted_sentence_values[$key] .= "</div></a>";
       $formatted_sentence_values[$key] .= "</a>";
     }
 
@@ -154,12 +154,7 @@ class IslandoraComparativeEditionObject {
     // Format collated sentences into ANALYSIS-MINDEX
     $mindex = array();
     foreach ($collation as $sentence_id => $sentence_array) {
-      if (!variable_get('islandora_comparative_edition_collatex_enabled', FALSE)) {
-        $mindex[$sentence_id] = self::formatSentenceUnaligned($sentence_array);
-      }
-      else {
-        $mindex[$sentence_id] = self::formatSentenceAligned($sentence_array);
-      }
+      $mindex[$sentence_id] = self::formatSentenceAligned($sentence_array);
     }
 
     // Write data to ANALYSIS-MINDEX datastream
@@ -183,7 +178,7 @@ class IslandoraComparativeEditionObject {
       $pages = IslandoraComparativeEditionWitnessObject::getChildren($witness);
       foreach ($pages as $page) {
         $page_object = islandora_object_load($page);
-        if ($page_object['TEXT-PINDEX']) {
+        if ($page_object['HTML-PINDEX']) {
           $pindices[$page] = $page_object['HTML-PINDEX']->content;
         }
         else {
@@ -194,7 +189,7 @@ class IslandoraComparativeEditionObject {
 
     // Notify user if missing HTML-PINDEX found during reindexing
     if (!empty($missing_pindices)) {
-      $missing_pindices_msg = "The following pages are missing TEXT-PINDEX datastreams, causing errors while rebuilding {$ce_pid}'s DISPLAY-MINDEX:";
+      $missing_pindices_msg = "The following pages are missing HTML-PINDEX datastreams, causing errors while rebuilding {$ce_pid}'s DISPLAY-MINDEX:";
       foreach ($missing_pindices as $missing_pindex) {
         $missing_pindices_msg .= "<br/>- {$missing_pindex}";
       }
