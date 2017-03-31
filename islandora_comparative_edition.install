@@ -21,6 +21,11 @@ function islandora_comparative_edition_install() {
 function islandora_comparative_edition_uninstall() {
   module_load_include('inc', 'islandora', 'includes/solution_packs');
   islandora_install_solution_pack('islandora_comparative_edition', 'uninstall');
-  $variables = array('islandora_comparative_edition_collatex_server_url', 'islandora_comparative_edition_page_viewers');
+  $variables = array(
+    'islandora_comparative_edition_collatex_server_url', 
+    'islandora_comparative_edition_collatex_alignment_algorithm', 
+    'islandora_comparative_edition_pindex_delimiter', 
+    'islandora_comparative_edition_page_viewers'
+  );
   array_walk($variables, 'variable_del');
 }
