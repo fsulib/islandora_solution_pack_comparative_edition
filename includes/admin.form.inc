@@ -22,13 +22,6 @@ function islandora_comparative_edition_admin_settings_form(array $form, array &$
   $form['collatex'] = array(
     '#type' => 'fieldset',
     '#title' => t('Collation configuration'),
-    '#collapsible' => TRUE,
-  );
-
-  $form['collatex']['islandora_comparative_edition_collatex_enabled'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Enable CollateX alignment'),
-    '#default_value' => variable_get('islandora_comparative_edition_collatex_enabled', FALSE),
   );
 
   $form['collatex']['islandora_comparative_edition_collatex_server_url'] = array(
@@ -37,11 +30,6 @@ function islandora_comparative_edition_admin_settings_form(array $form, array &$
     '#description' => t('URL for a running CollateX service (should end in /collate)'),
     '#default_value' => variable_get('islandora_comparative_edition_collatex_server_url', 'https://collatex.net/demo/collate'),
     '#size' => 40,
-    '#states' => array(
-      'visible' => array(
-        ':input[name="islandora_comparative_edition_collatex_enabled"]' => array('checked' => TRUE),
-      ),
-    ),
   );
 
   $form['collatex']['islandora_comparative_edition_collatex_alignment_algorithm'] = array(
@@ -54,15 +42,7 @@ function islandora_comparative_edition_admin_settings_form(array $form, array &$
       'needleman-wunsch' => 'Needleman-Wunsch',
       'medite' => 'MEDITE',
     ),
-    '#states' => array(
-      'visible' => array(
-        ':input[name="islandora_comparative_edition_collatex_enabled"]' => array('checked' => TRUE),
-      ),
-    ),
   );
-
-
-
 
   $form['islandora_comparative_edition_pindex_delimiter'] = array(
     '#type' => 'textfield',
@@ -71,11 +51,13 @@ function islandora_comparative_edition_admin_settings_form(array $form, array &$
     '#default_value' => variable_get('islandora_comparative_edition_pindex_delimiter', '|'),
     '#size' => 10,
   );
+
   module_load_include('inc', 'islandora', 'includes/solution_packs');
   $form += islandora_viewers_form('islandora_comparative_edition_page_viewers', 'image/jp2');
   $form['page_viewers'] = $form['viewers'];
   $form['page_viewers']['#title'] = t('Page Viewers');
   unset($form['viewers']);
+
   return system_settings_form($form);
 }
 
