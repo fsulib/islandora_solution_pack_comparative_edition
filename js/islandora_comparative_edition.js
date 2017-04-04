@@ -47,6 +47,7 @@ jQuery(document).ready(function($) {
       var analysis_mindex_location = window.location.href + "/analysis_mindex/" + this.id;
       var sentence_id = this.id;
       
+      $('#icesp-comparison-table').empty();
       $.ajaxSetup({async:false});
       
       // add the display tab
