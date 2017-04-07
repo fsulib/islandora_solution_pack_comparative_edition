@@ -291,20 +291,20 @@ function template_preprocess_islandora_comparative_edition_page(&$variables) {
     $variables['page_image'] = "<h3>No JP2 Datastream Found or View Objects Permissions for Anonymous disabled.</h3>";
   }
   
-  // Retrieve the DISPLAY-HTML datastream and place its content in memory
-  if (isset($islandora_object['DISPLAY-HTML'])) {
-    $variables['display_html'] = $islandora_object['DISPLAY-HTML']->content;
+  // Retrieve the DISPLAYHTML datastream and place its content in memory
+  if (isset($islandora_object['DISPLAYHTML'])) {
+    $variables['display_html'] = $islandora_object['DISPLAYHTML']->content;
   } else {
-    watchdog('islandora_comparative_edition', "Object ID {$islandora_object->id} has no DISPLAY-HTML datastream.");
-    $variables['display_html'] = "<h3>No DISPLAY-HTML datastream found.</h3>";
+    watchdog('islandora_comparative_edition', "Object ID {$islandora_object->id} has no DISPLAYHTML datastream.");
+    $variables['display_html'] = "<h3>No DISPLAYHTML datastream found.</h3>";
   }  
   
-  // Retrieve the CONTENT-XML datastream and place its content in memory
-  if (isset($islandora_object['CONTENT-XML'])) {
-    $variables['page_tei'] = '<xmp>' . $islandora_object['CONTENT-XML']->content . '</xmp>';
+  // Retrieve the CONTENTXML datastream and place its content in memory
+  if (isset($islandora_object['CONTENTXML'])) {
+    $variables['page_tei'] = '<xmp>' . $islandora_object['CONTENTXML']->content . '</xmp>';
   } else {
-    watchdog('islandora_comparative_edition', "Object ID {$islandora_object->id} has no CONTENT-XML datastream.");
-    $variables['page_tei'] = "<h3>No CONTENT-XML datastream found.</h3>";
+    watchdog('islandora_comparative_edition', "Object ID {$islandora_object->id} has no CONTENTXML datastream.");
+    $variables['page_tei'] = "<h3>No CONTENTXML datastream found.</h3>";
   }  
 }
 

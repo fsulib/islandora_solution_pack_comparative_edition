@@ -442,16 +442,16 @@ EOQ;
     $obj_datastream->setContentFromFile($files['obj']);
     $page_object->ingestDatastream($obj_datastream);
 
-    // Construct DISPLAY-HTML datastream 
-    $html_datastream = $page_object->constructDatastream('DISPLAY-HTML');
-    $html_datastream->label = 'DISPLAY-HTML';
+    // Construct DISPLAYHTML datastream 
+    $html_datastream = $page_object->constructDatastream('DISPLAYHTML');
+    $html_datastream->label = 'DISPLAYHTML';
     $html_datastream->mimeType = 'text/html'; 
     $html_datastream->setContentFromFile($files['html']);
     $page_object->ingestDatastream($html_datastream);
 
-    // Construct CONTENT-XML datastream 
-    $xml_datastream = $page_object->constructDatastream('CONTENT-XML');
-    $xml_datastream->label = 'CONTENT-XML';
+    // Construct CONTENTXML datastream 
+    $xml_datastream = $page_object->constructDatastream('CONTENTXML');
+    $xml_datastream->label = 'CONTENTXML';
     $xml_datastream->mimeType = 'application/xml'; 
     $xml_datastream->setContentFromFile($files['xml']);
     $page_object->ingestDatastream($xml_datastream);
