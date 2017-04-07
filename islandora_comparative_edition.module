@@ -56,7 +56,7 @@ function icesp_get_analysis_mindex($pid, $sentence_id) {
   module_load_include('inc', 'islandora_comparative_edition', 'includes/classes');
   $ce_pid = IslandoraComparativeEditionPageObject::getGrandparent($pid);
   $ce_object = islandora_object_load($ce_pid);
-  $mindex = json_decode($ce_object['ANALYSIS-MINDEX']->content);
+  $mindex = json_decode($ce_object['ANALYSISMINDEX']->content);
   print json_encode($mindex->{$sentence_id});
   drupal_exit();
 }
@@ -68,7 +68,7 @@ function icesp_get_display_mindex($pid, $sentence_id) {
   module_load_include('inc', 'islandora_comparative_edition', 'includes/classes');
   $ce_pid = IslandoraComparativeEditionPageObject::getGrandparent($pid);
   $ce_object = islandora_object_load($ce_pid);
-  $mindex = json_decode($ce_object['DISPLAY-MINDEX']->content);
+  $mindex = json_decode($ce_object['DISPLAYMINDEX']->content);
   print json_encode($mindex->{$sentence_id});
   drupal_exit();
 }
@@ -448,15 +448,26 @@ function islandora_comparative_edition_islandora_comparativeEditionWitnessCModel
 /**
  * Implements hook_cmodel_pid_dsid_islandora_datastream_purged().
  */
-function islandora_comparative_edition_islandora_comparativeEditionPageCModel_PINDEX_islandora_datastream_purged(AbstractObject $object, $dsid) {
-  drupal_set_message("You have deleted the PINDEX datastream of {$object->id}. This will cause future reindexing to fail. Please replace it.", 'error');
+function islandora_comparative_edition_islandora_comparativeEditionPageCModel_HTMLPINDEX_islandora_datastream_purged(AbstractObject $object, $dsid) {
+  drupal_set_message("You have deleted the HTMLPINDEX datastream of {$object->id}. This will cause future reindexing to fail. Please replace it.", 'error');
+}
+
+function islandora_comparative_edition_islandora_comparativeEditionPageCModel_TEXTPINDEX_islandora_datastream_purged(AbstractObject $object, $dsid) {
+  drupal_set_message("You have deleted the TEXTPINDEX datastream of {$object->id}. This will cause future reindexing to fail. Please replace it.", 'error');
 }
 
 /**
  * Implements hook_cmodel_pid_dsid_islandora_datastream_modified().
  */
-function islandora_comparative_edition_islandora_comparativeEditionPageCModel_PINDEX_islandora_datastream_modified(AbstractObject $object, AbstractDatastream $datastream, array $params) {
+function islandora_comparative_edition_islandora_comparativeEditionPageCModel_HTMLPINDEX_islandora_datastream_modified(AbstractObject $object, AbstractDatastream $datastream, array $params) {
   module_load_include('inc', 'islandora_comparative_edition', 'includes/classes');
   $grandparent_pid = IslandoraComparativeEditionPageObject::getGrandparent($object->id);
-  IslandoraComparativeEditionObject::generateMindex($grandparent_pid);
+  IslandoraComparativeEditionObject::generateDisplayMindex($grandparent_pid);
 }
+
+function islandora_comparative_edition_islandora_comparativeEditionPageCModel_TEXTPINDEX_islandora_datastream_modified(AbstractObject $object, AbstractDatastream $datastream, array $params) {
+  module_load_include('inc', 'islandora_comparative_edition', 'includes/classes');
+  $grandparent_pid = IslandoraComparativeEditionPageObject::getGrandparent($object->id);
+  IslandoraComparativeEditionObject::generateAnalysisMindex($grandparent_pid);
+}
+

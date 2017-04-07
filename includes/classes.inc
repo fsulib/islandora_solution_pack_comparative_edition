@@ -120,8 +120,8 @@ class IslandoraComparativeEditionObject {
       $pages = IslandoraComparativeEditionWitnessObject::getChildren($witness);
       foreach ($pages as $page) {
         $page_object = islandora_object_load($page);
-        if ($page_object['TEXT-PINDEX']) {
-          $pindices[$page] = $page_object['TEXT-PINDEX']->content;
+        if ($page_object['TEXTPINDEX']) {
+          $pindices[$page] = $page_object['TEXTPINDEX']->content;
         }
         else {
           $missing_pindices[] = $page_object->id;
@@ -129,9 +129,9 @@ class IslandoraComparativeEditionObject {
       }
     }
 
-    // Notify user if missing TEXT-PINDEX found during reindexing
+    // Notify user if missing TEXTPINDEX found during reindexing
     if (!empty($missing_pindices)) {
-      $missing_pindices_msg = "The following pages are missing TEXT-PINDEX datastreams, causing errors while rebuilding {$ce_pid}'s ANALYSIS-MINDEX:";
+      $missing_pindices_msg = "The following pages are missing TEXTPINDEX datastreams, causing errors while rebuilding {$ce_pid}'s ANALYSISMINDEX:";
       foreach ($missing_pindices as $missing_pindex) {
         $missing_pindices_msg .= "<br/>- {$missing_pindex}";
       }
@@ -151,21 +151,21 @@ class IslandoraComparativeEditionObject {
       }
     }
  
-    // Format collated sentences into ANALYSIS-MINDEX
+    // Format collated sentences into ANALYSISMINDEX
     $mindex = array();
     foreach ($collation as $sentence_id => $sentence_array) {
       $mindex[$sentence_id] = self::formatSentenceAligned($sentence_array);
     }
 
-    // Write data to ANALYSIS-MINDEX datastream
+    // Write data to ANALYSISMINDEX datastream
     $ce_object = islandora_object_load($ce_pid);
-    $ce_object->purgeDatastream('ANALYSIS-MINDEX');
-    $mindex_datastream = $ce_object->constructDatastream('ANALYSIS-MINDEX');
+    $ce_object->purgeDatastream('ANALYSISMINDEX');
+    $mindex_datastream = $ce_object->constructDatastream('ANALYSISMINDEX');
     $mindex_datastream->label = 'Analysis Master Index';
     $mindex_datastream->mimeType = 'application/json'; 
     $mindex_datastream->setContentFromString(json_encode($mindex));
     $ce_object->ingestDatastream($mindex_datastream);
-    watchdog("Islandora Comparative Editions", "ANALYSIS-MINDEX for '{$ce_object->id}' has been rebuilt.");
+    watchdog("Islandora Comparative Editions", "ANALYSISMINDEX for '{$ce_object->id}' has been rebuilt.");
   }
   
   public static function generateDisplayMindex($ce_pid) {
@@ -178,8 +178,8 @@ class IslandoraComparativeEditionObject {
       $pages = IslandoraComparativeEditionWitnessObject::getChildren($witness);
       foreach ($pages as $page) {
         $page_object = islandora_object_load($page);
-        if ($page_object['HTML-PINDEX']) {
-          $pindices[$page] = $page_object['HTML-PINDEX']->content;
+        if ($page_object['HTMLPINDEX']) {
+          $pindices[$page] = $page_object['HTMLPINDEX']->content;
         }
         else {
           $missing_pindices[] = $page_object->id;
@@ -187,9 +187,9 @@ class IslandoraComparativeEditionObject {
       }
     }
 
-    // Notify user if missing HTML-PINDEX found during reindexing
+    // Notify user if missing HTMLPINDEX found during reindexing
     if (!empty($missing_pindices)) {
-      $missing_pindices_msg = "The following pages are missing HTML-PINDEX datastreams, causing errors while rebuilding {$ce_pid}'s DISPLAY-MINDEX:";
+      $missing_pindices_msg = "The following pages are missing HTMLPINDEX datastreams, causing errors while rebuilding {$ce_pid}'s DISPLAYMINDEX:";
       foreach ($missing_pindices as $missing_pindex) {
         $missing_pindices_msg .= "<br/>- {$missing_pindex}";
       }
@@ -209,21 +209,21 @@ class IslandoraComparativeEditionObject {
       }
     }
  
-    // Format collated sentences into DISPLAY-MINDEX
+    // Format collated sentences into DISPLAYMINDEX
     $mindex = array();
     foreach ($collation as $sentence_id => $sentence_array) {
       $mindex[$sentence_id] = self::formatSentenceUnaligned($sentence_array);
     }
 
-    // Write data to DISPLAY-MINDEX datastream
+    // Write data to DISPLAYMINDEX datastream
     $ce_object = islandora_object_load($ce_pid);
-    $ce_object->purgeDatastream('DISPLAY-MINDEX');
-    $mindex_datastream = $ce_object->constructDatastream('DISPLAY-MINDEX');
+    $ce_object->purgeDatastream('DISPLAYMINDEX');
+    $mindex_datastream = $ce_object->constructDatastream('DISPLAYMINDEX');
     $mindex_datastream->label = 'Display Master Index';
     $mindex_datastream->mimeType = 'application/json'; 
     $mindex_datastream->setContentFromString(json_encode($mindex));
     $ce_object->ingestDatastream($mindex_datastream);
-    watchdog("Islandora Comparative Editions", "DISPLAY-MINDEX for '{$ce_object->id}' has been rebuilt.");
+    watchdog("Islandora Comparative Editions", "DISPLAYMINDEX for '{$ce_object->id}' has been rebuilt.");
   }
 
   public static function getChildren($pid) {
@@ -335,12 +335,9 @@ EOQ;
       $page_object->ingest($page, $witness_id);
     }
 
-    // Trigger rebuilding of parent ANALYSIS-MINDEX
+    // Trigger rebuilding of parent ANALYSISMINDEX and DISPLAYMINDEX
     IslandoraComparativeEditionObject::generateAnalysisMindex($parent_id);
-    
-    // Trigger rebuilding of parent DISPLAY-MINDEX
     IslandoraComparativeEditionObject::generateDisplayMindex($parent_id);
-
   }
 
 }
@@ -459,17 +456,17 @@ EOQ;
     $xml_datastream->setContentFromFile($files['xml']);
     $page_object->ingestDatastream($xml_datastream);
     
-        // Construct HTML-PINDEX datastream 
-    $html_pindex_datastream = $page_object->constructDatastream('HTML-PINDEX');
-    $html_pindex_datastream->label = 'HTML-PINDEX';
+        // Construct HTMLPINDEX datastream 
+    $html_pindex_datastream = $page_object->constructDatastream('HTMLPINDEX');
+    $html_pindex_datastream->label = 'HTMLPINDEX';
     $html_pindex_datastream->mimeType = 'text/html'; 
     $html_pindex_datastream->setContentFromFile($files['html-pindex']);
     $page_object->ingestDatastream($html_pindex_datastream);
 
 
-    // Construct TEXT-PINDEX datastream 
-    $text_pindex_datastream = $page_object->constructDatastream('TEXT-PINDEX');
-    $text_pindex_datastream->label = 'TEXT-PINDEX';
+    // Construct TEXTPINDEX datastream 
+    $text_pindex_datastream = $page_object->constructDatastream('TEXTPINDEX');
+    $text_pindex_datastream->label = 'TEXTPINDEX';
     $text_pindex_datastream->mimeType = 'text/plain'; 
     $text_pindex_datastream->setContentFromFile($files['text-pindex']);
     $page_object->ingestDatastream($text_pindex_datastream);
@@ -574,24 +571,24 @@ class IslandoraComparativeEditionWitnessIngestPackage {
           $validity['msg'] .= "<br/>- missing page HTML file from {$page}";
         }
            
-        // Validate existence of page HTML-PINDEX file 
+        // Validate existence of page HTMLPINDEX file 
         $witness_files['pages'][$page]['html-pindex'] = "{$witness_url}/pages/{$page}.index.html";
         if (@file_exists($witness_files['pages'][$page]['html-pindex'])) {
           $validity['files']['pages'][$page]['html-pindex'] = $witness_files['pages'][$page]['html-pindex'];
         }
         else {
           $validity['valid'] = FALSE;
-          $validity['msg'] .= "<br/>- missing page HTML-PINDEX file from {$page}";
+          $validity['msg'] .= "<br/>- missing page HTMLPINDEX file from {$page}";
         }
 
-        // Validate existence of page TEXT-PINDEX file 
+        // Validate existence of page TEXTPINDEX file 
         $witness_files['pages'][$page]['text-pindex'] = "{$witness_url}/pages/{$page}.index.txt";
         if (@file_exists($witness_files['pages'][$page]['text-pindex'])) {
           $validity['files']['pages'][$page]['text-pindex'] = $witness_files['pages'][$page]['text-pindex'];
         }
         else {
           $validity['valid'] = FALSE;
-          $validity['msg'] .= "<br/>- missing page TEXT-PINDEX file from {$page}";
+          $validity['msg'] .= "<br/>- missing page TEXTPINDEX file from {$page}";
         }
 
         // Validate existence of page image file 

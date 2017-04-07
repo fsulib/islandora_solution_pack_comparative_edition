@@ -94,7 +94,7 @@ jQuery(document).ready(function($) {
         width: 'auto'
       });
         
-      $("#icesp-dialog").dialog('option', 'title', 'Version comparison of sentence id ' + sentence_id);
+      $("#icesp-dialog").dialog('option', 'title', 'Comparison of sentence ' + sentence_id);
       $("#icesp-dialog").dialog("open");
       $(".icesp-table-row").blur();
       $("#icesp-dialog-tabs").tabs();

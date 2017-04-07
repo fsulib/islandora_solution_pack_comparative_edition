@@ -22,16 +22,16 @@
     <form MIME="image/png"/>
     <form MIME="image/gif"/>
   </dsTypeModel>
-  <dsTypeModel ID="DISPLAY-HTML" optional="true">
+  <dsTypeModel ID="DISPLAYHTML" optional="true">
     <form MIME="text/html"/>
   </dsTypeModel>
-  <dsTypeModel ID="CONTENT-XML" optional="true">
+  <dsTypeModel ID="CONTENTXML" optional="true">
     <form MIME="text/xml"/>
   </dsTypeModel>
-  <dsTypeModel ID="HTML-PINDEX" optional="true">
+  <dsTypeModel ID="HTMLPINDEX" optional="true">
     <form MIME="text/html"/>
   </dsTypeModel>
-  <dsTypeModel ID="TEXT-PINDEX" optional="true">
+  <dsTypeModel ID="TEXTPINDEX" optional="true">
     <form MIME="text/plain"/>
   </dsTypeModel>
 </dsCompositeModel>
