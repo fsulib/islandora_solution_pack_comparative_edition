@@ -6,12 +6,12 @@ jQuery(document).ready(function($) {
   $("#icesp-tabs-comparison").tabs();
   
   $("#icesp-focus-button").click(function() {
-    
+
     //disable focus button and enable comparison button
-    $("#icesp-focus-button").prop('disabled', true);
+    $("#icesp-comparison-button").removeAttr('disabled');
+    $("#icesp-focus-button").attr('disabled','disabled');
     $("#icesp-comparison-button").removeClass('icesp-button-active');
     $("#icesp-focus-button").addClass('icesp-button-active');
-    $("#icesp-comparison-button").removeAttr('disabled');
     
     //hide comparison view
     $("#icesp-tabs-comparison").css("display", "none");
@@ -23,10 +23,10 @@ jQuery(document).ready(function($) {
   $("#icesp-comparison-button").click(function() {
     
     //disable comparison button and enable focus button
-    $("#icesp-comparison-button").prop('disabled', true);
+    $("#icesp-focus-button").removeAttr('disabled');
+    $("#icesp-comparison-button").attr('disabled','disabled');
     $("#icesp-focus-button").removeClass('icesp-button-active');
     $("#icesp-comparison-button").addClass('icesp-button-active');
-    $("#icesp-focus-button").removeAttr('disabled');
     
     //show comparison view
     $("#icesp-tabs-comparison").css("display", "block");
