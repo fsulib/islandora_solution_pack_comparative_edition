@@ -433,7 +433,7 @@ EOQ;
     $mods_datastream->setContentFromFile($files['mods']);
     $page_object->ingestDatastream($mods_datastream);
    
-    $page_object->label = simplexml_load_file($files['mods'])->titleInfo->title;
+    $page_object->label = simplexml_load_file($files['mods'])->titleInfo->partNumber;
 
     // Construct OBJ datastream 
     $obj_datastream = $page_object->constructDatastream('OBJ');
