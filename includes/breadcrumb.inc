@@ -6,7 +6,7 @@
  */
 
 function _get_comparative_parent($object) {
-  $parent_result = $object->relationships->get(ISLANDORA_RELS_EXT_URI, 'isMemberOf');
+  $parent_result = $object->relationships->get(FEDORA_RELS_EXT_URI, 'isMemberOf');
   $parent_pid = $parent_result[0]['object']['value'];
   $parent_object = islandora_object_load($parent_pid);
   return $parent_object;

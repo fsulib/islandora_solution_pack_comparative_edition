@@ -229,7 +229,7 @@ class IslandoraComparativeEditionObject {
   public static function getChildren($pid) {
     $query = <<<EOQ
 SELECT ?child ?seq FROM <#ri> WHERE {
-  ?child <http://islandora.ca/ontology/relsext#isMemberOf> <info:fedora/{$pid}> .
+  ?child <info:fedora/fedora-system:def/relations-external#isMemberOf> <info:fedora/{$pid}> .
   ?child <http://islandora.ca/ontology/relsext#isSequenceNumber> ?seq .
 }
 EOQ;
@@ -266,14 +266,14 @@ class IslandoraComparativeEditionWitnessObject {
 
   public static function getParent($pid) {
     $object = islandora_object_load($pid);
-    $parent = $object->relationships->get(ISLANDORA_RELS_EXT_URI, 'isMemberOf');    
+    $parent = $object->relationships->get(FEDORA_RELS_EXT_URI, 'isMemberOf');    
     return $parent[0]['object']['value'];
   }
 
   public static function getChildren($pid) {
     $query = <<<EOQ
 SELECT ?child ?seq FROM <#ri> WHERE {
-  ?child <http://islandora.ca/ontology/relsext#isMemberOf> <info:fedora/{$pid}> .
+  ?child <info:fedora/fedora-system:def/relations-external#isMemberOf> <info:fedora/{$pid}> .
   ?child <http://islandora.ca/ontology/relsext#isSequenceNumber> ?seq .
 }
 EOQ;
@@ -301,7 +301,7 @@ EOQ;
     $repository = $connection->repository;
     $witness_object = $repository->constructObject($parent_namespace);
     $witness_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:comparativeEditionWitnessCModel');
-    $witness_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isMemberOf', $parent_id);
+    $witness_object->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOf', $parent_id);
     $witness_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isSequenceNumber', $seqnum, RELS_TYPE_PLAIN_LITERAL);
 
     // Construct MODS datastream
@@ -346,7 +346,7 @@ class IslandoraComparativeEditionPageObject {
 
   public static function getParent($pid) {
     $object = islandora_object_load($pid);
-    $parent = $object->relationships->get(ISLANDORA_RELS_EXT_URI, 'isMemberOf');    
+    $parent = $object->relationships->get(FEDORA_RELS_EXT_URI, 'isMemberOf');    
     return $parent[0]['object']['value'];
   }
 
@@ -360,7 +360,7 @@ class IslandoraComparativeEditionPageObject {
     $parent = self::getParent($pid);
     $query = <<<EOQ
 SELECT ?child ?seq FROM <#ri> WHERE {
-  ?child <http://islandora.ca/ontology/relsext#isMemberOf> <info:fedora/{$parent}> .
+  ?child <info:fedora/fedora-system:def/relations-external#isMemberOf> <info:fedora/{$parent}> .
   ?child <http://islandora.ca/ontology/relsext#isSequenceNumber> ?seq .
 }
 EOQ;
@@ -423,7 +423,7 @@ EOQ;
 
     $page_object = $repository->constructObject($namespace);
     $page_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:comparativeEditionPageCModel');
-    $page_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isMemberOf', $parent_id);
+    $page_object->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOf', $parent_id);
     $page_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isSequenceNumber', $files['seq'], RELS_TYPE_PLAIN_LITERAL);
 
     // Construct MODS datastream
