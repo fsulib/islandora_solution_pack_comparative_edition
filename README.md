@@ -1,5 +1,5 @@
 # islandora_solution_pack_comparative_edition
-Allows for sentence-level comparison of multiple witnesses of a comparative edition
+Allows for sentence-level comparison of multiple witnesses of a comparative edition.
 
 ## Introduction
 The comparative edition solution pack allows for the comparison of individual sentences across the pages of multiple witnesses of a comparative edition object. Additionally, a [CollateX](https://collatex.net/) server may be used to provide token-level comparison of sentences, showing variance in sentence structure using different language parsing algorithms. See the [/docs](https://github.com/fsulib/islandora_solution_pack_comparative_edition/tree/master/docs) folder for further documentation.
