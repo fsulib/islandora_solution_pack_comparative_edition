@@ -249,15 +249,18 @@ function template_preprocess_islandora_comparative_edition_witness(&$variables) 
  * Implements template_preprocess_HOOK().
  */
 function template_preprocess_islandora_comparative_edition_page(&$variables) {
+  global $base_url;
+  $islandora_object = $variables['islandora_object'];
+  module_load_include('inc', 'islandora_comparative_edition', 'includes/classes');
+  $parent_witness_id = IslandoraComparativeEditionPageObject::getParent($islandora_object->id);
   drupal_add_library( 'system' , 'ui.tabs' );
   drupal_add_library( 'system' , 'ui.dialog' );
   drupal_add_css(drupal_get_path('module', 'islandora_comparative_edition') . '/css/islandora_comparative_edition.css');
+  drupal_add_css($base_url . "/islandora/object/{$parent_witness_id}/datastream/DISPLAY-CSS/download");
   drupal_add_js(drupal_get_path('module', 'islandora_comparative_edition') . '/js/islandora_comparative_edition.js');
   module_load_include('inc', 'islandora', 'includes/solution_packs');
   
-  $islandora_object = $variables['islandora_object'];
 
-  module_load_include('inc', 'islandora_comparative_edition', 'includes/classes');
   $siblings = IslandoraComparativeEditionPageObject::getSiblings($islandora_object->id);
   $variables['siblings'] = $siblings['children'];
   $variables['previous'] = $siblings['previous'];
