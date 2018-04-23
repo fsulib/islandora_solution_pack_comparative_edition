@@ -98,7 +98,8 @@
 }
 
 .icesp-witness-child-container img {
-  max-width: 150px;
+  width: 149px;
+  max-height: 190px;
   border: 1px solid black;
 }
 
