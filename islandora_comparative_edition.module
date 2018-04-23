@@ -420,27 +420,6 @@ function islandora_comparative_edition_islandora_comparativeEditionPageCModel_is
 }
 
 /**
- * Implements hook_islandora_breadcrumbs_alter().
- */
-function islandora_comparative_edition_islandora_breadcrumbs_alter(&$breadcrumbs, $context, $object = NULL) {
-  module_load_include('inc', 'islandora_comparative_edition', 'includes/breadcrumb');
-  if (in_array('islandora:comparativeEditionWitnessCModel', $object->models)) {
-    $comp_parent = _get_comparative_parent($object);
-    $comp_parent_collection = _get_collection_parent($comp_parent);
-    $breadcrumbs[] = _create_breadcrumb_html($comp_parent_collection);
-    $breadcrumbs[] = _create_breadcrumb_html($comp_parent);
-  }
-  if (in_array('islandora:comparativeEditionPageCModel', $object->models)) {
-    $witness_parent = _get_comparative_parent($object);
-    $comp_parent = _get_comparative_parent($witness_parent);
-    $comp_parent_collection = _get_collection_parent($comp_parent);
-    $breadcrumbs[] = _create_breadcrumb_html($comp_parent_collection);
-    $breadcrumbs[] = _create_breadcrumb_html($comp_parent);
-    $breadcrumbs[] = _create_breadcrumb_html($witness_parent);
-  }
-}
-
-/**
  * Implements hook_cmodel_pid_islandora_object_alter().
  */
 function islandora_comparative_edition_islandora_comparativeEditionWitnessCModel_islandora_object_alter(AbstractObject $object, array &$context) {
