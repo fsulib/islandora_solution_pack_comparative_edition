@@ -44,7 +44,7 @@ jQuery(document).ready(function($) {
   for(var i=0;i<comp_units.length;i++){
     comp_units[i].addEventListener("click", function(){
 
-      var trimmed_id = this.id.substring(0, this.id.indexOf('.');
+      var trimmed_id = this.id.substring(0, this.id.indexOf('.'));
 
       var display_mindex_location = window.location.href + "/display_mindex/" + trimmed_id;
       var analysis_mindex_location = window.location.href + "/analysis_mindex/" + trimmed_id;
