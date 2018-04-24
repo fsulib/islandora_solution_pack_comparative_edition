@@ -260,8 +260,8 @@ class IslandoraComparativeEditionWitnessObject {
       $repository->purgeObject($child);
     }
 
-    IslandoraComparativeEditionObject::generateAnalysisMindex($parent);
-    IslandoraComparativeEditionObject::generateDisplayMindex($parent);
+    //IslandoraComparativeEditionObject::generateAnalysisMindex($parent);
+    //IslandoraComparativeEditionObject::generateDisplayMindex($parent);
   }
 
   public static function getParent($pid) {
