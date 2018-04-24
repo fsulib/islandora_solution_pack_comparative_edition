@@ -257,11 +257,10 @@ class IslandoraComparativeEditionWitnessObject {
     $repository = $connection->repository;
   
     foreach ($children as $child) {
+      watchdog("Islandora Comparative Edition SP", "Deleting child page object {$child} of witness {$pid}");
       $repository->purgeObject($child);
     }
 
-    //IslandoraComparativeEditionObject::generateAnalysisMindex($parent);
-    //IslandoraComparativeEditionObject::generateDisplayMindex($parent);
   }
 
   public static function getParent($pid) {
