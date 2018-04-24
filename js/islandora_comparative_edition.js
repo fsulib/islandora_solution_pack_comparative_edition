@@ -43,8 +43,9 @@ jQuery(document).ready(function($) {
  
   for(var i=0;i<comp_units.length;i++){
     comp_units[i].addEventListener("click", function(){
-      var display_mindex_location = window.location.href + "/display_mindex/" + this.id;
-      var analysis_mindex_location = window.location.href + "/analysis_mindex/" + this.id;
+      var trimmed_id = this.id.substring(0, this.id.length - 4); // FIX THIS
+      var display_mindex_location = window.location.href + "/display_mindex/" + trimmed_id;
+      var analysis_mindex_location = window.location.href + "/analysis_mindex/" + trimmed_id;
       var sentence_id = this.id;
       
       $('#icesp-comparison-table').empty();
@@ -52,6 +53,7 @@ jQuery(document).ready(function($) {
       
       // add the display tab
       $.get(display_mindex_location, function( results_json ) {
+        console.log(display_mindex_location);
         var results_object = JSON.parse(results_json);
         var keys = Object.keys(results_object);
         var result_html = '<div id="icesp-dialog-tabs"><ul><li><a href="#dtab-1">Display</a></li><li><a href="#dtab-2">Analysis</a></li></ul>';
