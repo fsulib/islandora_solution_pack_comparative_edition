@@ -53,6 +53,7 @@
   border: 1px solid black;
   float: left;
   margin-right: 10px;
+  padding: 1px;
 }
 
 #icesp-comparative-edition-child-grid-container {
@@ -80,6 +81,7 @@
   max-width: 200px;
   margin-left: 20px;
   border: 1px solid black;
+  padding: 1px;
 }
 
 #icesp-witness-children-container {
@@ -99,13 +101,15 @@
 
 .icesp-witness-child-container img {
   width: 149px;
-  max-height: 190px;
+  max-height: 185px;
   border: 1px solid black;
+  padding: 1px;
 }
 
 p.icesp-witness-page-label {
   text-align: center;
 }
+
 
 /* Comparative Edition Page Styles */
 .icesp-button-active {

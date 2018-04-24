@@ -19,7 +19,7 @@
       <?php foreach ($children as $child) { ?>
       <div class="icesp-comparative-edition-child-container">
         <a href="/islandora/object/<?php print $child['pid']; ?>">
-          <img src="/islandora/object/<?php print $child['pid']; ?>/datastream/TN">
+          <img class="icesp-comparative-edition-child-container-img" src="/islandora/object/<?php print $child['pid']; ?>/datastream/TN">
           <strong><?php print $child['label']; ?></strong>
           <p><?php print $child['abstract']; ?></p>
         </a>

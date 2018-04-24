@@ -310,8 +310,7 @@ EOQ;
     $mods_datastream->mimeType = 'application/xml';
     $mods_datastream->setContentFromFile($files['mods']);
     $witness_object->ingestDatastream($mods_datastream);
-   
-    $witness_object->label = simplexml_load_file($files['mods'])->titleInfo->title;
+    $witness_object->label = simplexml_load_file($files['mods'])->titleInfo->partName;
 
     // Construct OBJ datastream
     $obj_datastream = $witness_object->constructDatastream('OBJ');
@@ -432,7 +431,6 @@ EOQ;
     $mods_datastream->mimeType = 'application/xml';
     $mods_datastream->setContentFromFile($files['mods']);
     $page_object->ingestDatastream($mods_datastream);
-   
     $page_object->label = simplexml_load_file($files['mods'])->titleInfo->partNumber;
 
     // Construct OBJ datastream 
