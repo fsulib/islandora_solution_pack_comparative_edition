@@ -427,9 +427,9 @@ function islandora_comparative_edition_islandora_comparativeEditionWitnessCModel
     module_load_include('inc', 'islandora_comparative_edition', 'includes/classes');
     IslandoraComparativeEditionWitnessObject::recursiveDeleteChildren($object->id);
 
-    watchdog("Islandora Comparative Edition SP", "Rebuilding Mindex");
-    IslandoraComparativeEditionObject::generateAnalysisMindex($parent);
-    IslandoraComparativeEditionObject::generateDisplayMindex($parent);
+    //watchdog("Islandora Comparative Edition SP", "Rebuilding Mindex");
+    //IslandoraComparativeEditionObject::generateAnalysisMindex($parent);
+    //IslandoraComparativeEditionObject::generateDisplayMindex($parent);
   }
 }
 
