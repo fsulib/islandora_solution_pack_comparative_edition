@@ -425,7 +425,7 @@ function islandora_comparative_edition_islandora_comparativeEditionPageCModel_is
 function islandora_comparative_edition_islandora_comparativeEditionWitnessCModel_islandora_object_alter(AbstractObject $object, array &$context) {
   if ($context['action'] == 'purge' && $context['purge'] == TRUE) {
     module_load_include('inc', 'islandora_comparative_edition', 'includes/classes');
-    IslandoraComparativeEditionWitnessObject::recursiveDelete($object->id);
+    IslandoraComparativeEditionWitnessObject::recursiveDeleteChildren($object->id);
   }
 }
 

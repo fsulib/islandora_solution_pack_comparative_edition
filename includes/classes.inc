@@ -249,7 +249,7 @@ EOQ;
 
 class IslandoraComparativeEditionWitnessObject { 
 
-  public static function recursiveDelete($pid) {
+  public static function recursiveDeleteChildren($pid) {
     $object = islandora_object_load($pid);
     $parent = self::getParent($pid);
     $children = self::getChildren($pid);
@@ -259,7 +259,7 @@ class IslandoraComparativeEditionWitnessObject {
     foreach ($children as $child) {
       $repository->purgeObject($child);
     }
-  
+
     IslandoraComparativeEditionObject::generateAnalysisMindex($parent);
     IslandoraComparativeEditionObject::generateDisplayMindex($parent);
   }
