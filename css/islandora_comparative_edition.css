@@ -204,6 +204,7 @@ p.icesp-witness-page-label {
 
 .icesp-table-row {
   display: table-row;
+  text-decoration: none;
 }
 
 .icesp-table-header {
