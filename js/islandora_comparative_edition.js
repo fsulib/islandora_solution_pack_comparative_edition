@@ -48,7 +48,7 @@ jQuery(document).ready(function($) {
       if (id_versioned == -1) {
         var trimmed_id = this.id
       } else {
-        var trimmed_id = this.id.substring(0, id_versioned + 1);
+        var trimmed_id = this.id.substring(0, id_versioned);
       }
  
 
