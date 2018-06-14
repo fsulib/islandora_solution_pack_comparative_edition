@@ -180,12 +180,16 @@ p.icesp-witness-page-label {
 #icesp-comparison-tabs-container #tab-3 {
   height: 500px;
   overflow: scroll;
+  white-space: nowrap;
+  position: relative;
 }
 
 .icesp-right-column #tab-comp-2,
 .icesp-right-column #tab-comp-3 {
   height: 500px;
   overflow: scroll;
+  white-space: nowrap;
+  position: relative;
 }
 
 .icesp-comparable {
@@ -235,4 +239,8 @@ p.icesp-witness-page-label {
 .icesp-unaligned {
   display: table-cell;
   padding-left: 10px;
+}
+
+.ui-widget-header .ui-icon-closethick {
+  background-color: white;
 }

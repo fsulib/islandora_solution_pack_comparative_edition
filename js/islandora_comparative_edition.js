@@ -99,9 +99,9 @@ jQuery(document).ready(function($) {
       
       $( "#icesp-dialog" ).dialog({
         autoOpen: false,
-        resizable: false,
+        resizable: true,
         modal: true,
-        width: 'auto'
+        width: "90%"
       });
         
       $("#icesp-dialog").dialog('option', 'title', 'Comparison of sentence ' + sentence_id);
