@@ -312,11 +312,35 @@ function template_preprocess_islandora_comparative_edition_page(&$variables) {
   }  
 
   // Gather metadata for display
-  $variables['title'] = "Testing";
-  $variables['iid'] = "Testing";
-  $variables['purl'] = "Testing";
-  $variables['location'] = "Testing";
-  $variables['rights'] = simplexml_load_string($islandora_object['MODS']->content)->accessCondition;
+  $modsxml = simplexml_load_string($islandora_object['MODS']->content);
+
+  $full_title = $modsxml->titleInfo->title;
+  if (isset($modsxml->titleInfo->subTitle)) {
+    $full_title .= ": " . $modsxml->titleInfo->subTitle;
+  }
+  if (isset($modsxml->titleInfo->partName)) {
+    $full_title .= ", " . $modsxml->titleInfo->partName;
+  }
+  if (isset($modsxml->titleInfo->partNumber)) {
+    $full_title .= ", Page " . $modsxml->titleInfo->partNumber;
+  }
+  $variables['title'] = $full_title;
+
+  foreach ($modsxml->identifier as $identifier) {
+    if ((string) $identifier['type'] == 'IID') {
+      $variables['iid'] = $identifier;
+      $purl = "http://purl.flvc.org/fsu/fd/" . $identifier;
+      $variables['purl'] = "<a href='{$purl}'>{$purl}</a>";
+    }
+  }
+  
+  foreach ($modsxml->relatedItem as $relatedItem) {
+    if ((string) $relatedItem['type'] == 'host') {
+      $variables['location'] = "<a href='{$relatedItem->location->url}'>{$relatedItem->titleInfo->title}</a>, {$relatedItem->location->physicalLocation}"; 
+    }
+  }
+
+  $variables['rights'] = $modsxml->accessCondition;
 }
 
 /**
