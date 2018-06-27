@@ -260,7 +260,6 @@ function template_preprocess_islandora_comparative_edition_page(&$variables) {
   drupal_add_js(drupal_get_path('module', 'islandora_comparative_edition') . '/js/islandora_comparative_edition.js');
   module_load_include('inc', 'islandora', 'includes/solution_packs');
   
-
   $siblings = IslandoraComparativeEditionPageObject::getSiblings($islandora_object->id);
   $variables['siblings'] = $siblings['children'];
   $variables['previous'] = $siblings['previous'];
@@ -311,6 +310,13 @@ function template_preprocess_islandora_comparative_edition_page(&$variables) {
     watchdog('islandora_comparative_edition', "Object ID {$islandora_object->id} has no CONTENTXML datastream.");
     $variables['page_tei'] = "<h3>No CONTENTXML datastream found.</h3>";
   }  
+
+  // Gather metadata for display
+  $variables['title'] = "Testing";
+  $variables['iid'] = "Testing";
+  $variables['purl'] = "Testing";
+  $variables['location'] = "Testing";
+  $variables['rights'] = simplexml_load_string($islandora_object['MODS']->content)->accessCondition;
 }
 
 /**

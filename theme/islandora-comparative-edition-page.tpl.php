@@ -76,3 +76,28 @@
 </div>
 
 <div id="icesp-dialog"><div id="icesp-comparison-table"></div></div>
+
+<table>
+  <tbody>
+    <tr>
+      <th>Title:</th>
+      <td><?php print $title; ?></td>
+    </tr>
+    <tr>
+      <th>Location:</th>
+      <td><?php print $location; ?></td>
+    </tr>
+    <tr>
+      <th>Rights:</th>
+      <td><?php print $rights; ?></td>
+    </tr>
+    <tr>
+      <th>IID:</th>
+      <td><?php print $iid; ?></td>
+    </tr>
+    <tr>
+      <th>PURL:</th>
+      <td><?php print $purl; ?></td>
+    </tr>
+  </tbody>
+</table>
