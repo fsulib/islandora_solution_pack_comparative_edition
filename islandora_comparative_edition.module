@@ -269,7 +269,7 @@ function template_preprocess_islandora_comparative_edition_page(&$variables) {
   $variables['last'] = array_pop($siblings);
   
   // Check for a JP2 Datastream and feed it to the viewer
-  if (isset($islandora_object['JP2']) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $islandora_object['JP2'], user_load(0))) {
+  if (isset($islandora_object['JP2']) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $islandora_object['JP2'], drupal_anonymous_user())) {
     $params = array();
     $jp2_url = url("islandora/object/{$islandora_object->id}/datastream/JP2/view",
       array(
