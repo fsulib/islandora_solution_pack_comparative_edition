@@ -271,12 +271,11 @@ function template_preprocess_islandora_comparative_edition_page(&$variables) {
   // Check for a JP2 Datastream and feed it to the viewer
   if (isset($islandora_object['JP2']) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $islandora_object['JP2'], drupal_anonymous_user())) {
     $params = array();
-    $jp2_url = url("islandora/object/{$islandora_object->id}/datastream/JP2/view",
-      array(
-        'absolute' => TRUE,
-        'https' => TRUE,
-      ));
-    $params['jp2_url'] = $jp2_url; 
+    module_load_include('inc', 'islandora', 'includes/authtokens');
+    $token = islandora_get_object_token($islandora_object->id, 'JP2', 2);
+    $params['token'] = $token;
+    $params['pid'] = $islandora_object->id;
+    $params['dsid'] = 'JP2';
     $viewer = islandora_get_viewer($params, 'islandora_comparative_edition_page_viewers', $islandora_object);
     
     if(!$viewer) {
